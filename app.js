@@ -6,6 +6,7 @@ const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
 const catchAsync = require('./utils/catchAsync');
 const ExpressError = require('./utils/ExpressError');
+const { postSchema } = require('./schemas');
 
 app.engine('ejs', ejsMate);
 app.set('view engine', 'ejs');
@@ -14,6 +15,16 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
+
+const validatePost = (req, res, next) => {
+  const { error } = postSchema.validate(req.body);
+  if (error) {
+    const msg = error.details.map((el) => el.message).join(',');
+    throw new ExpressError(msg, 400);
+  } else {
+    next();
+  }
+};
 
 const mongoose = require('mongoose');
 mongoose
@@ -44,6 +55,7 @@ app.get('/posts/new', (req, res) => {
 
 app.post(
   '/posts',
+  validatePost,
   catchAsync(async (req, res) => {
     if (!req.body.post) throw new ExpressError('Invalid Campground Data', 400);
     const date = new Date();
