@@ -1,6 +1,7 @@
 <% layout('layouts/boilerplate') %>
 
 <div class="card mb-3">
+  <% if(post.text){ %>
   <div class="card-body pb-0">
     <div class="d-flex gap-3">
       <div>
@@ -19,7 +20,8 @@
     </div>
   </div>
   <hr />
-  <div class="card-body py-0">
+  <% } %>
+  <div class="card-body">
     <div class="d-flex gap-3">
       <div>
         <img
@@ -30,9 +32,26 @@
         />
       </div>
       <div>
-        <p class="fs-7 mb-0"><b>anas_ahmad35</b> <%=post.text %></p>
+        <p class="fs-7 mb-0"><b>anas_ahmad35</b> A comment</p>
         <div class="div"></div>
-        <p class="text-muted fs-7">10m</p>
+        <p class="text-muted fs-7 mb-0">10m</p>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="d-flex gap-3">
+      <div>
+        <img
+          src="https://d33wubrfki0l68.cloudfront.net/fb0ba0cbcadbdf0b2ffabf331d2345fb05106e16/20663/images/profile-picture.webp"
+          alt=""
+          class="rounded-circle"
+          id="profile-image"
+        />
+      </div>
+      <div>
+        <p class="fs-7 mb-0"><b>anas_ahmad35</b> A comment</p>
+        <div class="div"></div>
+        <p class="text-muted fs-7 mb-0">10m</p>
       </div>
     </div>
   </div>

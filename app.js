@@ -5,6 +5,7 @@ const Post = require('./models/post');
 const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
 const catchAsync = require('./utils/catchAsync');
+const ExpressError = require('./utils/ExpressError');
 
 app.engine('ejs', ejsMate);
 app.set('view engine', 'ejs');
@@ -25,50 +26,81 @@ mongoose
     console.log(err);
   });
 
-app.get('/', async (req, res) => {
+app.get('/', (req, res) => {
   res.redirect('/posts');
 });
 
-app.get('/posts', async (req, res) => {
-  const posts = await Post.find();
-  res.render('posts/index', { posts });
-});
-
-app.get('/');
+app.get(
+  '/posts',
+  catchAsync(async (req, res) => {
+    const posts = await Post.find();
+    res.render('posts/index', { posts });
+  })
+);
 
 app.get('/posts/new', (req, res) => {
   res.render('posts/new');
 });
 
-app.post('/posts', async (req, res) => {
-  const date = new Date();
-  const post = new Post({ ...req.body.post, date });
-  await post.save();
-  res.redirect('/posts');
+app.post(
+  '/posts',
+  catchAsync(async (req, res) => {
+    if (!req.body.post) throw new ExpressError('Invalid Campground Data', 400);
+    const date = new Date();
+    const post = new Post({ ...req.body.post, date });
+    await post.save();
+    res.redirect('/posts');
+  })
+);
+
+app.get(
+  '/posts/:id',
+  catchAsync(async (req, res, next) => {
+    const post = await Post.findById(req.params.id);
+    if (!post) {
+      return next(new ExpressError('Post Not Found', 404));
+    }
+    res.render('posts/show', { post });
+  })
+);
+
+app.get(
+  '/posts/:id/edit',
+  catchAsync(async (req, res, next) => {
+    const post = await Post.findById(req.params.id);
+    if (!post) {
+      return next(new ExpressError('Post Not Found', 404));
+    }
+    res.render('posts/edit', { post });
+  })
+);
+
+app.put(
+  '/posts/:id',
+  catchAsync(async (req, res) => {
+    const { id } = req.params;
+    const post = await Post.findByIdAndUpdate(id, { ...req.body.post });
+    res.redirect(`/posts/${post._id}`);
+  })
+);
+
+app.delete(
+  '/posts/:id',
+  catchAsync(async (req, res) => {
+    const { id } = req.params;
+    await Post.findByIdAndDelete(id);
+    res.redirect('/posts');
+  })
+);
+
+app.all('*', (req, res, next) => {
+  next(new ExpressError('Page not found', 404));
 });
 
-app.get('/posts/:id', async (req, res) => {
-  const { id } = req.params;
-  const post = await Post.findById(id);
-  res.render('posts/show', { post });
-});
-
-app.get('/posts/:id/edit', async (req, res) => {
-  const { id } = req.params;
-  const post = await Post.findById(id);
-  res.render('posts/edit', { post });
-});
-
-app.put('/posts/:id', async (req, res) => {
-  const { id } = req.params;
-  const post = await Post.findByIdAndUpdate(id, { ...req.body.post });
-  res.redirect(`/posts/${post._id}`);
-});
-
-app.delete('/posts/:id', async (req, res) => {
-  const { id } = req.params;
-  await Post.findByIdAndDelete(id);
-  res.redirect('/posts');
+app.use((err, req, res, next) => {
+  const { statusCode = 500 } = err;
+  if (!err.message) err.message = 'Something Went Wrong';
+  res.status(statusCode).render('error', { err });
 });
 
 app.listen(3000, () => {
