@@ -1,0 +1,19 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="container mx-width">
+  <h1 class="mb-3 fs-3">Edit Post</h1>
+  <form action="/posts/<%= post._id %>?_method=PUT" method="POST">
+    <div class="mb-4">
+      <input
+        type="text"
+        name="post[text]"
+        class="form-control"
+        value="<%= post.text %>"
+        placeholder="Write a caption"
+      />
+    </div>
+    <div class="d-grid">
+      <button class="btn btn-secondary">Edit</button>
+    </div>
+  </form>
+</div>
