@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const Post = require('./models/post');
+const Comment = require('./models/comment');
 const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
 const catchAsync = require('./utils/catchAsync');
@@ -68,7 +69,7 @@ app.post(
 app.get(
   '/posts/:id',
   catchAsync(async (req, res, next) => {
-    const post = await Post.findById(req.params.id);
+    const post = await Post.findById(req.params.id).populate('comments');
     if (!post) {
       return next(new ExpressError('Post Not Found', 404));
     }
@@ -102,6 +103,28 @@ app.delete(
     const { id } = req.params;
     await Post.findByIdAndDelete(id);
     res.redirect('/posts');
+  })
+);
+
+app.post(
+  '/posts/:id/comments',
+  catchAsync(async (req, res) => {
+    const post = await Post.findById(req.params.id);
+    const comment = new Comment({ ...req.body.comment });
+    post.comments.push(comment);
+    await comment.save();
+    await post.save();
+    res.redirect(`/posts/${post._id}`);
+  })
+);
+
+app.delete(
+  '/posts/:id/comments/:commentId',
+  catchAsync(async (req, res) => {
+    const { id, commentId } = req.params;
+    await Post.findByIdAndUpdate(id, { $pull: { comments: commentId } });
+    await Comment.findByIdAndDelete(commentId);
+    res.redirect(`/posts/${id}`);
   })
 );
 

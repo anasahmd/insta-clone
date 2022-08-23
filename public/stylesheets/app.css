@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
+
 #profile-image {
   width: 32px;
   height: 32px;
@@ -17,4 +19,49 @@ i {
 
 .fs-7 {
   font-size: 0.875rem;
+}
+
+.fs-8 {
+  font-size: 0.75rem;
+}
+
+.btn-custom {
+  background-color: white;
+  border-color: white;
+}
+
+.btn-custom:hover {
+  background-color: white;
+  border-color: white;
+}
+
+.btn-custom:focus {
+  background-color: white;
+  border-color: white;
+  box-shadow: none;
+}
+
+.btn-custom:active {
+  background-color: white;
+  border-color: white;
+}
+
+.btn-delete:hover {
+  color: #dc3545;
+}
+
+.btn-delete:focus {
+  color: #dc3545;
+}
+
+.btn-delete:active:focus {
+  box-shadow: none;
+}
+
+.btn-opc:hover {
+  color: #0d6efd;
+}
+
+.btn-opc:focus {
+  color: #0d6efd;
 }
