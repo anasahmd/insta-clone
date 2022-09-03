@@ -1,0 +1,73 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="container px-4">
+  <div class="d-flex gap-4">
+    <img
+      src="https://d33wubrfki0l68.cloudfront.net/fb0ba0cbcadbdf0b2ffabf331d2345fb05106e16/20663/images/profile-picture.webp"
+      alt=""
+      class="rounded-circle profile-image-index"
+    />
+    <div class="mt-1">
+      <h2 class="fw-normal fs-3"><%= user.username %></h2>
+      <button class="btn btn-primary">Follow</button>
+    </div>
+  </div>
+  <div class="mt-3 d-flex flex-column">
+    <span class="fs-6 fw-5"><%= user.fullName %> </span>
+    <span>some cool bio here some more here </span>
+  </div>
+</div>
+
+<hr class="mb-2 text-muted" />
+
+<div class="d-flex justify-content-around my-0 text-center fs-7">
+  <div>
+    <div class="fw-bold">111</div>
+    <div class="text-muted">posts</div>
+  </div>
+  <div>
+    <div class="fw-bold">111k</div>
+    <div class="text-muted">followers</div>
+  </div>
+  <div>
+    <div class="fw-bold">487</div>
+    <div class="text-muted">following</div>
+  </div>
+</div>
+
+<hr class="mt-2 text-muted" />
+
+<!-- <div class="container">
+  <div class="row">
+    <% for (post of user.posts){ %>
+    <div class="m">
+      <div class="profile-post-img">
+        <img class="img img-fluid" src="<%= post.image %>" alt="" />
+      </div>
+    </div>
+    <% } %>
+  </div>
+</div> -->
+
+<div
+  class="text-center my-3 gap-2 d-flex justify-content-center align-items-center"
+>
+  <i class="fa-solid fa-table-cells-large fs-7 text-muted"></i>
+  <span class="text-muted fs-7 fw-bold">POSTS</span>
+</div>
+
+<section class="post-list">
+  <% for (post of user.posts){ %>
+  <a href="" class="post">
+    <figure class="post-image profile-post-img">
+      <img class="img img-fluid" src="<%= post.image %>" alt="" />
+    </figure>
+    <span class="post-overlay">
+      <p>
+        <span class="post-likes">150</span>
+        <span class="post-comments">10</span>
+      </p>
+    </span>
+  </a>
+  <% } %>
+</section>

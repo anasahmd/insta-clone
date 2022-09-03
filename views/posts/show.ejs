@@ -6,8 +6,7 @@
       <img
         src="https://d33wubrfki0l68.cloudfront.net/fb0ba0cbcadbdf0b2ffabf331d2345fb05106e16/20663/images/profile-picture.webp"
         alt=""
-        class="rounded-circle"
-        id="profile-image"
+        class="rounded-circle profile-image"
       />
     </div>
     <form action="/posts/<%= post._id %>/comments" method="POST" class="w-100">
@@ -36,12 +35,11 @@
         <img
           src="https://d33wubrfki0l68.cloudfront.net/fb0ba0cbcadbdf0b2ffabf331d2345fb05106e16/20663/images/profile-picture.webp"
           alt=""
-          class="rounded-circle"
-          id="profile-image"
+          class="rounded-circle profile-image"
         />
       </div>
       <div>
-        <span class="fs-7"><b>anas_ahmad35 </b> <%=post.caption %></span>
+        <span class="fs-7"><b><%= post.user.username %></b> <%=post.caption %></span>
         <div class="d-flex align-items-center gap-1 mt-1">
           <span class="text-muted fs-8">Edited</span>
           <span class="text-muted fs-8">&#183</span>
@@ -59,8 +57,7 @@
         <img
           src="https://d33wubrfki0l68.cloudfront.net/fb0ba0cbcadbdf0b2ffabf331d2345fb05106e16/20663/images/profile-picture.webp"
           alt=""
-          class="rounded-circle"
-          id="profile-image"
+          class="rounded-circle profile-image"
         />
       </div>
       <div>

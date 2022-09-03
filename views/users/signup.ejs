@@ -1,0 +1,85 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="card mx-width mx-auto px-3 w-75">
+  <div class="card-body">
+    <h1 class="fs-3 mt-4 text-center">Dext</h1>
+    <p class="text-muted text-center fs-5">
+      Sign up to see photos and videos from your friends
+    </p>
+    <div class="d-grid">
+      <button class="btn btn-primary">Google</button>
+    </div>
+    <div class="d-flex py-3 flex-row align-items-center">
+      <div class="col-5 text-muted">
+        <hr />
+      </div>
+      <div class="text-muted text-center col-2 fs-7">OR</div>
+      <div class="col-5 text-muted">
+        <hr />
+      </div>
+    </div>
+    <form
+      action="/accounts/signup"
+      method="POST"
+      novalidate
+      class="needs-validation"
+    >
+      <div class="mb-4">
+        <input
+          type="email"
+          name="email"
+          class="form-control"
+          placeholder="Email"
+          required
+        />
+        <div class="valid-feedback">Looks good!</div>
+      </div>
+      <div class="mb-4">
+        <input
+          type="text"
+          name="fullName"
+          class="form-control"
+          placeholder="Full Name"
+        />
+      </div>
+      <div class="mb-4">
+        <input
+          type="text"
+          name="username"
+          class="form-control"
+          placeholder="Username"
+          required
+        />
+        <div class="valid-feedback">Looks good!</div>
+      </div>
+      <div class="mb-4">
+        <input
+          type="password"
+          name="password"
+          class="form-control"
+          placeholder="Password"
+          required
+        />
+        <div class="valid-feedback">Looks good!</div>
+      </div>
+      <p class="text-muted text-center fs-7">
+        This app is just for demonstration of my skills as a web developer. It
+        is not meant for public usage and may contain bugs. I am not responsible
+        for your data. Feel free to test this app and if you want to report any
+        bug or have a suggestion, please email me.
+      </p>
+      <p class="text-muted text-center fs-7">
+        By signing up, you agree to our terms as mentioned above.
+      </p>
+      <div class="d-grid mb-4">
+        <button class="btn btn-primary">Sign Up</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="card mx-width mx-auto px-3 w-75 my-4">
+  <div class="card-body text-center">
+    <span>Have an account?</span> <a href="/accounts/login">Log in</a>
+  </div>
+</div>

@@ -6,3 +6,9 @@ module.exports.postSchema = Joi.object({
     image: Joi.string().required(),
   }).required(),
 });
+
+module.exports.commentSchema = Joi.object({
+  comment: Joi.object({
+    text: Joi.string().required(),
+  }).required(),
+});

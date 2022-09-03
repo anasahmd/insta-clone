@@ -1,13 +1,19 @@
 const express = require('express');
 const app = express();
 const path = require('path');
-const Post = require('./models/post');
-const Comment = require('./models/comment');
 const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
 const catchAsync = require('./utils/catchAsync');
 const ExpressError = require('./utils/ExpressError');
-const { postSchema } = require('./schemas');
+const session = require('express-session');
+const flash = require('connect-flash');
+const passport = require('passport');
+const LocalStrategy = require('passport-local');
+const User = require('./models/users');
+
+const posts = require('./routes/posts');
+const comments = require('./routes/comments');
+const users = require('./routes/users');
 
 app.engine('ejs', ejsMate);
 app.set('view engine', 'ejs');
@@ -16,16 +22,6 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
-
-const validatePost = (req, res, next) => {
-  const { error } = postSchema.validate(req.body);
-  if (error) {
-    const msg = error.details.map((el) => el.message).join(',');
-    throw new ExpressError(msg, 400);
-  } else {
-    next();
-  }
-};
 
 const mongoose = require('mongoose');
 mongoose
@@ -38,95 +34,50 @@ mongoose
     console.log(err);
   });
 
+const sessionConfig = {
+  secret: 'thisisnotagoodsecret',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    httpOnly: true,
+    expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+    maxAge: 1000 * 60 * 60 * 24 * 7,
+  },
+};
+
+app.use(session(sessionConfig));
+app.use(flash());
+
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(User.createStrategy());
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+app.use((req, res, next) => {
+  res.locals.success = req.flash('success');
+  res.locals.error = req.flash('error');
+  res.locals.currentUser = req.user;
+  next();
+});
+
+app.get('/fakeuser', async (req, res) => {
+  const user = new User({
+    email: 'anasahmad@gmail.com',
+    username: 'anasahmad',
+  });
+  const newUser = await User.register(user, 'chicken');
+  res.send(newUser);
+});
+
+app.use('/posts', posts);
+app.use('/posts/:id/comments', comments);
+app.use('/', users);
+
 app.get('/', (req, res) => {
   res.redirect('/posts');
 });
-
-app.get(
-  '/posts',
-  catchAsync(async (req, res) => {
-    const posts = await Post.find();
-    res.render('posts/index', { posts });
-  })
-);
-
-app.get('/posts/new', (req, res) => {
-  res.render('posts/new');
-});
-
-app.post(
-  '/posts',
-  validatePost,
-  catchAsync(async (req, res) => {
-    if (!req.body.post) throw new ExpressError('Invalid Campground Data', 400);
-    const date = new Date();
-    const post = new Post({ ...req.body.post, date });
-    await post.save();
-    res.redirect('/posts');
-  })
-);
-
-app.get(
-  '/posts/:id',
-  catchAsync(async (req, res, next) => {
-    const post = await Post.findById(req.params.id).populate('comments');
-    if (!post) {
-      return next(new ExpressError('Post Not Found', 404));
-    }
-    res.render('posts/show', { post });
-  })
-);
-
-app.get(
-  '/posts/:id/edit',
-  catchAsync(async (req, res, next) => {
-    const post = await Post.findById(req.params.id);
-    if (!post) {
-      return next(new ExpressError('Post Not Found', 404));
-    }
-    res.render('posts/edit', { post });
-  })
-);
-
-app.put(
-  '/posts/:id',
-  catchAsync(async (req, res) => {
-    const { id } = req.params;
-    const post = await Post.findByIdAndUpdate(id, { ...req.body.post });
-    res.redirect(`/posts/${post._id}`);
-  })
-);
-
-app.delete(
-  '/posts/:id',
-  catchAsync(async (req, res) => {
-    const { id } = req.params;
-    await Post.findByIdAndDelete(id);
-    res.redirect('/posts');
-  })
-);
-
-app.post(
-  '/posts/:id/comments',
-  catchAsync(async (req, res) => {
-    const post = await Post.findById(req.params.id);
-    const comment = new Comment({ ...req.body.comment });
-    post.comments.push(comment);
-    await comment.save();
-    await post.save();
-    res.redirect(`/posts/${post._id}`);
-  })
-);
-
-app.delete(
-  '/posts/:id/comments/:commentId',
-  catchAsync(async (req, res) => {
-    const { id, commentId } = req.params;
-    await Post.findByIdAndUpdate(id, { $pull: { comments: commentId } });
-    await Comment.findByIdAndDelete(commentId);
-    res.redirect(`/posts/${id}`);
-  })
-);
 
 app.all('*', (req, res, next) => {
   next(new ExpressError('Page not found', 404));

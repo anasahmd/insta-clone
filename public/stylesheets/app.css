@@ -1,8 +1,27 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
 
-#profile-image {
+.profile-image {
   width: 32px;
   height: 32px;
+}
+
+.profile-image-index {
+  width: 77px;
+  height: 77px;
+}
+
+.profile-post-img {
+  position: relative;
+  overflow: hidden;
+  padding-bottom: 100%;
+}
+
+.profile-post-img img {
+  position: absolute;
+  display: block;
+  min-width: 100%;
+  min-height: 100%;
+  object-fit: cover;
 }
 
 a {
@@ -23,6 +42,10 @@ i {
 
 .fs-8 {
   font-size: 0.75rem;
+}
+
+.fw-5 {
+  font-weight: 500;
 }
 
 .btn-custom {
@@ -64,4 +87,54 @@ i {
 
 .btn-opc:focus {
   color: #0d6efd;
+}
+
+.post-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(100px, 293px));
+  justify-content: center;
+  grid-gap: 28px;
+}
+.post {
+  cursor: pointer;
+  position: relative;
+  display: block;
+}
+.post-image {
+  margin: 0;
+}
+.post-image img {
+  width: 100%;
+  vertical-align: top;
+}
+.post-overlay {
+  background: rgba(0, 0, 0, 0.4);
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-align: center;
+}
+.post:hover .post-overlay {
+  display: flex;
+}
+
+.post-like,
+.post-comments {
+  width: 80px;
+  margin: 5px;
+  font-weight: bold;
+  text-align: center;
+  display: inline-block;
+}
+
+@media screen and (max-width: 768px) {
+  .post-list {
+    grid-gap: 3px;
+  }
 }
