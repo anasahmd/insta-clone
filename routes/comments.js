@@ -27,10 +27,8 @@ router.post(
     const user = await User.findById(req.user._id);
     const post = await Post.findById(req.params.id);
     const comment = new Comment({ ...req.body.comment, user });
-    user.comments.push(comment);
     post.comments.push(comment);
     await comment.save();
-    await user.save();
     await post.save();
     res.redirect(`/posts/${post._id}`);
   })
@@ -43,9 +41,6 @@ router.delete(
   catchAsync(async (req, res) => {
     const { id, commentId } = req.params;
     await Post.findByIdAndUpdate(id, { $pull: { comments: commentId } });
-    await User.findByIdAndUpdate(req.user._id, {
-      $pull: { comments: commentId },
-    });
     await Comment.findByIdAndDelete(commentId);
     res.redirect(`/posts/${id}`);
   })

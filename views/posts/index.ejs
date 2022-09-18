@@ -76,7 +76,7 @@
       <a href="" class="text-reset">
         <i class="fa-regular fa-heart"></i>
       </a>
-      <a href="" class="text-reset">
+      <a href="/posts/<%= post._id %>" class="text-reset">
         <i class="fa-regular fa-comment"></i>
       </a>
       <a href="" class="text-reset">
@@ -86,12 +86,16 @@
     <small class="fw-bolder">100 likes</small>
     <br />
     <% if(post.caption){ %>
-    <p class="fs-7 mb-1"><b><%= post.user.username %></b> <%=post.caption %></p>
-    <% } %>
+    <p class="fs-7 mt-1 mb-0">
+      <b><%= post.user.username %></b> <%=post.caption %>
+    </p>
+    <% } %> <% if (post.comments.length){ %>
     <a href="/posts/<%= post._id %>" class="text-muted fs-7 mb-2"
-      >View all comments</a
-    >
-    <p class="text-muted fs-7 mb-0">
+      >View <%= post.comments.length %> <% if (post.comments.length > 1){ %>
+      comments <% }else{ %> comment <% } %>
+    </a>
+    <% } %>
+    <p class="text-muted fs-7 mt-2 mb-0">
       <small><%= post.date%> </small>
     </p>
   </div>

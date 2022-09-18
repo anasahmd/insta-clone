@@ -98,6 +98,7 @@ router.delete(
   isAuthor,
   catchAsync(async (req, res) => {
     const { id } = req.params;
+    await User.findByIdAndUpdate(req.user._id, { $pull: { posts: id } });
     await Post.findByIdAndDelete(id);
     res.redirect('/posts');
   })
