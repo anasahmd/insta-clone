@@ -8,7 +8,7 @@ router.get('/login', (req, res) => {
   res.render('users/login');
 });
 
-router.get('accounts/signup', (req, res) => {
+router.get('/accounts/signup', (req, res) => {
   res.render('users/signup');
 });
 
@@ -39,7 +39,7 @@ router.post(
   '/login',
   passport.authenticate('local', {
     failureFlash: true,
-    failureRedirect: '/accounts/login',
+    failureRedirect: '/login',
   }),
   (req, res) => {
     req.flash('success', 'Welcome Back');
@@ -52,7 +52,7 @@ router.get('/logout', (req, res) => {
     if (err) {
       return next(err);
     }
-    res.redirect('/accounts/login');
+    res.redirect('/login');
   });
 });
 

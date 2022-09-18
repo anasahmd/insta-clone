@@ -1,5 +1,35 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
 
+body {
+  background-color: rgb(250, 250, 250);
+}
+
+#navbar {
+  background-color: #fff !important;
+}
+
+.btn-primary,
+.btn-primary:active,
+.btn-primary:focus,
+.btn-primary:hover {
+  background-color: #0095f6;
+  border: none;
+}
+
+.nav-pop {
+  width: 150px;
+}
+
+.btn-nav {
+  width: 35px;
+  height: 35px;
+}
+
+.nav-image {
+  width: 24px;
+  height: 24px;
+}
+
 .profile-image {
   width: 32px;
   height: 32px;
@@ -30,6 +60,10 @@ a {
 
 .mx-width {
   max-width: 500px;
+}
+
+.mx-width-nav {
+  max-width: 750px;
 }
 
 i {

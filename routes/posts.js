@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const catchAsync = require('../utils/catchAsync');
 const { postSchema } = require('../schemas');
-const { isLoggedIn } = require('../middleware');
+const { isLoggedIn, isAuthor } = require('../middleware');
 
 const ExpressError = require('../utils/ExpressError');
 const Post = require('../models/post');
@@ -51,7 +51,13 @@ router.get(
   '/:id',
   catchAsync(async (req, res, next) => {
     const post = await Post.findById(req.params.id)
-      .populate('comments')
+      .populate({
+        path: 'comments',
+        populate: {
+          path: 'user',
+          select: 'username',
+        },
+      })
       .populate('user');
     if (!post) {
       req.flash('error', 'Post Not Found');
@@ -65,6 +71,7 @@ router.get(
 router.get(
   '/:id/edit',
   isLoggedIn,
+  isAuthor,
   catchAsync(async (req, res, next) => {
     const post = await Post.findById(req.params.id);
     if (!post) {
@@ -77,6 +84,7 @@ router.get(
 router.put(
   '/:id',
   isLoggedIn,
+  isAuthor,
   catchAsync(async (req, res) => {
     const { id } = req.params;
     const post = await Post.findByIdAndUpdate(id, { ...req.body.post });
@@ -87,6 +95,7 @@ router.put(
 router.delete(
   '/:id',
   isLoggedIn,
+  isAuthor,
   catchAsync(async (req, res) => {
     const { id } = req.params;
     await Post.findByIdAndDelete(id);

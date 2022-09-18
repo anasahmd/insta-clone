@@ -1,21 +1,38 @@
-<nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="/posts">Dext</a>
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarNavAltMarkup"
-      aria-controls="navbarNavAltMarkup"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div class="navbar-nav">
-          <a class="nav-link " href="/posts"">All Posts</a>
-          <a class="nav-link" href="/posts/new">New Post</a>
-        </div>
+<nav class="navbar sticky-top bg-light border-bottom" id="navbar">
+  <div
+    class="container-fluid d-flex align-items-center justify-content-between mx-3 py-1 mx-width-nav mx-auto"
+  >
+    <div class="left">
+      <a href="/" class="text-reset fw-semibold">Dext</a>
+    </div>
+    <div class="right d-flex align-items-center">
+      <% if(currentUser){ %>
+      <a href="/posts/new" class="text-reset me-4 pt-1"
+        ><i class="fa-regular fa-square-plus fs-2"></i
+      ></a>
+      <button
+        type="button"
+        class="btn rounded-circle btn-nav p-0"
+        data-bs-toggle="popover"
+        data-bs-content='<div class="d-flex nav-pop flex-column">
+          <a href="/<%= currentUser.username %>" class="text-reset list-group-item my-2"><i class="fa-solid fs-7 fa-user me-2"></i>Profile</a>
+          <a href="#" class="text-reset my-2"><i class="fa-solid fa-gear fs-7 me-2"></i>Settings</a>
+          <a href="/logout" class="text-reset my-2"><i class="fa-solid fa-right-from-bracket fs-7 me-2"></i>Logout</a>
+        </div>'
+        data-trigger="focus"
+      >
+        <img
+          src="https://d33wubrfki0l68.cloudfront.net/fb0ba0cbcadbdf0b2ffabf331d2345fb05106e16/20663/images/profile-picture.webp"
+          alt=""
+          class="rounded-circle nav-image"
+        />
+      </button>
+      <% } else { %>
+      <button type="button" class="btn btn-primary btn-sm me-3">
+        <a href="/login" class="text-reset">Log In</a>
+      </button>
+      <a href="/accounts/signup" class="fw-5">Sign Up</a>
+      <% } %>
+    </div>
   </div>
 </nav>

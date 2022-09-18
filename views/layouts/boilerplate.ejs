@@ -22,8 +22,9 @@
   </head>
   <body class="d-flex flex-column vh-100">
     <%- include('../partials/navbar') %>
-    <main class="mt-3"><%- include('../partials/flash') %> <%- body %></main>
+    <main class="pt-3"><%- include('../partials/flash') %> <%- body %></main>
     <%- include('../partials/footer') %>
+
     <script>
       // Example starter JavaScript for disabling form submissions if there are invalid fields
       (() => {
@@ -54,5 +55,14 @@
       integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
       crossorigin="anonymous"
     ></script>
+    <script>
+      const popoverTriggerList = document.querySelectorAll(
+        '[data-bs-toggle="popover"]'
+      );
+      const popoverList = [...popoverTriggerList].map(
+        (popoverTriggerEl) =>
+          new bootstrap.Popover(popoverTriggerEl, { html: true })
+      );
+    </script>
   </body>
 </html>

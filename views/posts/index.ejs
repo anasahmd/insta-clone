@@ -1,8 +1,4 @@
-<% layout('layouts/boilerplate') %>
-<a href="/posts/new">Add a post</a>
-<h1 class="fs-3 my-3">All Posts</h1>
-
-<% for (post of posts){ %>
+<% layout('layouts/boilerplate') %> <% for (post of posts){ %>
 <div class="card my-3 mx-width mx-auto">
   <div class="card-body">
     <div class="d-flex w-100 gap-3">
@@ -40,6 +36,7 @@
       >
         <div class="modal-dialog modal-sm modal-dialog-centered">
           <div class="modal-content">
+            <% if (currentUser && post.user.equals(currentUser)) { %>
             <div class="modal-body text-center border-bottom">
               <form
                 action="/posts/<%= post._id %>?_method=DELETE"
@@ -52,8 +49,12 @@
                 </button>
               </form>
             </div>
-            <div class="modal-body text-center">
+            <div class="modal-body text-center border-bottom">
               <a href="/posts/<%= post._id %>/edit" class="text-reset">Edit</a>
+            </div>
+            <% } %>
+            <div class="modal-body text-center">
+              <a href="/posts/<%= post._id %>" class="text-reset">Go to post</a>
             </div>
             <div class="modal-footer text-center">
               <button

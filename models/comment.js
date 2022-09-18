@@ -8,6 +8,10 @@ const commentSchema = new Schema({
   },
   likes: Number,
   date: Date,
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+  },
 });
 
 module.exports = mongoose.model('Comment', commentSchema);

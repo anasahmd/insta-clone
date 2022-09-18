@@ -9,7 +9,7 @@
     />
     <div class="mt-1">
       <h2 class="fw-normal fs-3"><%= user.username %></h2>
-      <button class="btn btn-primary">Follow</button>
+      <button class="btn btn-primary btn-sm px-3">Follow</button>
     </div>
   </div>
   <div class="mt-3 d-flex flex-column">
@@ -22,7 +22,7 @@
 
 <div class="d-flex justify-content-around my-0 text-center fs-7">
   <div>
-    <div class="fw-bold">111</div>
+    <div class="fw-bold"><%= user.posts.length %></div>
     <div class="text-muted">posts</div>
   </div>
   <div>
@@ -58,14 +58,18 @@
 
 <section class="post-list">
   <% for (post of user.posts){ %>
-  <a href="" class="post">
+  <a href="/posts/<%= post._id %> " class="post">
     <figure class="post-image profile-post-img">
       <img class="img img-fluid" src="<%= post.image %>" alt="" />
     </figure>
     <span class="post-overlay">
       <p>
-        <span class="post-likes">150</span>
-        <span class="post-comments">10</span>
+        <span class="post-likes"
+          ><i class="fa-solid fa-heart fs-6"></i> 150</span
+        >
+        <span class="post-comments"
+          ><i class="fa-solid fa-comment fs-6"></i> <%= post.comments.length %>
+        </span>
       </p>
     </span>
   </a>

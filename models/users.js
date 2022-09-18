@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const passportLocalMongoose = require('passport-local-mongoose');
 const { Schema } = mongoose;
 const Post = require('./post');
+const Comment = require('./comment');
 
 const userSchema = new Schema({
   email: {
@@ -16,6 +17,12 @@ const userSchema = new Schema({
     {
       type: Schema.Types.ObjectId,
       ref: 'Post',
+    },
+  ],
+  comments: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Comment',
     },
   ],
 });
