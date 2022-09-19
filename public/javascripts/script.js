@@ -1,7 +1,7 @@
 const likeForms = document.querySelectorAll('.like-form');
 
 likeForms.forEach((likeForm) => {
-  likeForm.addEventListener('submit', (e) => {
+  likeForm.addEventListener('click', (e) => {
     e.preventDefault();
     axios
       .post(`${likeForm.action}`, {})

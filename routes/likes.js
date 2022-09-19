@@ -22,7 +22,15 @@ router.post(
     }
     const updatedPost = await Post.findById(id);
     res.send(
-      `<small class="fw-bolder" <% if (!${updatedPost.likes.length}){ %>hidden<% } %> >${updatedPost.likes.length} <% if(${updatedPost.likes.length} > 1){%> likes <% }else { %> like <% } %></small><% if (${updatedPost.likes.length}){ %><br /><% } %>`
+      `<div class="fs-7 mt-2">
+      <% if (${updatedPost.likes.length}){ %>
+      <span class="fw-bolder"
+        ><%= ${updatedPost.likes.length} %> <% if(${updatedPost.likes.length} > 1){ %> likes <%
+        }else { %> like <% } %>
+      </span>
+      <% } else { %> Be the first to <b>like this </b>
+      <% } %>
+    </div>`
     );
   })
 );

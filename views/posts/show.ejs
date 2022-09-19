@@ -94,13 +94,15 @@
       </a>
     </div>
     <div class="like-container">
-      <small class="fw-bolder" <% if (!post.likes.length){ %>
-        hidden <% } %> ><%= post.likes.length %> <% if(post.likes.length > 1){
-        %> likes <% }else { %> like <% } %>
-      </small>
-      <% if (post.likes.length){ %>
-      <br />
-      <% } %>
+      <div class="fs-7 mt-2">
+        <% if (post.likes.length){ %>
+        <span class="fw-bolder"
+          ><%= post.likes.length %> <% if(post.likes.length > 1){ %> likes <%
+          }else { %> like <% } %>
+        </span>
+        <% } else { %> Be the first to <b>like this </b>
+        <% } %>
+      </div>
     </div>
     <% if(post.caption){ %>
     <p class="fs-7 mt-2 mb-0">
