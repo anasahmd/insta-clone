@@ -1,6 +1,6 @@
 <% layout('layouts/boilerplate') %> <% for (post of posts){ %>
 <div class="card my-3 mx-width mx-auto">
-  <div class="card-body">
+  <div class="card-body py-2">
     <div class="d-flex w-100 gap-3">
       <div class="flex-shrink-0">
         <img
@@ -70,12 +70,22 @@
       </div>
     </div>
   </div>
-  <img src="<%= post.image %>" alt="" class="img-fluid" />
+  <img src="<%= post.image %>" alt="" class="img-fluid like-form" />
   <div class="card-body">
     <div class="d-flex gap-3 my-1">
-      <a href="" class="text-reset">
-        <i class="fa-regular fa-heart"></i>
-      </a>
+      <form
+        action="/like/<%= post._id %> "
+        method="POST"
+        class="m-0 p-0 like-form"
+      >
+        <button class="text-reset p-0 m-0 btn-like">
+          <% if(currentUser && post.likes.includes(currentUser._id)){ %>
+          <i class="fa-solid fa-heart red-heart"></i>
+          <% } else { %>
+          <i class="fa-regular fa-heart"></i>
+          <% } %>
+        </button>
+      </form>
       <a href="/posts/<%= post._id %>" class="text-reset">
         <i class="fa-regular fa-comment"></i>
       </a>
@@ -83,11 +93,26 @@
         <i class="fa-solid fa-paper-plane"></i>
       </a>
     </div>
-    <small class="fw-bolder">100 likes</small>
-    <br />
+
+    <div class="like-container">
+      <small class="fw-bolder" <% if (!post.likes.length){ %>
+        hidden <% } %> ><%= post.likes.length %> <% if(post.likes.length > 1){
+        %> likes <% }else { %> like <% } %>
+      </small>
+      <% if (post.likes.length){ %>
+      <br />
+      <% } %>
+    </div>
     <% if(post.caption){ %>
-    <p class="fs-7 mt-1 mb-0">
-      <b><%= post.user.username %></b> <%=post.caption %>
+    <p class="fs-7 mt-2 mb-0">
+      <b
+        ><a
+          href="/<%= post.user.username %>"
+          class="fs-7 fw-bolder mb-0 text-reset"
+          ><%= post.user.username %></a
+        ></b
+      >
+      <%=post.caption %>
     </p>
     <% } %> <% if (post.comments.length){ %>
     <a href="/posts/<%= post._id %>" class="text-muted fs-7 mb-2"

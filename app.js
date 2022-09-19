@@ -5,6 +5,7 @@ const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
 const catchAsync = require('./utils/catchAsync');
 const ExpressError = require('./utils/ExpressError');
+const like = require('./utils/like');
 const session = require('express-session');
 const flash = require('connect-flash');
 const passport = require('passport');
@@ -14,6 +15,7 @@ const User = require('./models/users');
 const posts = require('./routes/posts');
 const comments = require('./routes/comments');
 const users = require('./routes/users');
+const likes = require('./routes/likes');
 
 app.engine('ejs', ejsMate);
 app.set('view engine', 'ejs');
@@ -74,6 +76,7 @@ app.get('/fakeuser', async (req, res) => {
 app.use('/posts', posts);
 app.use('/posts/:id/comments', comments);
 app.use('/', users);
+app.use('/like', likes);
 
 app.get('/', (req, res) => {
   res.redirect('/posts');

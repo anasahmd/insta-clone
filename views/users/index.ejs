@@ -65,10 +65,11 @@
     <span class="post-overlay">
       <p>
         <span class="post-likes"
-          ><i class="fa-solid fa-heart fs-6"></i> 150</span
-        >
+          ><i class="fa-solid fa-heart fs-6 me-1"></i> <%= post.likes.length %>
+        </span>
         <span class="post-comments"
-          ><i class="fa-solid fa-comment fs-6"></i> <%= post.comments.length %>
+          ><i class="fa-solid fa-comment fs-6 me-1"></i> <%=
+          post.comments.length %>
         </span>
       </p>
     </span>

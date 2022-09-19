@@ -12,6 +12,8 @@ router.get('/accounts/signup', (req, res) => {
   res.render('users/signup');
 });
 
+// Validate User maybe
+
 router.post(
   '/accounts/signup',
   catchAsync(async (req, res) => {

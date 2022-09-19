@@ -22,6 +22,12 @@ router.get(
   '/',
   catchAsync(async (req, res) => {
     const posts = await Post.find().populate('user');
+    // const likedPosts = await Post.find({ likes: { $in: req.user._id } });
+    // likedPosts.forEach((likedPost) => {
+    //   const likedId = likedPost._id;
+    // });
+    // console.log({ likedPosts });
+    // console.log(likedPost);
     res.render('posts/index', { posts });
   })
 );

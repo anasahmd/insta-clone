@@ -70,6 +70,10 @@ i {
   font-size: 1.35rem;
 }
 
+.red-heart {
+  color: #ed4957;
+}
+
 .fs-7 {
   font-size: 0.875rem;
 }
@@ -121,6 +125,12 @@ i {
 
 .btn-opc:focus {
   color: #0d6efd;
+}
+
+.btn-like {
+  box-shadow: none;
+  border: none;
+  background: none;
 }
 
 .post-list {
