@@ -25,6 +25,18 @@ const userSchema = new Schema({
       ref: 'Comment',
     },
   ],
+  followers: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+    },
+  ],
+  following: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+    },
+  ],
 });
 
 userSchema.plugin(passportLocalMongoose);

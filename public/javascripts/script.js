@@ -1,4 +1,6 @@
 const likeForms = document.querySelectorAll('.like-form');
+const followForm = document.querySelector('.follow-form');
+const followersLength = document.querySelector('#followers-length');
 
 likeForms.forEach((likeForm) => {
   likeForm.addEventListener('click', (e) => {
@@ -28,17 +30,22 @@ likeForms.forEach((likeForm) => {
   });
 });
 
-// const updateLike = (likeForm) => {
-//   axios
-//     .get(`${likeForm.action}`)
-//     .then(function (response) {
-//       const res = ejs.render(response.data);
-//       console.log(res);
-//       likeForm.parentElement.parentElement.querySelector(
-//         '.like-container'
-//       ).innerHTML = res;
-//     })
-//     .catch(function (error) {
-//       console.log(error);
+followForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  axios.post(`${followForm.action}`, {}).then(function (response) {
+    followForm.innerHTML = response.data.button;
+    followForm.action = response.data.action;
+    followersLength.innerHTML = response.data.followers.length;
+  });
+});
+
+// if (unFollowForm) {
+//   unFollowForm.addEventListener('submit', (e) => {
+//     e.preventDefault();
+//     axios.post(`${unFollowForm.action}`, {}).then(function (response) {
+//       console.log(response.data.html);
+//       const html = ejs.render(response.data.html);
+//       followDiv.innerHTML = html;
 //     });
-// };
+//   });
+// }

@@ -16,6 +16,7 @@ const posts = require('./routes/posts');
 const comments = require('./routes/comments');
 const users = require('./routes/users');
 const likes = require('./routes/likes');
+const follow = require('./routes/follow');
 
 app.engine('ejs', ejsMate);
 app.set('view engine', 'ejs');
@@ -77,6 +78,7 @@ app.use('/posts', posts);
 app.use('/posts/:id/comments', comments);
 app.use('/', users);
 app.use('/like', likes);
+app.use('/follow', follow);
 
 app.get('/', (req, res) => {
   res.redirect('/posts');

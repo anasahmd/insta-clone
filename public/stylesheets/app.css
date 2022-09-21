@@ -133,6 +133,19 @@ i {
   background: none;
 }
 
+.btn-unfollow {
+  color: #262626;
+  border: 1px solid #dbdbdb;
+}
+
+.btn-unfollow:hover,
+.btn-unfollow:focus,
+.btn-unfollow:active:focus {
+  background-color: rgb(250, 250, 250);
+  color: #262626;
+  border: 1px solid #dbdbdb;
+}
+
 .post-list {
   display: grid;
   grid-template-columns: repeat(3, minmax(100px, 293px));
