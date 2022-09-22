@@ -6,6 +6,8 @@ const { isLoggedIn } = require('../middleware');
 const Post = require('../models/post');
 const User = require('../models/users');
 
+router.get('/:id');
+
 router.post(
   '/:id',
   catchAsync(async (req, res) => {

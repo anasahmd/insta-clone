@@ -38,10 +38,7 @@
           <div class="modal-content">
             <% if (currentUser && post.user.equals(currentUser)) { %>
             <div class="modal-body text-center border-bottom">
-              <form
-                action="/posts/<%= post._id %>?_method=DELETE"
-                method="POST"
-              >
+              <form action="/p/<%= post._id %>?_method=DELETE" method="POST">
                 <button
                   class="btn btn-outline-danger btn-delete btn-custom py-0 ms-auto"
                 >
@@ -50,11 +47,11 @@
               </form>
             </div>
             <div class="modal-body text-center border-bottom">
-              <a href="/posts/<%= post._id %>/edit" class="text-reset">Edit</a>
+              <a href="/p/<%= post._id %>/edit" class="text-reset">Edit</a>
             </div>
             <% } %>
             <div class="modal-body text-center">
-              <a href="/posts/<%= post._id %>" class="text-reset">Go to post</a>
+              <a href="/p/<%= post._id %>" class="text-reset">Go to post</a>
             </div>
             <div class="modal-footer text-center">
               <button
@@ -86,7 +83,7 @@
           <% } %>
         </button>
       </form>
-      <a href="/posts/<%= post._id %>" class="text-reset">
+      <a href="/p/<%= post._id %>" class="text-reset">
         <i class="fa-regular fa-comment"></i>
       </a>
       <a href="" class="text-reset">
@@ -132,9 +129,10 @@
         />
       </div>
       <form
-        action="/posts/<%= post._id %>/comments"
+        action="/p/<%= post._id %>/comments"
         method="POST"
         class="w-100"
+        autocomplete="off"
       >
         <div class="d-flex">
           <input
@@ -154,20 +152,24 @@
   </div>
   <% } %> <% if (post.comments.length){ %>
   <div class="container mb-2">
-    <% for (comment of post.comments){ %>
+    <% for (let comment of post.comments){ %>
     <div class="card-body py-2">
       <div class="d-flex gap-3">
         <div>
-          <img
-            src="https://d33wubrfki0l68.cloudfront.net/fb0ba0cbcadbdf0b2ffabf331d2345fb05106e16/20663/images/profile-picture.webp"
-            alt=""
-            class="rounded-circle profile-image"
-          />
+          <a href="/<%= comment.user.username%>">
+            <img
+              src="https://d33wubrfki0l68.cloudfront.net/fb0ba0cbcadbdf0b2ffabf331d2345fb05106e16/20663/images/profile-picture.webp"
+              alt=""
+              class="rounded-circle profile-image"
+            />
+          </a>
         </div>
         <div>
           <span class="fs-7 mb-0"
-            ><b class="me-1"><%= comment.user.username %> </b> <%= comment.text
-            %></span
+            ><a href="/<%= comment.user.username%>" class="me-1 text-reset fw-6"
+              ><%= comment.user.username %>
+            </a>
+            <%= comment.text %></span
           >
           <div class="d-flex align-items-center gap-2">
             <span class="text-muted fs-8">10m</span>
@@ -204,7 +206,7 @@
         <div class="modal-content">
           <div class="modal-body text-center border-bottom">
             <form
-              action="/posts/<%= post._id %>/comments/<%= comment._id %>?_method=DELETE"
+              action="/p/<%= post._id %>/comments/<%= comment._id %>?_method=DELETE"
               method="POST"
             >
               <button

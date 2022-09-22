@@ -1,4 +1,4 @@
-<% layout('layouts/boilerplate') %> <% for (post of posts){ %>
+<% layout('layouts/boilerplate') %> <% for (let post of posts){ %>
 <div class="card my-3 mx-width mx-auto">
   <div class="card-body py-2">
     <div class="d-flex w-100 gap-3">
@@ -38,10 +38,7 @@
           <div class="modal-content">
             <% if (currentUser && post.user.equals(currentUser)) { %>
             <div class="modal-body text-center border-bottom">
-              <form
-                action="/posts/<%= post._id %>?_method=DELETE"
-                method="POST"
-              >
+              <form action="/p/<%= post._id %>?_method=DELETE" method="POST">
                 <button
                   class="btn btn-outline-danger btn-delete btn-custom py-0 ms-auto"
                 >
@@ -50,11 +47,11 @@
               </form>
             </div>
             <div class="modal-body text-center border-bottom">
-              <a href="/posts/<%= post._id %>/edit" class="text-reset">Edit</a>
+              <a href="/p/<%= post._id %>/edit" class="text-reset">Edit</a>
             </div>
             <% } %>
             <div class="modal-body text-center">
-              <a href="/posts/<%= post._id %>" class="text-reset">Go to post</a>
+              <a href="/p/<%= post._id %>" class="text-reset">Go to post</a>
             </div>
             <div class="modal-footer text-center">
               <button
@@ -86,7 +83,7 @@
           <% } %>
         </button>
       </form>
-      <a href="/posts/<%= post._id %>" class="text-reset">
+      <a href="/p/<%= post._id %>" class="text-reset">
         <i class="fa-regular fa-comment"></i>
       </a>
       <a href="" class="text-reset">
@@ -94,17 +91,19 @@
       </a>
     </div>
 
-    <div class="like-container">
-      <div class="fs-7 mt-2">
-        <% if (post.likes.length){ %>
-        <span class="fw-bolder"
-          ><%= post.likes.length %> <% if(post.likes.length > 1){ %> likes <%
-          }else { %> like <% } %>
-        </span>
-        <% } else { %> Be the first to <b>like this </b>
-        <% } %>
+    <a href="/p/<%= post._id %>/liked_by" class="text-reset">
+      <div class="like-container">
+        <div class="fs-7 mt-2">
+          <% if (post.likes.length){ %>
+          <span class="fw-bolder"
+            ><%= post.likes.length %> <% if(post.likes.length > 1){ %> likes <%
+            }else { %> like <% } %>
+          </span>
+          <% } else { %> Be the first to <b>like this </b>
+          <% } %>
+        </div>
       </div>
-    </div>
+    </a>
     <% if(post.caption){ %>
     <p class="fs-7 mt-2 mb-0">
       <b
@@ -117,7 +116,7 @@
       <%=post.caption %>
     </p>
     <% } %> <% if (post.comments.length){ %>
-    <a href="/posts/<%= post._id %>" class="text-muted fs-7 mb-2"
+    <a href="/p/<%= post._id %>" class="text-muted fs-7 mb-2"
       >View <%= post.comments.length %> <% if (post.comments.length > 1){ %>
       comments <% }else{ %> comment <% } %>
     </a>

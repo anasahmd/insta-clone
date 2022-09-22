@@ -3,6 +3,7 @@ const router = express.Router();
 const catchAsync = require('../utils/catchAsync');
 const User = require('../models/users');
 const passport = require('passport');
+const { isLoggedIn } = require('../middleware');
 
 router.get('/login', (req, res) => {
   res.render('users/login');
@@ -28,7 +29,7 @@ router.post(
       req.login(registeredUser, (err) => {
         if (err) return next(err);
         req.flash('success', 'User registered successfully');
-        res.redirect('/posts');
+        res.redirect('/');
       });
     } catch (e) {
       req.flash('error', e.message);
@@ -45,7 +46,7 @@ router.post(
   }),
   (req, res) => {
     req.flash('success', 'Welcome Back');
-    res.redirect('/posts');
+    res.redirect('/');
   }
 );
 
@@ -59,11 +60,58 @@ router.get('/logout', (req, res) => {
 });
 
 router.get(
+  '/accounts/edit',
+  isLoggedIn,
+  catchAsync(async (req, res) => {
+    const user = req.user;
+    res.render('users/edit', { user });
+  })
+);
+
+router.post(
+  '/accounts/edit',
+  isLoggedIn,
+  catchAsync(async (req, res) => {
+    const user = req.user;
+    const updatedUser = await User.findByIdAndUpdate(user._id, {
+      ...req.body,
+    });
+    res.redirect(`/${updatedUser.username}`);
+  })
+);
+
+router.get(
   '/:username',
   catchAsync(async (req, res) => {
     const { username } = req.params;
     const user = await User.findByUsername(username).populate('posts');
     res.render('users/index', { user });
+  })
+);
+
+router.get(
+  '/:username/followers',
+  catchAsync(async (req, res) => {
+    const { username } = req.params;
+    const user = await User.findByUsername(username).populate({
+      path: 'followers',
+      select: ['username', 'fullName'],
+    });
+    const listUsers = user.followers;
+    res.render('users/listuser', { listUsers });
+  })
+);
+
+router.get(
+  '/:username/following',
+  catchAsync(async (req, res) => {
+    const { username } = req.params;
+    const user = await User.findByUsername(username).populate({
+      path: 'following',
+      select: ['username', 'fullName'],
+    });
+    const listUsers = user.following;
+    res.render('users/listuser', { listUsers });
   })
 );
 

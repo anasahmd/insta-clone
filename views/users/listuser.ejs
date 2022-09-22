@@ -1,0 +1,44 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="container mx-width">
+  <% for(let user of listUsers){ %>
+  <div class="d-flex mb-4 align-items-center justify-content-between">
+    <div class="left d-flex gap-3">
+      <a href="/<%= user.username %>">
+        <img
+          src="https://d33wubrfki0l68.cloudfront.net/fb0ba0cbcadbdf0b2ffabf331d2345fb05106e16/20663/images/profile-picture.webp"
+          alt=""
+          class="rounded-circle profile-image-list"
+        />
+      </a>
+      <div>
+        <a href="/<%= user.username %>" class="text-reset fw-5 fs-7">
+          <%= user.username %>
+        </a>
+        <div class="fs-7 my-0 text-muted"><%= user.fullName %></div>
+      </div>
+    </div>
+    <div class="right">
+      <% if(currentUser && !user._id.equals(currentUser._id)){ %>
+      <form
+        action="/follow/<%= user._id %>/<% if (!(currentUser && currentUser.following.includes(user._id))){ %>follow<% } else { %>unfollow<% } %>"
+        method="POST"
+        class="follow-form"
+      >
+        <% if (!(currentUser && currentUser.following.includes(user._id))){ %>
+        <button class="btn btn-primary btn-sm px-3 btn-follow">Follow</button>
+        <% } else { %>
+        <button class="btn btn-outline-secondary btn-sm px-4 btn-unfollow">
+          <span class="fs-7 fw-5">Following</span>
+        </button>
+        <% } %>
+      </form>
+      <% } else if (!currentUser){%>
+      <a href="/login">
+        <button class="btn btn-primary btn-sm px-3 btn-follow">Follow</button>
+      </a>
+      <% }%>
+    </div>
+  </div>
+  <% } %>
+</div>

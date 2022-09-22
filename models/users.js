@@ -25,6 +25,12 @@ const userSchema = new Schema({
       ref: 'Comment',
     },
   ],
+  bio: {
+    type: String,
+  },
+  // website: {
+  //   type: String,
+  // },
   followers: [
     {
       type: Schema.Types.ObjectId,

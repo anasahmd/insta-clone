@@ -62,6 +62,7 @@ app.use((req, res, next) => {
   res.locals.success = req.flash('success');
   res.locals.error = req.flash('error');
   res.locals.currentUser = req.user;
+  res.set('Cache-Control', 'no-store');
   next();
 });
 
@@ -74,14 +75,14 @@ app.get('/fakeuser', async (req, res) => {
   res.send(newUser);
 });
 
-app.use('/posts', posts);
-app.use('/posts/:id/comments', comments);
+app.use('/p', posts);
+app.use('/p/:id/comments', comments);
 app.use('/', users);
 app.use('/like', likes);
 app.use('/follow', follow);
 
 app.get('/', (req, res) => {
-  res.redirect('/posts');
+  res.redirect('/p');
 });
 
 app.all('*', (req, res, next) => {

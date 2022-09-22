@@ -1,6 +1,14 @@
 const likeForms = document.querySelectorAll('.like-form');
 const followForm = document.querySelector('.follow-form');
 const followersLength = document.querySelector('#followers-length');
+const links = document.querySelectorAll('a');
+
+links.forEach((link) => {
+  link.addEventListener('click', () => {
+    console.log('hello');
+    location.reload();
+  });
+});
 
 likeForms.forEach((likeForm) => {
   likeForm.addEventListener('click', (e) => {

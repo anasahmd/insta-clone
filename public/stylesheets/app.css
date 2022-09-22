@@ -16,6 +16,10 @@ body {
   border: none;
 }
 
+.website-link {
+  color: #00376b;
+}
+
 .nav-pop {
   width: 150px;
 }
@@ -40,6 +44,16 @@ body {
   height: 77px;
 }
 
+.profile-image-edit {
+  width: 38px;
+  height: 38px;
+}
+
+.profile-image-list {
+  width: 44px;
+  height: 44px;
+}
+
 .profile-post-img {
   position: relative;
   overflow: hidden;
@@ -52,6 +66,10 @@ body {
   min-width: 100%;
   min-height: 100%;
   object-fit: cover;
+}
+
+.bio-text {
+  white-space: pre-wrap;
 }
 
 a {
@@ -84,6 +102,14 @@ i {
 
 .fw-5 {
   font-weight: 500;
+}
+
+.fw-6 {
+  font-weight: 600;
+}
+
+.w-90 {
+  width: 95%;
 }
 
 .btn-custom {

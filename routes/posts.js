@@ -49,7 +49,7 @@ router.post(
     await post.save();
     await user.save();
     req.flash('success', 'Your post has been shared');
-    res.redirect('/posts');
+    res.redirect('/p');
   })
 );
 
@@ -67,7 +67,7 @@ router.get(
       .populate('user');
     if (!post) {
       req.flash('error', 'Post Not Found');
-      return res.redirect('/posts');
+      return res.redirect('/p');
       // return next(new ExpressError('Post Not Found', 404));
     }
     res.render('posts/show', { post });
@@ -107,6 +107,18 @@ router.delete(
     await User.findByIdAndUpdate(req.user._id, { $pull: { posts: id } });
     await Post.findByIdAndDelete(id);
     res.redirect('/posts');
+  })
+);
+
+router.get(
+  '/:id/liked_by',
+  catchAsync(async (req, res) => {
+    const post = await Post.findById(req.params.id).populate({
+      path: 'likes',
+      select: ['username', 'fullname'],
+    });
+    const listUsers = post.likes;
+    res.render('users/listuser', { listUsers });
   })
 );
 
