@@ -23,17 +23,24 @@ router.post(
       await post.save();
     }
     const updatedPost = await Post.findById(id);
-    res.send(
-      `<div class="fs-7 mt-2">
+    let updatedHeart;
+    if (updatedPost.likes.includes(req.user._id)) {
+      updatedHeart = `<i class="fa-solid fa-heart red-heart"></i>`;
+    } else {
+      updatedHeart = `<i class="fa-regular fa-heart"></i>`;
+    }
+    res.send({
+      text: `<div class="fs-7 mt-2">
       <% if (${updatedPost.likes.length}){ %>
-      <span class="fw-bolder"
+      <span class="fw-bolder" data-like-count="${updatedPost.likes.length}"
         ><%= ${updatedPost.likes.length} %> <% if(${updatedPost.likes.length} > 1){ %> likes <%
         }else { %> like <% } %>
       </span>
-      <% } else { %> Be the first to <b>like this </b>
+      <% } else { %><span data-like-count="${updatedPost.likes.length}">Be the first to <b>like this </b><span>
       <% } %>
-    </div>`
-    );
+    </div>`,
+      heart: `${updatedHeart}`,
+    });
   })
 );
 

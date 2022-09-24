@@ -1,8 +1,8 @@
 <% layout('layouts/boilerplate') %>
 
-<div class="container mx-width">
+<div class="container mx-width my-1">
   <% for(let user of listUsers){ %>
-  <div class="d-flex mb-4 align-items-center justify-content-between">
+  <div class="d-flex mb-4 align-items-center justify-content-between mx-2">
     <div class="left d-flex gap-3">
       <a href="/<%= user.username %>">
         <img
@@ -11,11 +11,13 @@
           class="rounded-circle profile-image-list"
         />
       </a>
-      <div>
-        <a href="/<%= user.username %>" class="text-reset fw-5 fs-7">
+      <div class="d-flex justify-content-center flex-column align-self-center">
+        <a href="/<%= user.username %>" class="text-reset fw-bold fs-7">
           <%= user.username %>
         </a>
-        <div class="fs-7 my-0 text-muted"><%= user.fullName %></div>
+        <% if (user.fullName){ %>
+        <div class="fs-7 my-n1 text-muted"><%= user.fullName %></div>
+        <% } %>
       </div>
     </div>
     <div class="right">

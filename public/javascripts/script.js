@@ -13,27 +13,93 @@ links.forEach((link) => {
 likeForms.forEach((likeForm) => {
   likeForm.addEventListener('click', (e) => {
     e.preventDefault();
+    const btnLIke =
+      likeForm.parentElement.parentElement.querySelector('.btn-like');
+    const btnLikeClass =
+      likeForm.parentElement.parentElement.querySelector('.btn-like')
+        .children[0].classList;
+
+    const likeContainer =
+      likeForm.parentElement.parentElement.querySelector('.like-container');
+    let likeContainerDiv = likeForm.parentElement.parentElement.querySelector(
+      '.like-container div'
+    );
+    let likeCount = parseInt(
+      likeForm.parentElement.parentElement.querySelector('.like-container span')
+        .dataset.likeCount
+    );
+
+    btnLikeClass.toggle('red-heart');
+    if (btnLikeClass.contains('fa-regular')) {
+      btnLikeClass.remove('fa-regular');
+      btnLikeClass.add('fa-solid');
+      if (likeCount == 0) {
+        likeContainerDiv.innerHTML = `<span class="fw-bolder" data-like-count="1">1 like</span>`;
+      } else {
+        likeContainerDiv.innerHTML = `<span class="fw-bolder" data-like-count="${
+          likeCount + 1
+        }">${likeCount + 1} likes</span>`;
+      }
+    } else {
+      btnLikeClass.add('fa-regular');
+      btnLikeClass.remove('fa-solid');
+      if (likeCount == 1) {
+        likeContainerDiv.innerHTML = `<span data-like-count="0">Be the first to <b>like this </b><span>`;
+      } else if (likeCount == 2) {
+        likeContainerDiv.innerHTML = `<span class="fw-bolder" data-like-count="1">1 like</span>`;
+      } else {
+        likeContainerDiv.innerHTML = `<span class="fw-bolder" data-like-count="${
+          likeCount - 1
+        }">${likeCount - 1} likes</span>`;
+      }
+    }
+
     axios
       .post(`${likeForm.action}`, {})
       .then(function (response) {
-        const res = ejs.render(response.data);
-        likeForm.parentElement.parentElement.querySelector(
-          '.like-container'
-        ).innerHTML = res;
+        const resText = ejs.render(response.data.text);
+        likeContainer.innerHTML = resText;
+        btnLIke.innerHTML = response.data.heart;
         const btnLikeClass =
           likeForm.parentElement.parentElement.querySelector('.btn-like')
             .children[0].classList;
+      })
+      .catch(function (error) {
+        const btnLikeClass =
+          likeForm.parentElement.parentElement.querySelector('.btn-like')
+            .children[0].classList;
+        likeContainerDiv = likeForm.parentElement.parentElement.querySelector(
+          '.like-container div'
+        );
+        likeCount = parseInt(
+          likeForm.parentElement.parentElement.querySelector(
+            '.like-container span'
+          ).dataset.likeCount
+        );
         btnLikeClass.toggle('red-heart');
         if (btnLikeClass.contains('fa-regular')) {
           btnLikeClass.remove('fa-regular');
           btnLikeClass.add('fa-solid');
+          if (likeCount == 0) {
+            likeContainerDiv.innerHTML = `<span class="fw-bolder" data-like-count="1">1 like</span>`;
+          } else {
+            likeContainerDiv.innerHTML = `<span class="fw-bolder" data-like-count="${
+              likeCount + 1
+            }">${likeCount + 1} likes</span>`;
+          }
         } else {
           btnLikeClass.add('fa-regular');
           btnLikeClass.remove('fa-solid');
+          if (likeCount == 1) {
+            likeContainerDiv.innerHTML = `<span data-like-count="0">Be the first to <b>like this </b><span>`;
+          } else if (likeCount == 2) {
+            likeContainerDiv.innerHTML = `<span class="fw-bolder" data-like-count="1">1 like</span>`;
+          } else {
+            likeContainerDiv.innerHTML = `<span class="fw-bolder" data-like-count="${
+              likeCount - 1
+            }">${likeCount - 1} likes</span>`;
+          }
         }
-      })
-      .catch(function (error) {
-        window.location.href = '/login';
       });
   });
 });

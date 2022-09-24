@@ -84,6 +84,10 @@ a {
   max-width: 750px;
 }
 
+.mx-width-profile {
+  max-width: 935px;
+}
+
 i {
   font-size: 1.35rem;
 }
@@ -108,8 +112,16 @@ i {
   font-weight: 600;
 }
 
+.w-80 {
+  width: 80%;
+}
+
+.w-85 {
+  width: 85%;
+}
+
 .w-90 {
-  width: 95%;
+  width: 90%;
 }
 
 .btn-custom {
@@ -203,8 +215,11 @@ i {
   color: white;
   text-align: center;
 }
-.post:hover .post-overlay {
-  display: flex;
+
+@media (min-width: 576px) {
+  .post:hover .post-overlay {
+    display: flex;
+  }
 }
 
 .post-like,
@@ -219,5 +234,24 @@ i {
 @media screen and (max-width: 768px) {
   .post-list {
     grid-gap: 3px;
+  }
+}
+.post-index-card {
+  margin: 0em inherit;
+}
+
+@media (max-width: 576px) {
+  body {
+    background-color: #fff;
+  }
+  main {
+    padding-top: 0px !important;
+  }
+  .card {
+    width: 100%;
+    border: none;
+  }
+  .mx-width {
+    max-width: 576px;
   }
 }

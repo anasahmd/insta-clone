@@ -1,6 +1,6 @@
 <% layout('layouts/boilerplate') %>
 
-<div class="container px-4">
+<div class="container px-4 mx-width-profile mx-auto mt-3">
   <div class="d-flex gap-4">
     <img
       src="https://d33wubrfki0l68.cloudfront.net/fb0ba0cbcadbdf0b2ffabf331d2345fb05106e16/20663/images/profile-picture.webp"
@@ -44,30 +44,34 @@
   </div>
 </div>
 
-<hr class="mb-2 text-muted" />
+<!-- <hr class="mb-2 text-muted" /> -->
 
-<div class="d-flex justify-content-around my-0 text-center fs-7">
-  <div>
-    <div class="fw-bold"><%= user.posts.length %></div>
-    <div class="text-muted">posts</div>
-  </div>
-  <div>
-    <a href="<%= user.username %>/followers" class="text-reset">
-      <div class="fw-bold" id="followers-length">
-        <%= user.followers.length %>
-      </div>
-      <div class="text-muted">followers</div>
-    </a>
-  </div>
-  <div>
-    <a href="<%= user.username %>/following" class="text-reset">
-      <div class="fw-bold"><%= user.following.length %></div>
-      <div class="text-muted">following</div>
-    </a>
+<div
+  class="py-2 mt-3 mx-width-profile mx-auto border-top border-bottom border-end border-start"
+>
+  <div class="d-flex justify-content-around my-0 text-center fs-7">
+    <div>
+      <div class="fw-bold"><%= user.posts.length %></div>
+      <div class="text-muted">posts</div>
+    </div>
+    <div>
+      <a href="<%= user.username %>/followers" class="text-reset">
+        <div class="fw-bold" id="followers-length">
+          <%= user.followers.length %>
+        </div>
+        <div class="text-muted">followers</div>
+      </a>
+    </div>
+    <div>
+      <a href="<%= user.username %>/following" class="text-reset">
+        <div class="fw-bold"><%= user.following.length %></div>
+        <div class="text-muted">following</div>
+      </a>
+    </div>
   </div>
 </div>
 
-<hr class="mt-2 text-muted" />
+<!-- <hr class="mt-2 mb-0 text-muted" /> -->
 
 <!-- <div class="container">
   <div class="row">
@@ -82,7 +86,7 @@
 </div> -->
 
 <div
-  class="text-center my-3 gap-2 d-flex justify-content-center align-items-center"
+  class="text-center py-3 gap-2 d-flex justify-content-center align-items-center"
 >
   <i class="fa-solid fa-table-cells-large fs-7 text-muted"></i>
   <span class="text-muted fs-7 fw-bold">POSTS</span>

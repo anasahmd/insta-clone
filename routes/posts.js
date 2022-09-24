@@ -115,7 +115,7 @@ router.get(
   catchAsync(async (req, res) => {
     const post = await Post.findById(req.params.id).populate({
       path: 'likes',
-      select: ['username', 'fullname'],
+      select: ['username', 'fullName'],
     });
     const listUsers = post.likes;
     res.render('users/listuser', { listUsers });
