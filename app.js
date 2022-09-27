@@ -11,6 +11,7 @@ const flash = require('connect-flash');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const User = require('./models/users');
+const formatDistanceToNowStrict = require('date-fns/formatDistanceToNowStrict');
 
 const posts = require('./routes/posts');
 const comments = require('./routes/comments');
@@ -62,17 +63,9 @@ app.use((req, res, next) => {
   res.locals.success = req.flash('success');
   res.locals.error = req.flash('error');
   res.locals.currentUser = req.user;
+  res.locals.formatDistanceToNowStrict = formatDistanceToNowStrict;
   res.set('Cache-Control', 'no-store');
   next();
-});
-
-app.get('/fakeuser', async (req, res) => {
-  const user = new User({
-    email: 'anasahmad@gmail.com',
-    username: 'anasahmad',
-  });
-  const newUser = await User.register(user, 'chicken');
-  res.send(newUser);
 });
 
 app.use('/p', posts);

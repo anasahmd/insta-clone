@@ -4,9 +4,45 @@ const catchAsync = require('../utils/catchAsync');
 
 const { isLoggedIn } = require('../middleware');
 const Post = require('../models/post');
+const Comment = require('../models/comment');
 const User = require('../models/users');
 
-router.get('/:id');
+router.post(
+  '/comment/:commentId',
+  catchAsync(async (req, res) => {
+    // if (!req.user._id) {
+    //   isLoggedIn();
+    // }
+    const { commentId } = req.params;
+    const comment = await Comment.findById(commentId);
+    if (comment.likes.includes(req.user._id)) {
+      await Comment.findByIdAndUpdate(commentId, {
+        $pull: { likes: req.user._id },
+      });
+    } else {
+      comment.likes.push(req.user._id);
+      await comment.save();
+    }
+
+    const updatedComment = await Comment.findById(commentId);
+    let updatedHeart;
+    let resText;
+    if (updatedComment.likes.length > 0) {
+      resText = `<span class="text-muted fs-8 fw-5" data-like-count="${updatedComment.likes.length}">${updatedComment.likes.length} <% if(${updatedComment.likes.length} > 1){%> likes <% } else {%>like<% }%></span>`;
+    } else {
+      resText = `<span class="text-muted fs-8 fw-5" data-like-count="0"><span>`;
+    }
+    if (updatedComment.likes.includes(req.user._id)) {
+      updatedHeart = `<i class="fa-solid fa-heart red-heart fs-8"></i>`;
+    } else {
+      updatedHeart = `<i class="fa-regular fa-heart fs-8"></i>`;
+    }
+    res.send({
+      text: `${resText}`,
+      heart: `${updatedHeart}`,
+    });
+  })
+);
 
 router.post(
   '/:id',

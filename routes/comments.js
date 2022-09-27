@@ -30,7 +30,7 @@ router.post(
     post.comments.push(comment);
     await comment.save();
     await post.save();
-    res.redirect(`/p/${post._id}`);
+    res.redirect(`/p/${post._id}#comment`);
   })
 );
 
@@ -42,7 +42,7 @@ router.delete(
     const { id, commentId } = req.params;
     await Post.findByIdAndUpdate(id, { $pull: { comments: commentId } });
     await Comment.findByIdAndDelete(commentId);
-    res.redirect(`/p/${id}`);
+    res.redirect(`/p/${id}#comment`);
   })
 );
 

@@ -94,7 +94,7 @@ router.put(
   catchAsync(async (req, res) => {
     const { id } = req.params;
     const post = await Post.findByIdAndUpdate(id, { ...req.body.post });
-    res.redirect(`/posts/${post._id}`);
+    res.redirect(`/p/${post._id}`);
   })
 );
 
@@ -106,7 +106,7 @@ router.delete(
     const { id } = req.params;
     await User.findByIdAndUpdate(req.user._id, { $pull: { posts: id } });
     await Post.findByIdAndDelete(id);
-    res.redirect('/posts');
+    res.redirect('/p');
   })
 );
 

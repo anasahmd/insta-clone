@@ -1,7 +1,7 @@
 <% layout('layouts/boilerplate') %> <% for (let post of posts){ %>
 <div class="post-index-card card my-sm-3 mx-width mx-auto">
   <div class="card-body py-2">
-    <div class="d-flex w-100 gap-3">
+    <div class="d-flex w-100 gap-2 gap-sm-3">
       <div class="flex-shrink-0">
         <a href="/<%= post.user.username %>">
           <img
@@ -88,9 +88,12 @@
       <a href="/p/<%= post._id %>#comment" class="text-reset">
         <i class="fa-regular fa-comment"></i>
       </a>
-      <a href="" class="text-reset">
+      <button
+        class="text-reset btn btn-custom text-reset p-0 post-share"
+        data-share-data="<%= {url: `/p/${post._id}`} %>"
+      >
         <i class="fa-solid fa-paper-plane"></i>
-      </a>
+      </button>
     </div>
 
     <a href="/p/<%= post._id %>/liked_by" class="text-reset">
@@ -126,7 +129,7 @@
     </a>
     <% } %>
     <p class="text-muted fs-7 my-1 mb-0">
-      <small><%= post.date%> </small>
+      <small><%= formatDistanceToNowStrict(post.date)%> ago</small>
     </p>
   </div>
 </div>
