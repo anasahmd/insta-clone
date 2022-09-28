@@ -3,13 +3,32 @@ const likeComments = document.querySelectorAll('.like-form-comment');
 const followForm = document.querySelector('.follow-form');
 const followersLength = document.querySelector('#followers-length');
 const links = document.querySelectorAll('a');
-const postShare = document.querySelectorAll('.post-share');
+const postLinks = document.querySelectorAll('.post-link');
+let doubleTaps = document.querySelectorAll('.double-tap-post');
+
+doubleTaps.forEach((doubleTap) => {
+  doubleTap.addEventListener('dblclick', () => {
+    let btnLikeClass =
+      doubleTap.parentElement.querySelector('.like-form').children[0]
+        .children[0].classList;
+    if (btnLikeClass.contains('fa-regular')) {
+      doubleTap.parentElement.querySelector('.like-form').click();
+      btnLikeClass =
+        doubleTap.parentElement.querySelector('.like-form').children[0]
+          .children[0].classList;
+    }
+    doubleTap.children[1].classList.add('like');
+    setTimeout(() => {
+      doubleTap.children[1].classList.remove('like');
+    }, 1200);
+  });
+});
 
 likeForms.forEach((likeForm) => {
-  likeForm.addEventListener('submit', (e) => {
+  likeForm.addEventListener('click', (e) => {
     e.preventDefault();
-    const btnLIke = likeForm.querySelector('.btn-like');
-    const btnLikeClass = btnLIke.children[0].classList;
+    const btnLike = likeForm.querySelector('.btn-like');
+    const btnLikeClass = btnLike.children[0].classList;
 
     const likeContainer =
       likeForm.parentElement.parentElement.querySelector('.like-container');
@@ -36,7 +55,7 @@ likeForms.forEach((likeForm) => {
       btnLikeClass.add('fa-regular');
       btnLikeClass.remove('fa-solid');
       if (likeCount == 1) {
-        likeContainerDiv.innerHTML = `<span data-like-count="0">Be the first to <b>like this </b><span>`;
+        likeContainerDiv.innerHTML = `<span data-like-count="0">Be the first to <b class="like-this">like this </b><span>`;
       } else if (likeCount == 2) {
         likeContainerDiv.innerHTML = `<span class="fw-bolder" data-like-count="1">1 like</span>`;
       } else {
@@ -51,7 +70,7 @@ likeForms.forEach((likeForm) => {
       .then(function (response) {
         const resText = ejs.render(response.data.text);
         likeContainer.innerHTML = resText;
-        btnLIke.innerHTML = response.data.heart;
+        btnLike.innerHTML = response.data.heart;
       })
       .catch(function (error) {
         const btnLikeClass =
@@ -80,7 +99,7 @@ likeForms.forEach((likeForm) => {
           btnLikeClass.add('fa-regular');
           btnLikeClass.remove('fa-solid');
           if (likeCount == 1) {
-            likeContainerDiv.innerHTML = `<span data-like-count="0">Be the first to <b>like this </b><span>`;
+            likeContainerDiv.innerHTML = `<span data-like-count="0">Be the first to <b class="like-this">like this </b><span>`;
           } else if (likeCount == 2) {
             likeContainerDiv.innerHTML = `<span class="fw-bolder" data-like-count="1">1 like</span>`;
           } else {
@@ -167,18 +186,25 @@ likeComments.forEach((likeComment) => {
   });
 });
 
-followForm.addEventListener('submit', (e) => {
-  e.preventDefault();
-  axios.post(`${followForm.action}`, {}).then(function (response) {
-    followForm.innerHTML = response.data.button;
-    followForm.action = response.data.action;
-    followersLength.innerHTML = response.data.followers.length;
+if (followForm) {
+  followForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    axios.post(`${followForm.action}`, {}).then(function (response) {
+      followForm.innerHTML = response.data.button;
+      followForm.action = response.data.action;
+      followersLength.innerHTML = response.data.followers.length;
+    });
   });
-});
+}
 
-postShare.forEach((share) => {
-  share.addEventListener('click', () => {
-    console.log('hello');
-    // navigator.share({ url: 'hello' });
+postLinks.forEach((post) => {
+  post.addEventListener('click', () => {
+    if (navigator.share) {
+      navigator.share({
+        url: post.dataset.url,
+      });
+    } else {
+      console.log('hello');
+    }
   });
 });

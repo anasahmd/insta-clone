@@ -92,10 +92,6 @@ i {
   font-size: 1.35rem;
 }
 
-.red-heart {
-  color: #ed4957;
-}
-
 .fs-7 {
   font-size: 0.875rem;
 }
@@ -231,6 +227,60 @@ i {
   display: inline-block;
 }
 
+.post-heart-center {
+  opacity: 0;
+  display: inline-block;
+}
+
+.post-heart-center.like {
+  animation: 1s like-heart-animation ease-in-out forwards;
+}
+
+.post-heart-center i {
+  font-size: 5rem;
+}
+
+.like-this {
+  cursor: pointer;
+}
+
+.double-tap-image {
+  width: 100%;
+  flex-basis: 100%;
+}
+
+.red-heart {
+  color: #ed4957;
+}
+
+.white-heart {
+  color: #fff;
+}
+
+@keyframes like-heart-animation {
+  0%,
+  to {
+    opacity: 0;
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  }
+  15% {
+    opacity: 0.9;
+    -webkit-transform: scale(1.2);
+    transform: scale(1.2);
+  }
+  30% {
+    -webkit-transform: scale(0.95);
+    transform: scale(0.95);
+  }
+  45%,
+  80% {
+    opacity: 0.9;
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+}
+
 @media screen and (max-width: 768px) {
   .post-list {
     grid-gap: 3px;
@@ -253,5 +303,8 @@ i {
   }
   .mx-width {
     max-width: 576px;
+  }
+  .fs-sm-7 {
+    font-size: 0.75rem;
   }
 }

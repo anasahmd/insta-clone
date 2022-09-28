@@ -26,7 +26,7 @@ router.post(
     await user.save();
     updatedFollowUser = await User.findById(followId);
     res.send({
-      button: `<button class="btn btn-outline-secondary btn-sm px-4 btn-unfollow"><span class="fs-7 fw-5">Following</span></button>`,
+      button: `<button class="btn btn-outline-secondary btn-sm px-3 btn-unfollow"><span class="fs-7 fw-5">Following</span></button>`,
       action: `/follow/${updatedFollowUser._id}/unfollow`,
       followers: updatedFollowUser.followers,
     });

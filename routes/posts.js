@@ -21,7 +21,7 @@ const validatePost = (req, res, next) => {
 router.get(
   '/',
   catchAsync(async (req, res) => {
-    const posts = await Post.find().populate('user');
+    const posts = await Post.find().populate('user').sort({ date: -1 });
     // const likedPosts = await Post.find({ likes: { $in: req.user._id } });
     // likedPosts.forEach((likedPost) => {
     //   const likedId = likedPost._id;
@@ -93,7 +93,10 @@ router.put(
   isAuthor,
   catchAsync(async (req, res) => {
     const { id } = req.params;
-    const post = await Post.findByIdAndUpdate(id, { ...req.body.post });
+    const post = await Post.findByIdAndUpdate(id, {
+      ...req.body.post,
+      edited: true,
+    });
     res.redirect(`/p/${post._id}`);
   })
 );

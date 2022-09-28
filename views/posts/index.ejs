@@ -69,7 +69,16 @@
       </div>
     </div>
   </div>
-  <img src="<%= post.image %>" alt="" class="img-fluid" />
+  <div
+    class="double-tap-post position-relative w-100 d-flex justify-content-center align-items-center"
+  >
+    <div class="double-tap-image">
+      <img src="<%= post.image %>" alt="" class="img-fluid w-100" />
+    </div>
+    <div class="position-absolute post-heart-center">
+      <i class="fa-solid fa-heart white-heart text-center"></i>
+    </div>
+  </div>
   <div class="card-body">
     <div class="d-flex gap-3 my-1">
       <form
@@ -88,12 +97,13 @@
       <a href="/p/<%= post._id %>#comment" class="text-reset">
         <i class="fa-regular fa-comment"></i>
       </a>
-      <button
-        class="text-reset btn btn-custom text-reset p-0 post-share"
-        data-share-data="<%= {url: `/p/${post._id}`} %>"
+      <span
+        class="post-link text-reset text-reset p-0"
+        style="cursor: pointer"
+        data-url="p/<%= post._id %>"
       >
         <i class="fa-solid fa-paper-plane"></i>
-      </button>
+      </span>
     </div>
 
     <a href="/p/<%= post._id %>/liked_by" class="text-reset">
@@ -105,7 +115,7 @@
             }else { %> like <% } %>
           </span>
           <% } else { %><span data-like-count="0"
-            >Be the first to <b>like this </b></span
+            >Be the first to <b class="like-this">like this </b></span
           >
           <% } %>
         </div>
@@ -128,9 +138,9 @@
       comments <% }else{ %> comment <% } %>
     </a>
     <% } %>
-    <p class="text-muted fs-7 my-1 mb-0">
-      <small><%= formatDistanceToNowStrict(post.date)%> ago</small>
-    </p>
+    <div class="text-muted fs-8 my-1 mb-0">
+      <span><%= formatDistanceToNowStrict(post.date)%> ago</span>
+    </div>
   </div>
 </div>
 <% } %>

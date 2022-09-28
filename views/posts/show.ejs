@@ -67,7 +67,16 @@
       </div>
     </div>
   </div>
-  <img src="<%= post.image %>" alt="" class="img-fluid" />
+  <div
+  class="double-tap-post position-relative w-100 d-flex justify-content-center align-items-center"
+>
+  <div class="double-tap-image">
+    <img src="<%= post.image %>" alt="" class="img-fluid w-100" />
+  </div>
+  <div class="position-absolute post-heart-center">
+    <i class="fa-solid fa-heart white-heart text-center"></i>
+  </div>
+</div>
   <div class="card-body">
     <div class="d-flex gap-3 my-1">
       <form
@@ -90,6 +99,7 @@
         <i class="fa-solid fa-paper-plane"></i>
       </a>
     </div>
+    <a href="/p/<%= post._id %>/liked_by" class="text-reset">
     <div class="like-container">
       <div class="fs-7 mt-2 mb-1">
         <% if (post.likes.length){ %>
@@ -98,11 +108,12 @@
           }else { %> like <% } %>
         </span>
         <% } else { %><span data-like-count="0"
-          >Be the first to <b>like this </b></span
+          >Be the first to <b class="like-this">like this </b></span
         >
         <% } %>
       </div>
     </div>
+    </a>
     <% if(post.caption){ %>
     <p class="fs-7 my-1 mb-0">
       <b
@@ -115,9 +126,13 @@
       <%=post.caption %>
     </p>
     <% } %>
-    <p class="text-muted fs-7 my-1 mb-0">
-      <small><%= formatDistanceToNowStrict(post.date)%> ago</small>
-    </p>
+    <div class="text-muted fs-8 my-1 mb-0">
+      <span class="me-1"><%= formatDistanceToNowStrict(post.date)%> ago</span>
+      <% if (post.edited){ %>
+      <span class="me-1"> &#183</span>
+      <span>Edited</span>
+      <% } %>
+    </div>
   </div>
 
   <div id="comment">

@@ -1,3 +1,4 @@
+const { boolean } = require('joi');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const Comment = require('./comment');
@@ -6,7 +7,10 @@ const User = require('./users');
 const PostSchema = new Schema({
   caption: String,
   image: String,
-  edited: Boolean,
+  edited: {
+    type: Boolean,
+    default: false,
+  },
   date: {
     type: Date,
     default: Date.now,

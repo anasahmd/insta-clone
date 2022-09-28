@@ -21,7 +21,7 @@ router.post(
     try {
       const { username, email, password, fullName } = req.body;
       const newUser = new User({
-        username,
+        username: username.toLowerCase(),
         email,
         fullName,
       });
@@ -40,6 +40,10 @@ router.post(
 
 router.post(
   '/login',
+  (req, res, next) => {
+    req.body.username = req.body.username.toLowerCase();
+    next();
+  },
   passport.authenticate('local', {
     failureFlash: true,
     failureRedirect: '/login',
@@ -73,6 +77,7 @@ router.post(
   isLoggedIn,
   catchAsync(async (req, res) => {
     const user = req.user;
+    req.body.username = req.body.username.toLowerCase();
     const updatedUser = await User.findByIdAndUpdate(user._id, {
       ...req.body,
     });
@@ -84,7 +89,10 @@ router.get(
   '/:username',
   catchAsync(async (req, res) => {
     const { username } = req.params;
-    const user = await User.findByUsername(username).populate('posts');
+    const user = await User.findByUsername(username).populate({
+      path: 'posts',
+      options: { sort: { date: -1 } },
+    });
     res.render('users/index', { user });
   })
 );

@@ -72,7 +72,7 @@ router.post(
         ><%= ${updatedPost.likes.length} %> <% if(${updatedPost.likes.length} > 1){ %> likes <%
         }else { %> like <% } %>
       </span>
-      <% } else { %><span data-like-count="${updatedPost.likes.length}">Be the first to <b>like this </b><span>
+      <% } else { %><span data-like-count="${updatedPost.likes.length}">Be the first to <b class="like-this">like this </b><span>
       <% } %>
     </div>`,
       heart: `${updatedHeart}`,
