@@ -1,6 +1,6 @@
 const likeForms = document.querySelectorAll('.like-form');
 const likeComments = document.querySelectorAll('.like-form-comment');
-const followForm = document.querySelector('.follow-form');
+const followForms = document.querySelectorAll('.follow-form');
 const followersLength = document.querySelector('#followers-length');
 const links = document.querySelectorAll('a');
 const postLinks = document.querySelectorAll('.post-link');
@@ -186,13 +186,15 @@ likeComments.forEach((likeComment) => {
   });
 });
 
-if (followForm) {
-  followForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    axios.post(`${followForm.action}`, {}).then(function (response) {
-      followForm.innerHTML = response.data.button;
-      followForm.action = response.data.action;
-      followersLength.innerHTML = response.data.followers.length;
+if (followForms) {
+  followForms.forEach((followForm) => {
+    followForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      axios.post(`${followForm.action}`, {}).then(function (response) {
+        followForm.innerHTML = response.data.button;
+        followForm.action = response.data.action;
+        followersLength.innerHTML = response.data.followers.length;
+      });
     });
   });
 }

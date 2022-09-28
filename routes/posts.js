@@ -1,128 +1,24 @@
 const express = require('express');
 const router = express.Router();
 const catchAsync = require('../utils/catchAsync');
-const { postSchema } = require('../schemas');
-const { isLoggedIn, isAuthor } = require('../middleware');
+const { isLoggedIn, isAuthor, validatePost } = require('../middleware');
+const posts = require('../controllers/posts');
 
-const ExpressError = require('../utils/ExpressError');
-const Post = require('../models/post');
-const User = require('../models/users');
+router
+  .route('/')
+  .get(catchAsync(posts.index))
+  .post(isLoggedIn, validatePost, catchAsync(posts.createPost));
 
-const validatePost = (req, res, next) => {
-  const { error } = postSchema.validate(req.body);
-  if (error) {
-    const msg = error.details.map((el) => el.message).join(',');
-    throw new ExpressError(msg, 400);
-  } else {
-    next();
-  }
-};
+router.get('/new', isLoggedIn, posts.renderNewForm);
 
-router.get(
-  '/',
-  catchAsync(async (req, res) => {
-    const posts = await Post.find().populate('user').sort({ date: -1 });
-    // const likedPosts = await Post.find({ likes: { $in: req.user._id } });
-    // likedPosts.forEach((likedPost) => {
-    //   const likedId = likedPost._id;
-    // });
-    // console.log({ likedPosts });
-    // console.log(likedPost);
-    res.render('posts/index', { posts });
-  })
-);
+router
+  .route('/:id')
+  .get(catchAsync(posts.showPost))
+  .put(isLoggedIn, isAuthor, catchAsync(posts.updatePost))
+  .delete(isLoggedIn, isAuthor, catchAsync(posts.deletePost));
 
-router.get('/new', isLoggedIn, (req, res) => {
-  res.render('posts/new');
-});
+router.get('/:id/edit', isLoggedIn, isAuthor, catchAsync(posts.renderEditForm));
 
-router.post(
-  '/',
-  isLoggedIn,
-  validatePost,
-  catchAsync(async (req, res) => {
-    if (!req.body.post) throw new ExpressError('Invalid Post Data', 400);
-    const user = await User.findById(req.user._id);
-    const post = new Post(req.body.post);
-    post.user = req.user._id;
-    user.posts.push(post);
-    await post.save();
-    await user.save();
-    req.flash('success', 'Your post has been shared');
-    res.redirect('/p');
-  })
-);
-
-router.get(
-  '/:id',
-  catchAsync(async (req, res, next) => {
-    const post = await Post.findById(req.params.id)
-      .populate({
-        path: 'comments',
-        populate: {
-          path: 'user',
-          select: 'username',
-        },
-      })
-      .populate('user');
-    if (!post) {
-      req.flash('error', 'Post Not Found');
-      return res.redirect('/p');
-      // return next(new ExpressError('Post Not Found', 404));
-    }
-    res.render('posts/show', { post });
-  })
-);
-
-router.get(
-  '/:id/edit',
-  isLoggedIn,
-  isAuthor,
-  catchAsync(async (req, res, next) => {
-    const post = await Post.findById(req.params.id);
-    if (!post) {
-      return next(new ExpressError('Post Not Found', 404));
-    }
-    res.render('posts/edit', { post });
-  })
-);
-
-router.put(
-  '/:id',
-  isLoggedIn,
-  isAuthor,
-  catchAsync(async (req, res) => {
-    const { id } = req.params;
-    const post = await Post.findByIdAndUpdate(id, {
-      ...req.body.post,
-      edited: true,
-    });
-    res.redirect(`/p/${post._id}`);
-  })
-);
-
-router.delete(
-  '/:id',
-  isLoggedIn,
-  isAuthor,
-  catchAsync(async (req, res) => {
-    const { id } = req.params;
-    await User.findByIdAndUpdate(req.user._id, { $pull: { posts: id } });
-    await Post.findByIdAndDelete(id);
-    res.redirect('/p');
-  })
-);
-
-router.get(
-  '/:id/liked_by',
-  catchAsync(async (req, res) => {
-    const post = await Post.findById(req.params.id).populate({
-      path: 'likes',
-      select: ['username', 'fullName'],
-    });
-    const listUsers = post.likes;
-    res.render('users/listuser', { listUsers });
-  })
-);
+router.get('/:id/liked_by', catchAsync(posts.likedBy));
 
 module.exports = router;

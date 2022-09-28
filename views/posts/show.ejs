@@ -196,11 +196,11 @@
                 </a>
                 <%= comment.text %></span
               >
-              <div class="d-flex align-items-center gap-2">
+              <div class="d-flex align-items-center gap-1">
                 <span class="text-muted fs-8"
                   ><%= formatDistanceToNowStrict(comment.date)%></span
                 >
-                <span class="fs-8">
+                <span class="fs-8 ms-2">
                   <% if(comment.likes.length){ %>
                   <span
                     class="text-muted fs-8 fw-5"

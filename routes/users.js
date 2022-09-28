@@ -1,126 +1,41 @@
 const express = require('express');
 const router = express.Router();
 const catchAsync = require('../utils/catchAsync');
-const User = require('../models/users');
 const passport = require('passport');
 const { isLoggedIn } = require('../middleware');
+const users = require('../controllers/users');
 
-router.get('/login', (req, res) => {
-  res.render('users/login');
-});
+router
+  .route('/login')
+  .get(users.renderLogin)
+  .post(
+    (req, res, next) => {
+      req.body.username = req.body.username.toLowerCase();
+      next();
+    },
+    passport.authenticate('local', {
+      failureFlash: true,
+      failureRedirect: '/login',
+    }),
+    users.userLogin
+  );
 
-router.get('/accounts/signup', (req, res) => {
-  res.render('users/signup');
-});
+router
+  .route('/accounts/signup')
+  .get(users.renderSignup)
+  .post(catchAsync(users.userSignup));
 
-// Validate User maybe
+router.get('/logout', users.userLogout);
 
-router.post(
-  '/accounts/signup',
-  catchAsync(async (req, res) => {
-    try {
-      const { username, email, password, fullName } = req.body;
-      const newUser = new User({
-        username: username.toLowerCase(),
-        email,
-        fullName,
-      });
-      const registeredUser = await User.register(newUser, password);
-      req.login(registeredUser, (err) => {
-        if (err) return next(err);
-        req.flash('success', 'User registered successfully');
-        res.redirect('/');
-      });
-    } catch (e) {
-      req.flash('error', e.message);
-      res.redirect('/accounts/signup');
-    }
-  })
-);
+router
+  .route('/accounts/edit')
+  .get(isLoggedIn, catchAsync(users.renderEditForm))
+  .post(isLoggedIn, catchAsync(users.accountEdit));
 
-router.post(
-  '/login',
-  (req, res, next) => {
-    req.body.username = req.body.username.toLowerCase();
-    next();
-  },
-  passport.authenticate('local', {
-    failureFlash: true,
-    failureRedirect: '/login',
-  }),
-  (req, res) => {
-    req.flash('success', 'Welcome Back');
-    res.redirect('/');
-  }
-);
+router.get('/:username', catchAsync(users.renderUserIndex));
 
-router.get('/logout', (req, res) => {
-  req.logout(function (err) {
-    if (err) {
-      return next(err);
-    }
-    res.redirect('/login');
-  });
-});
+router.get('/:username/followers', catchAsync(users.renderFollowers));
 
-router.get(
-  '/accounts/edit',
-  isLoggedIn,
-  catchAsync(async (req, res) => {
-    const user = req.user;
-    res.render('users/edit', { user });
-  })
-);
-
-router.post(
-  '/accounts/edit',
-  isLoggedIn,
-  catchAsync(async (req, res) => {
-    const user = req.user;
-    req.body.username = req.body.username.toLowerCase();
-    const updatedUser = await User.findByIdAndUpdate(user._id, {
-      ...req.body,
-    });
-    res.redirect(`/${updatedUser.username}`);
-  })
-);
-
-router.get(
-  '/:username',
-  catchAsync(async (req, res) => {
-    const { username } = req.params;
-    const user = await User.findByUsername(username).populate({
-      path: 'posts',
-      options: { sort: { date: -1 } },
-    });
-    res.render('users/index', { user });
-  })
-);
-
-router.get(
-  '/:username/followers',
-  catchAsync(async (req, res) => {
-    const { username } = req.params;
-    const user = await User.findByUsername(username).populate({
-      path: 'followers',
-      select: ['username', 'fullName'],
-    });
-    const listUsers = user.followers;
-    res.render('users/listuser', { listUsers });
-  })
-);
-
-router.get(
-  '/:username/following',
-  catchAsync(async (req, res) => {
-    const { username } = req.params;
-    const user = await User.findByUsername(username).populate({
-      path: 'following',
-      select: ['username', 'fullName'],
-    });
-    const listUsers = user.following;
-    res.render('users/listuser', { listUsers });
-  })
-);
+router.get('/:username/following', catchAsync(users.renderFollowing));
 
 module.exports = router;
