@@ -6,7 +6,10 @@ const User = require('./users');
 
 const PostSchema = new Schema({
   caption: String,
-  image: String,
+  image: {
+    url: String,
+    filename: String,
+  },
   edited: {
     type: Boolean,
     default: false,

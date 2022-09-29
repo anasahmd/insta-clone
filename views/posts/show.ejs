@@ -4,7 +4,7 @@
     <div class="d-flex w-100 gap-2 gap-sm-3">
       <div class="flex-shrink-0">
         <img
-          src="https://d33wubrfki0l68.cloudfront.net/fb0ba0cbcadbdf0b2ffabf331d2345fb05106e16/20663/images/profile-picture.webp"
+          src="<%= post.user.dp.url ? post.user.dp.url : defaultDp %>"
           alt=""
           class="rounded-circle profile-image"
         />
@@ -71,7 +71,7 @@
   class="double-tap-post position-relative w-100 d-flex justify-content-center align-items-center"
 >
   <div class="double-tap-image">
-    <img src="<%= post.image %>" alt="" class="img-fluid w-100" />
+    <img src="<%= post.image.url %>" alt="" class="img-fluid w-100" />
   </div>
   <div class="position-absolute post-heart-center">
     <i class="fa-solid fa-heart white-heart text-center"></i>
@@ -141,7 +141,7 @@
       <div class="card-body d-flex gap-3 py-2">
         <div>
           <img
-            src="https://d33wubrfki0l68.cloudfront.net/fb0ba0cbcadbdf0b2ffabf331d2345fb05106e16/20663/images/profile-picture.webp"
+            src="<%= currentUser.dp.url ? currentUser.dp.url : defaultDp %>"
             alt=""
             class="rounded-circle profile-image"
           />
@@ -181,7 +181,7 @@
             <div>
               <a href="/<%= comment.user.username%>">
                 <img
-                  src="https://d33wubrfki0l68.cloudfront.net/fb0ba0cbcadbdf0b2ffabf331d2345fb05106e16/20663/images/profile-picture.webp"
+                  src="<%= comment.user.dp.url ? comment.user.dp.url : defaultDp %>"
                   alt=""
                   class="rounded-circle profile-image"
                 />

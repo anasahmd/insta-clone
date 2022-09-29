@@ -6,7 +6,7 @@
     <div class="left d-flex gap-3">
       <a href="/<%= user.username %>">
         <img
-          src="https://d33wubrfki0l68.cloudfront.net/fb0ba0cbcadbdf0b2ffabf331d2345fb05106e16/20663/images/profile-picture.webp"
+          src="<%= user.dp.url ? user.dp.url : defaultDp %>"
           alt=""
           class="rounded-circle profile-image-list"
         />

@@ -3,7 +3,7 @@
 <div class="container px-4 mx-width-profile mx-auto mt-sm-3 mt-2">
   <div class="d-flex gap-4">
     <img
-      src="https://d33wubrfki0l68.cloudfront.net/fb0ba0cbcadbdf0b2ffabf331d2345fb05106e16/20663/images/profile-picture.webp"
+      src="<%= user.dp.url ? user.dp.url : defaultDp %> "
       alt=""
       class="rounded-circle profile-image-index ms-1"
     />
@@ -96,7 +96,7 @@
   <% for (let post of user.posts){ %>
   <a href="/p/<%= post._id %> " class="post">
     <figure class="post-image profile-post-img">
-      <img class="img img-fluid" src="<%= post.image %>" alt="" />
+      <img class="img img-fluid" src="<%= post.image.url %>" alt="" />
     </figure>
     <span class="post-overlay">
       <p>

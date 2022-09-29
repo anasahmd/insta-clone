@@ -13,6 +13,10 @@ const userSchema = new Schema({
   fullName: {
     type: String,
   },
+  dp: {
+    url: String,
+    filename: String,
+  },
   posts: [
     {
       type: Schema.Types.ObjectId,

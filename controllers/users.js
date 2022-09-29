@@ -1,4 +1,5 @@
 const User = require('../models/users');
+const { cloudinary } = require('../cloudinary');
 
 module.exports.renderLogin = (req, res) => {
   res.render('users/login');
@@ -83,4 +84,32 @@ module.exports.renderFollowing = async (req, res) => {
   });
   const listUsers = user.following;
   res.render('users/listuser', { listUsers });
+};
+
+module.exports.editDp = async (req, res) => {
+  const id = req.user._id;
+  const user = await User.findById(id);
+  if (user.dp.filename) {
+    await cloudinary.uploader.destroy(user.dp.filename);
+  }
+  user.dp.filename = req.file.filename;
+  user.dp.url = req.file.path;
+  await user.save();
+  res.redirect(`/${user.username}`);
+};
+
+module.exports.removeDp = async (req, res) => {
+  const id = req.user._id;
+  const user = await User.findById(id);
+  if (user.dp.filename) {
+    await cloudinary.uploader.destroy(user.dp.filename);
+  }
+  user.dp.filename = '';
+  user.dp.url = '';
+  await user.save();
+  res.redirect(`/${user.username}`);
+};
+
+module.exports.renderDpForm = (req, res) => {
+  res.render('users/editdp');
 };

@@ -10,13 +10,15 @@
     >
       <div class="d-flex gap-4 mb-3 align-items-center">
         <img
-          src="https://d33wubrfki0l68.cloudfront.net/fb0ba0cbcadbdf0b2ffabf331d2345fb05106e16/20663/images/profile-picture.webp"
+          src="<%= user.dp.url ? user.dp.url : defaultDp %>"
           alt=""
           class="rounded-circle profile-image-edit"
         />
         <div>
           <h2 class="fw-normal fs-5 my-0"><%= user.username %></h2>
-          <a href="" class="fs-7 fw-5 my-0">Change profile photo</a>
+          <a href="/accounts/profilepicture" class="fs-7 fw-5 my-0"
+            >Change profile photo</a
+          >
         </div>
       </div>
       <div class="mb-3">

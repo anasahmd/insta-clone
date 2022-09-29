@@ -7,9 +7,9 @@
 ></script>
 
 <div class="container mx-width">
-  <h1 class="fs-3 mb-4" id="create-new">Create new post</h1>
+  <h1 class="fs-3 mb-4" id="change-profile">Change profile photo</h1>
   <form
-    action="/p"
+    action="/accounts/editdp"
     method="POST"
     novalidate
     class="needs-validation"
@@ -20,28 +20,14 @@
         class="form-control"
         type="file"
         name="image"
-        accept="image"
         id="id_image"
+        accept="image"
         required
       />
     </div>
-    <div class="mb-4">
-      <input
-        type="text"
-        name="post[caption]"
-        class="form-control"
-        placeholder="Write a caption"
-        id="caption-input"
-      />
-    </div>
     <div id="image-box" class="image-container" style="max-height: 50vh"></div>
-    <span class="my-3" id="btn-container" style="display: none">
-      <button class="btn btn-sm btn-outline-info me-2" id="1-1">1:1</button>
-      <button class="btn btn-sm btn-outline-info me-2" id="16-9">16:9</button>
-      <button class="btn btn-sm btn-outline-info" id="4-5">4:5</button>
-    </span>
     <button
-      class="btn btn-outline-info mt-3 mb-4"
+      class="btn btn-outline-info mt-4"
       id="crop-btn"
       style="width: 100%; margin-top: 10px; display: none"
       type="button"
@@ -49,7 +35,14 @@
       Crop
     </button>
     <div class="d-grid">
-      <button class="btn btn-secondary" id="confirm-btn">Share</button>
+      <button class="btn btn-primary" id="confirm-btn">Upload Photo</button>
+    </div>
+  </form>
+  <form action="/accounts/removedp" method="POST" class="mt-4">
+    <div class="d-grid mb-4">
+      <button class="btn btn-outline-danger" id="remove-btn">
+        Remove Current Photo
+      </button>
     </div>
   </form>
 </div>
@@ -61,10 +54,6 @@
   const crop_btn = document.getElementById('crop-btn');
   // id_image is the id of the input tag where we will upload the image
   const input = document.getElementById('id_image');
-
-  const squareImage = document.getElementById('1-1');
-  const landscapeImage = document.getElementById('16-9');
-  const potraitImage = document.getElementById('4-5');
 
   // When user uploads the image this event will get triggered
   input.addEventListener('change', () => {
@@ -86,16 +75,15 @@
     document.getElementById('crop-btn').style.display = 'block';
     // Hiding the Post button
     document.getElementById('confirm-btn').style.display = 'none';
-    document.getElementById('caption-input').style.display = 'none';
-    document.getElementById('create-new').style.display = 'none';
-    document.getElementById('btn-container').style.display = 'block';
+    document.getElementById('remove-btn').style.display = 'none';
+    document.getElementById('change-profile').style.display = 'none';
 
     // Creating a croper object with the cropping view image
     // The new Cropper() method will do all the magic and diplay the cropping view and adding cropping functionality on the website
     // For more settings, check out their official documentation at https://github.com/fengyuanchen/cropperjs
     const cropper = new Cropper(image, {
-      aspectRatio: 1 / 1,
       background: false,
+      aspectRatio: 1 / 1,
       autoCropArea: 1,
       viewMode: 1,
       scalable: false,
@@ -105,56 +93,32 @@
       minCropBoxWidth: 50,
       minCropBoxHeight: 50,
     });
-
-    //Changing aspect ratio
-    squareImage.addEventListener('click', (e) => {
-      e.preventDefault();
-      cropper.setAspectRatio(1 / 1);
-    });
-
-    landscapeImage.addEventListener('click', (e) => {
-      e.preventDefault();
-      cropper.setAspectRatio(16 / 9);
-    });
-
-    potraitImage.addEventListener('click', (e) => {
-      e.preventDefault();
-      cropper.setAspectRatio(4 / 5);
-    });
-
     // When crop button is clicked this event will get triggered
     crop_btn.addEventListener('click', () => {
       // This method coverts the selected cropped image on the cropper canvas into a blob object
-      cropper
-        .getCroppedCanvas({
-          maxWidth: 1200,
-          maxHeight: 1200,
-        })
-        .toBlob((blob) => {
-          // Gets the original image data
-          let fileInputElement = document.getElementById('id_image');
-          // Make a new cropped image file using that blob object, image_data.name will make the new file name same as original image
-          let file = new File([blob], img_data.name, {
-            type: 'image/*',
-            lastModified: new Date().getTime(),
-          });
-          // Create a new container
-          let container = new DataTransfer();
-          // Add the cropped image file to the container
-          container.items.add(file);
-          // Replace the original image file with the new cropped image file
-          fileInputElement.files = container.files;
-
-          // Hide the cropper box
-          document.getElementById('image-box').style.display = 'none';
-          // Hide the crop button
-          document.getElementById('crop-btn').style.display = 'none';
-          // Display the Post button
-          document.getElementById('confirm-btn').style.display = 'block';
-          document.getElementById('caption-input').style.display = 'block';
-          document.getElementById('create-new').style.display = 'block';
-          document.getElementById('btn-container').style.display = 'none';
+      cropper.getCroppedCanvas().toBlob((blob) => {
+        // Gets the original image data
+        let fileInputElement = document.getElementById('id_image');
+        // Make a new cropped image file using that blob object, image_data.name will make the new file name same as original image
+        let file = new File([blob], img_data.name, {
+          type: 'image/*',
+          lastModified: new Date().getTime(),
         });
+        // Create a new container
+        let container = new DataTransfer();
+        // Add the cropped image file to the container
+        container.items.add(file);
+        // Replace the original image file with the new cropped image file
+        fileInputElement.files = container.files;
+
+        // Hide the cropper box
+        document.getElementById('image-box').style.display = 'none';
+        // Hide the crop button
+        document.getElementById('crop-btn').style.display = 'none';
+        // Display the Post button
+        document.getElementById('confirm-btn').style.display = 'block';
+        document.getElementById('change-profile').style.display = 'block';
+      });
     });
   });
 </script>

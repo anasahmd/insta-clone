@@ -1,3 +1,4 @@
+const { cloudinary } = require('../cloudinary');
 const Post = require('../models/post');
 const User = require('../models/users');
 
@@ -14,6 +15,8 @@ module.exports.createPost = async (req, res) => {
   if (!req.body.post) throw new ExpressError('Invalid Post Data', 400);
   const user = await User.findById(req.user._id);
   const post = new Post(req.body.post);
+  post.image.filename = req.file.filename;
+  post.image.url = req.file.path;
   post.user = req.user._id;
   user.posts.push(post);
   await post.save();
@@ -28,7 +31,7 @@ module.exports.showPost = async (req, res, next) => {
       path: 'comments',
       populate: {
         path: 'user',
-        select: 'username',
+        select: 'username dp',
       },
     })
     .populate('user');
@@ -60,6 +63,8 @@ module.exports.updatePost = async (req, res) => {
 module.exports.deletePost = async (req, res) => {
   const { id } = req.params;
   await User.findByIdAndUpdate(req.user._id, { $pull: { posts: id } });
+  const post = await Post.findById(id);
+  await cloudinary.uploader.destroy(post.image.filename);
   await Post.findByIdAndDelete(id);
   res.redirect('/p');
 };

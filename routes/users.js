@@ -4,6 +4,9 @@ const catchAsync = require('../utils/catchAsync');
 const passport = require('passport');
 const { isLoggedIn } = require('../middleware');
 const users = require('../controllers/users');
+const multer = require('multer');
+const { storagedp } = require('../cloudinary');
+const upload = multer({ storage: storagedp });
 
 router
   .route('/login')
@@ -25,12 +28,23 @@ router
   .get(users.renderSignup)
   .post(catchAsync(users.userSignup));
 
-router.get('/logout', users.userLogout);
+router.get('/logout', isLoggedIn, users.userLogout);
 
 router
   .route('/accounts/edit')
   .get(isLoggedIn, catchAsync(users.renderEditForm))
   .post(isLoggedIn, catchAsync(users.accountEdit));
+
+router.get('/accounts/profilepicture', isLoggedIn, users.renderDpForm);
+
+router.post(
+  '/accounts/editdp',
+  isLoggedIn,
+  upload.single('image'),
+  catchAsync(users.editDp)
+);
+
+router.post('/accounts/removedp', isLoggedIn, users.removeDp);
 
 router.get('/:username', catchAsync(users.renderUserIndex));
 

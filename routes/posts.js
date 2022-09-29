@@ -3,11 +3,19 @@ const router = express.Router();
 const catchAsync = require('../utils/catchAsync');
 const { isLoggedIn, isAuthor, validatePost } = require('../middleware');
 const posts = require('../controllers/posts');
+const multer = require('multer');
+const { storage } = require('../cloudinary');
+const upload = multer({ storage });
 
 router
   .route('/')
   .get(catchAsync(posts.index))
-  .post(isLoggedIn, validatePost, catchAsync(posts.createPost));
+  .post(
+    isLoggedIn,
+    upload.single('image'),
+    validatePost,
+    catchAsync(posts.createPost)
+  );
 
 router.get('/new', isLoggedIn, posts.renderNewForm);
 

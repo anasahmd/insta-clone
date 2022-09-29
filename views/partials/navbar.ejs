@@ -22,7 +22,7 @@
         data-trigger="focus"
       >
         <img
-          src="https://d33wubrfki0l68.cloudfront.net/fb0ba0cbcadbdf0b2ffabf331d2345fb05106e16/20663/images/profile-picture.webp"
+          src="<%= currentUser.dp.url ? currentUser.dp.url : defaultDp %>"
           alt=""
           class="rounded-circle nav-image"
         />
