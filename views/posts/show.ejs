@@ -9,10 +9,10 @@
           class="rounded-circle profile-image"
         />
       </div>
-      <div class="d-flex flex-column justify-content-center m-0">
+      <div class="d-flex flex-column justify-content-center m-0 username-overflow">
         <a
           href="/<%= post.user.username %>"
-          class="fs-7 fw-bolder mb-0 text-reset"
+          class="fs-7 fw-bolder mb-0 text-reset username-overflow"
           ><%= post.user.username %></a
         >
       </div>
@@ -176,7 +176,7 @@
       <div
         class="card-body py-2 d-flex justify-content-between align-items-center"
       >
-        <div class="left">
+        <div class="left w-100">
           <div class="d-flex gap-3">
             <div>
               <a href="/<%= comment.user.username%>">
@@ -187,15 +187,17 @@
                 />
               </a>
             </div>
-            <div>
-              <span class="fs-7 mb-0"
-                ><a
+            <div class="w-75 text-wrap" >
+              <div class="">
+              <span class="fs-7 mb-0">
+                <a
                   href="/<%= comment.user.username%>"
                   class="me-1 text-reset fw-6"
                   ><%= comment.user.username %>
                 </a>
-                <%= comment.text %></span
-              >
+                <%= comment.text %>
+                </span>
+                </div>
               <div class="d-flex align-items-center gap-1">
                 <span class="text-muted fs-8"
                   ><%= formatDistanceToNowStrict(comment.date)%></span
@@ -230,7 +232,7 @@
             </div>
           </div>
         </div>
-        <div class="right me-3">
+        <div class="right me-3 position-absolute" style="right: 1em;">
           <form
             action="/like/comment/<%= comment._id %> "
             method="POST"

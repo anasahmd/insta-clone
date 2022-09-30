@@ -1,0 +1,53 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="card mx-width mx-auto px-2 w-90">
+  <div class="card-body">
+    <form
+      action="/accounts/password?_method=PUT"
+      method="POST"
+      novalidate
+      class="needs-validation"
+    >
+      <div class="d-flex gap-3 gap-sm-3 mb-4 mt-2 align-items-center w-100">
+        <img
+          src="<%= user.dp.url ? user.dp.url : defaultDp %>"
+          alt=""
+          class="rounded-circle profile-image-edit"
+        />
+        <div class="d-flex flex-column w-100 username-overflow">
+          <h2 class="fw-normal fs-5 my-0 w-90 username-overflow">
+            <%= user.username %>
+          </h2>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="name" class="form-label fw-5">Old Password</label>
+        <input
+          type="password"
+          name="oldPassword"
+          class="form-control"
+          required
+        />
+      </div>
+      <div class="mb-3">
+        <label for="username" class="form-label fw-5">New Password</label>
+        <input type="password" name="password" class="form-control" required />
+      </div>
+      <div class="mb-3">
+        <label for="username" class="form-label fw-5"
+          >Confirm New Password</label
+        >
+        <input
+          type="password"
+          name="repeat_password"
+          class="form-control"
+          required
+        />
+      </div>
+      <button class="btn btn-primary btn-sm py-1 my-2">Change Password</button>
+      <div class="my-2">
+        <a href="" class="fs-7 fw-5">Forgot Password</a>
+      </div>
+    </form>
+  </div>
+</div>

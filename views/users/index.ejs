@@ -1,14 +1,14 @@
 <% layout('layouts/boilerplate') %>
 
 <div class="container px-4 mx-width-profile mx-auto mt-sm-3 mt-2">
-  <div class="d-flex gap-4">
+  <div class="d-flex gap-4 w-100">
     <img
-      src="<%= user.dp.url ? user.dp.url : defaultDp %> "
+      src="<%= user.dp.url ? user.dp.url : defaultDp %>"
       alt=""
       class="rounded-circle profile-image-index ms-1"
     />
-    <div class="mt-1">
-      <h2 class="fw-normal fs-4"><%= user.username %></h2>
+    <div class="mt-1 username-overflow">
+      <h2 class="fw-normal fs-4 username-overflow"><%= user.username %></h2>
       <% if(currentUser && !user._id.equals(currentUser._id)){ %>
       <form
         action="/follow/<%= user._id %>/<% if (!(currentUser && currentUser.following.includes(user._id))){ %>follow<% } else { %>unfollow<% } %>"

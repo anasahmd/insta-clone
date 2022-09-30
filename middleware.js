@@ -1,6 +1,11 @@
 const Post = require('./models/post');
 const Comment = require('./models/comment');
-const { postSchema, commentSchema } = require('./schemas');
+const {
+  postSchema,
+  commentSchema,
+  userSchema,
+  passwordSchema,
+} = require('./schemas');
 const ExpressError = require('./utils/ExpressError');
 
 module.exports.validatePost = (req, res, next) => {
@@ -15,6 +20,26 @@ module.exports.validatePost = (req, res, next) => {
 
 module.exports.validateComment = (req, res, next) => {
   const { error } = commentSchema.validate(req.body);
+  if (error) {
+    const msg = error.details.map((el) => el.message).join(',');
+    throw new ExpressError(msg, 400);
+  } else {
+    next();
+  }
+};
+
+module.exports.validateUser = (req, res, next) => {
+  const { error } = userSchema.validate(req.body);
+  if (error) {
+    const msg = error.details.map((el) => el.message).join(',');
+    throw new ExpressError(msg, 400);
+  } else {
+    next();
+  }
+};
+
+module.exports.validatePassword = (req, res, next) => {
+  const { error } = passwordSchema.validate(req.body);
   if (error) {
     const msg = error.details.map((el) => el.message).join(',');
     throw new ExpressError(msg, 400);

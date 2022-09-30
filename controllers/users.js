@@ -11,9 +11,9 @@ module.exports.renderSignup = (req, res) => {
 
 module.exports.userSignup = async (req, res) => {
   try {
-    const { username, email, password, fullName } = req.body;
+    const { username, email, password, fullName } = req.body.user;
     const newUser = new User({
-      username: username.toLowerCase(),
+      username,
       email,
       fullName,
     });
@@ -50,11 +50,13 @@ module.exports.renderEditForm = async (req, res) => {
 
 module.exports.accountEdit = async (req, res) => {
   const user = req.user;
-  req.body.username = req.body.username.toLowerCase();
+  req.body.user.username = req.body.user.username.toLowerCase();
+  req.body.user.bio = req.body.user.bio.replace(/\r\n\r\n/g, '');
   const updatedUser = await User.findByIdAndUpdate(user._id, {
-    ...req.body,
+    ...req.body.user,
   });
-  res.redirect(`/${updatedUser.username}`);
+  req.session.passport.user = req.body.user.username;
+  res.redirect(`/${req.body.user.username}`);
 };
 
 module.exports.renderUserIndex = async (req, res) => {
@@ -112,4 +114,16 @@ module.exports.removeDp = async (req, res) => {
 
 module.exports.renderDpForm = (req, res) => {
   res.render('users/editdp');
+};
+
+module.exports.renderPasswordChangeForm = async (req, res) => {
+  const user = await User.findById(req.user._id);
+  res.render('users/editpwd', { user });
+};
+
+module.exports.changePassword = async (req, res) => {
+  const user = await User.findById(req.user._id);
+  await user.changePassword(req.body.oldPassword, req.body.password);
+  req.flash('success', 'Password Changed');
+  res.redirect('/accounts/password/change');
 };

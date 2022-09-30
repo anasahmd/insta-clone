@@ -4,8 +4,23 @@ body {
   background-color: rgb(250, 250, 250);
 }
 
+main {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
 #navbar {
   background-color: #fff !important;
+}
+
+textarea.noscrollbars {
+  overflow: hidden;
+}
+
+.username-overflow {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .btn-primary,
@@ -106,6 +121,18 @@ i {
 
 .fw-6 {
   font-weight: 600;
+}
+
+.w-60 {
+  width: 60%;
+}
+
+.w-65 {
+  width: 65%;
+}
+
+.w-70 {
+  width: 70%;
 }
 
 .w-80 {

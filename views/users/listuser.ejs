@@ -3,7 +3,7 @@
 <div class="container mx-width my-1">
   <% for(let user of listUsers){ %>
   <div class="d-flex mb-4 align-items-center justify-content-between mx-2">
-    <div class="left d-flex gap-3">
+    <div class="left d-flex gap-2 gap-sm-3 w-65">
       <a href="/<%= user.username %>">
         <img
           src="<%= user.dp.url ? user.dp.url : defaultDp %>"
@@ -11,12 +11,19 @@
           class="rounded-circle profile-image-list"
         />
       </a>
-      <div class="d-flex justify-content-center flex-column align-self-center">
-        <a href="/<%= user.username %>" class="text-reset fw-bold fs-7">
+      <div
+        class="d-flex justify-content-center flex-column align-self-center w-85 username-overflow"
+      >
+        <a
+          href="/<%= user.username %>"
+          class="text-reset fw-semibold fs-7 username-overflow"
+        >
           <%= user.username %>
         </a>
         <% if (user.fullName){ %>
-        <div class="fs-7 my-n1 text-muted"><%= user.fullName %></div>
+        <div class="fs-7 my-n1 text-muted username-overflow">
+          <%= user.fullName %>
+        </div>
         <% } %>
       </div>
     </div>

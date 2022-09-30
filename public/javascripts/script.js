@@ -5,6 +5,7 @@ const followersLength = document.querySelector('#followers-length');
 const links = document.querySelectorAll('a');
 const postLinks = document.querySelectorAll('.post-link');
 let doubleTaps = document.querySelectorAll('.double-tap-post');
+const usernameOverflow = document.querySelector('.username-overflow');
 
 doubleTaps.forEach((doubleTap) => {
   doubleTap.addEventListener('dblclick', () => {
@@ -199,6 +200,7 @@ if (followForms) {
   });
 }
 
+//For sharing post
 postLinks.forEach((post) => {
   post.addEventListener('click', () => {
     if (navigator.share) {
@@ -210,3 +212,19 @@ postLinks.forEach((post) => {
     }
   });
 });
+
+//Auto grow textarea
+
+function autoGrow(oField) {
+  if (oField.scrollHeight > oField.clientHeight) {
+    oField.style.height = `${oField.scrollHeight}px`;
+  }
+}
+
+window.addEventListener('load', () => {
+  isEllipsisActive(usernameOverflow);
+});
+
+function isEllipsisActive(e) {
+  return e.offsetWidth < e.scrollWidth;
+}

@@ -32,9 +32,6 @@ const userSchema = new Schema({
   bio: {
     type: String,
   },
-  // website: {
-  //   type: String,
-  // },
   followers: [
     {
       type: Schema.Types.ObjectId,
@@ -49,6 +46,9 @@ const userSchema = new Schema({
   ],
 });
 
-userSchema.plugin(passportLocalMongoose);
+userSchema.plugin(passportLocalMongoose, {
+  usernameQueryFields: ['email'],
+  usernameLowerCase: true,
+});
 
 module.exports = mongoose.model('User', userSchema);

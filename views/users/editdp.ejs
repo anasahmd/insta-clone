@@ -55,6 +55,13 @@
   // id_image is the id of the input tag where we will upload the image
   const input = document.getElementById('id_image');
 
+  //Stop context menu from popping up
+  imagebox.oncontextmenu = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    return false;
+  };
+
   // When user uploads the image this event will get triggered
   input.addEventListener('change', () => {
     // Getting image file object from the input variable

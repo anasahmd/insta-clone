@@ -8,14 +8,16 @@
       novalidate
       class="needs-validation"
     >
-      <div class="d-flex gap-4 mb-3 align-items-center">
+      <div class="d-flex gap-3 gap-sm-4 mb-3 align-items-center w-100">
         <img
           src="<%= user.dp.url ? user.dp.url : defaultDp %>"
           alt=""
           class="rounded-circle profile-image-edit"
         />
-        <div>
-          <h2 class="fw-normal fs-5 my-0"><%= user.username %></h2>
+        <div class="d-flex flex-column w-100 username-overflow">
+          <h2 class="fw-normal fs-5 my-0 w-90 username-overflow">
+            <%= user.username %>
+          </h2>
           <a href="/accounts/profilepicture" class="fs-7 fw-5 my-0"
             >Change profile photo</a
           >
@@ -25,7 +27,7 @@
         <label for="name" class="form-label fw-5">Name</label>
         <input
           type="text"
-          name="fullName"
+          name="user[fullName]"
           class="form-control"
           placeholder="Name"
           id="name"
@@ -40,7 +42,7 @@
         <label for="username" class="form-label fw-5">Username</label>
         <input
           type="text"
-          name="username"
+          name="user[username]"
           class="form-control"
           placeholder="Username"
           required
@@ -50,10 +52,17 @@
       </div>
       <div class="mb-3">
         <label for="bio" class="form-label fw-5">Bio</label>
-        <textarea name="bio" id="bio" class="form-control">
+        <textarea
+          name="user[bio]"
+          id="userbio"
+          class="form-control noscrollbars"
+          onkeyup="autoGrow(this);"
+        >
 <%= user.bio %></textarea
         >
-        <div class="fs-8 text-muted mt-2 ms-1">0/150</div>
+        <div class="fs-8 text-muted mt-2 ms-1">
+          Must be less tha 150 characters.
+        </div>
       </div>
       <div class="mb-4">
         <div class="text-muted fs-7 fw-5 mb-1">Personal information</div>
@@ -64,7 +73,7 @@
         <label for="email" class="form-label fw-5">Email</label>
         <input
           type="email"
-          name="email"
+          name="user[email]"
           class="form-control"
           placeholder="Email"
           id="email"
@@ -73,7 +82,12 @@
         />
         <div class="valid-feedback">Looks good!</div>
       </div>
-      <button class="btn btn-primary btn-sm py-1 mb-2">Submit</button>
+      <div class="d-flex justify-content-between align-items-center py-1 mb-2">
+        <button class="btn btn-primary btn-sm">Submit</button>
+        <a class="fs-7 fw-5" href="/accounts/password/change"
+          >Change password</a
+        >
+      </div>
     </form>
   </div>
 </div>
