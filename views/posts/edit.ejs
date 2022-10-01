@@ -4,16 +4,18 @@
   <h1 class="mb-3 fs-3">Edit Post</h1>
   <form action="/p/<%= post._id %>?_method=PUT" method="POST">
     <div class="mb-4">
-      <input
-        type="text"
+      <textarea
         name="post[caption]"
-        class="form-control"
-        value="<%= post.caption %>"
+        class="form-control noscrollbars"
+        onkeyup="autoGrow(this);"
         placeholder="Write a caption"
-      />
+        id="caption-input"
+      >
+<%= post.caption %></textarea
+      >
     </div>
     <div class="d-grid">
-      <button class="btn btn-secondary">Edit</button>
+      <button class="btn btn-secondary spinner">Edit</button>
     </div>
   </form>
 </div>

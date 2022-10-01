@@ -14,7 +14,10 @@ const userSchema = new Schema({
     type: String,
   },
   dp: {
-    url: String,
+    url: {
+      type: String,
+      default: `https://res.cloudinary.com/dtq8oqzvj/image/upload/v1664629311/Dext%20Profile%20Images/instadefault_lowfpp.jpg`,
+    },
     filename: String,
   },
   posts: [

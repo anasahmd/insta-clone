@@ -83,8 +83,12 @@ textarea.noscrollbars {
   object-fit: cover;
 }
 
-.bio-text {
+.pre-wrap {
   white-space: pre-wrap;
+}
+
+.read-more {
+  cursor: pointer;
 }
 
 a {
@@ -176,7 +180,27 @@ i {
   color: #dc3545;
 }
 
-.btn-delete:active:focus {
+.btn:active:focus {
+  box-shadow: none;
+}
+
+.btn:active {
+  box-shadow: none;
+}
+
+.form-control:focus {
+  box-shadow: none;
+}
+
+.form-control:active:focus {
+  box-shadow: none;
+}
+
+.form-control:active {
+  box-shadow: none;
+}
+
+.btn:focus {
   box-shadow: none;
 }
 
@@ -282,6 +306,10 @@ i {
 
 .white-heart {
   color: #fff;
+}
+
+.search-item:hover {
+  background-color: #f8f9fa;
 }
 
 @keyframes like-heart-animation {

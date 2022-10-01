@@ -56,6 +56,12 @@ router.put(
   catchAsync(users.changePassword)
 );
 
+router.get('/explore', catchAsync(users.renderExplore));
+
+router.get('/explore/search', users.renderSearchForm);
+
+router.get('/explore/search/users', catchAsync(users.searchUsers));
+
 router.get('/:username', catchAsync(users.renderUserIndex));
 
 router.get('/:username/followers', catchAsync(users.renderFollowers));

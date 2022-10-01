@@ -29,7 +29,7 @@
   </head>
   <body class="d-flex flex-column vh-100">
     <%- include('../partials/navbar') %>
-    <main class="pt-3"><%- include('../partials/flash') %> <%- body %></main>
+    <main><%- include('../partials/flash') %> <%- body %></main>
     <%- include('../partials/footer') %>
     <script src="/javascripts/ejs.min.js"></script>
     <script src="/javascripts/script.js"></script>
@@ -50,8 +50,16 @@
               if (!form.checkValidity()) {
                 event.preventDefault();
                 event.stopPropagation();
+              } else {
+                const spinner = form.querySelector('.spinner');
+                if (spinner) {
+                  spinner.disabled = true;
+                  spinner.innerHTML = `<div class="spinner-border spinner-border-sm text-light" role="status">
+                <span class="sr-only">Loading...</span>
+                </div>`;
+                }
               }
-
+              // spinner on button
               form.classList.add('was-validated');
             },
             false

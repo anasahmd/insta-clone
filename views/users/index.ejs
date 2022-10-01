@@ -16,9 +16,13 @@
         class="follow-form"
       >
         <% if (!(currentUser && currentUser.following.includes(user._id))){ %>
-        <button class="btn btn-primary btn-sm px-3 btn-follow">Follow</button>
+        <button class="btn btn-primary btn-sm px-3 btn-follow spinner">
+          Follow
+        </button>
         <% } else { %>
-        <button class="btn btn-outline-secondary btn-sm px-3 btn-unfollow">
+        <button
+          class="btn btn-outline-secondary btn-sm px-3 btn-unfollow spinner"
+        >
           <span class="fs-7 fw-5">Following</span>
         </button>
         <% } %>
@@ -40,11 +44,9 @@
   </div>
   <div class="mt-sm-3 mt-2 d-flex flex-column">
     <span class="fs-7 fw-5 m-0"><%= user.fullName %> </span>
-    <span class="bio-text fs-7 m-0"><%= user.bio %></span>
+    <span class="pre-wrap fs-7 m-0"><%= user.bio %></span>
   </div>
 </div>
-
-<!-- <hr class="mb-2 text-muted" /> -->
 
 <div
   class="py-2 mt-3 mx-width-profile mx-auto border-top border-bottom border-end border-start"
@@ -70,20 +72,6 @@
     </div>
   </div>
 </div>
-
-<!-- <hr class="mt-2 mb-0 text-muted" /> -->
-
-<!-- <div class="container">
-  <div class="row">
-    <% for (let post of user.posts){ %>
-    <div class="m">
-      <div class="profile-post-img">
-        <img class="img img-fluid" src="<%= post.image %>" alt="" />
-      </div>
-    </div>
-    <% } %>
-  </div>
-</div> -->
 
 <div
   class="text-center py-3 gap-2 d-flex justify-content-center align-items-center"

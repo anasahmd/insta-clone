@@ -18,3 +18,13 @@ module.exports.deleteComment = async (req, res) => {
   await Comment.findByIdAndDelete(commentId);
   res.redirect(`/p/${id}#comment`);
 };
+
+module.exports.likedBy = async (req, res) => {
+  const { commentId } = req.params;
+  const comment = await Comment.findById(commentId).populate({
+    path: 'likes',
+    select: ['username', 'fullName'],
+  });
+  const listUsers = comment.likes;
+  res.render('users/listuser', { listUsers });
+};

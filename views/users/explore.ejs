@@ -1,0 +1,37 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="d-flex bg-light py-2 px-3 px-lg-0 mx-width-profile mx-auto">
+  <div class="w-100 position-relative">
+    <i
+      class="fa-solid fa-magnifying-glass position-absolute text-muted fs-8"
+      style="left: 8px; top: 13px"
+    ></i>
+    <input
+      type="text"
+      name="comment[text]"
+      class="form-control fs-7 px-4"
+      placeholder="Search"
+    />
+  </div>
+</div>
+
+<section class="post-list mt-2">
+  <% for (let post of posts){ %>
+  <a href="/p/<%= post._id %> " class="post">
+    <figure class="post-image profile-post-img">
+      <img class="img img-fluid" src="<%= post.image.url %>" alt="" />
+    </figure>
+    <span class="post-overlay">
+      <p>
+        <span class="post-likes"
+          ><i class="fa-solid fa-heart fs-6 me-1"></i> <%= post.likes.length %>
+        </span>
+        <span class="post-comments"
+          ><i class="fa-solid fa-comment fs-6 me-1"></i> <%=
+          post.comments.length %>
+        </span>
+      </p>
+    </span>
+  </a>
+  <% } %>
+</section>

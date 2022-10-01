@@ -9,23 +9,36 @@
           type="text"
           name="username"
           class="form-control"
-          placeholder="Username"
+          placeholder="Username or email"
           required
         />
-        <div class="valid-feedback">Looks good!</div>
       </div>
-      <div class="mb-4">
+      <div class="mb-4 position-relative">
         <input
           type="password"
           name="password"
           class="form-control"
           placeholder="Password"
+          id="password"
           required
         />
-        <div class="valid-feedback">Looks good!</div>
+        <div
+          id="show"
+          class="position-absolute fs-7 fw-5 my-auto"
+          style="top: 8px; right: 12px; cursor: pointer"
+        >
+          Show
+        </div>
+        <div
+          id="hide"
+          class="position-absolute fs-7 fw-5 my-auto"
+          style="top: 8px; right: 12px; display: none; cursor: pointer"
+        >
+          Hide
+        </div>
       </div>
       <div class="d-grid">
-        <button class="btn btn-primary">Log in</button>
+        <button class="btn btn-primary spinner">Log in</button>
       </div>
     </form>
     <div class="d-flex py-3 flex-row align-items-center">

@@ -52,14 +52,29 @@
         />
         <div class="valid-feedback">Looks good!</div>
       </div>
-      <div class="mb-4">
+      <div class="mb-4 position-relative">
         <input
           type="password"
           name="user[password]"
           class="form-control"
+          id="password"
           placeholder="Password"
           required
         />
+        <div
+          id="show"
+          class="position-absolute fs-7 fw-5 my-auto"
+          style="top: 8px; right: 12px; cursor: pointer"
+        >
+          Show
+        </div>
+        <div
+          id="hide"
+          class="position-absolute fs-7 fw-5 my-auto"
+          style="top: 8px; right: 12px; display: none; cursor: pointer"
+        >
+          Hide
+        </div>
         <div class="valid-feedback">Looks good!</div>
       </div>
       <p class="text-muted text-center fs-7">
@@ -72,7 +87,7 @@
         By signing up, you agree to our terms as mentioned above.
       </p>
       <div class="d-grid mb-4">
-        <button class="btn btn-primary">Sign Up</button>
+        <button class="btn btn-primary spinner">Sign Up</button>
       </div>
     </form>
   </div>

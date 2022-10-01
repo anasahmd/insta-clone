@@ -1,0 +1,24 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="d-flex bg-light py-2 px-3 px-lg-0 mx-width-profile mx-auto">
+  <div class="w-100 position-relative">
+    <i
+      class="fa-solid fa-magnifying-glass position-absolute text-muted fs-8"
+      style="left: 8px; top: 13px"
+    ></i>
+    <input
+      type="text"
+      name="comment[text]"
+      class="form-control fs-7 px-4"
+      placeholder="Search"
+      id="search-user"
+    />
+  </div>
+</div>
+
+<div
+  class="search-container py-2 mx-width-profile mx-auto"
+  id="search-container"
+></div>
+
+<script src="/javascripts/search.js"></script>

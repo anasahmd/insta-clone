@@ -6,6 +6,7 @@ const links = document.querySelectorAll('a');
 const postLinks = document.querySelectorAll('.post-link');
 let doubleTaps = document.querySelectorAll('.double-tap-post');
 const usernameOverflow = document.querySelector('.username-overflow');
+const readMores = document.querySelectorAll('.read-more');
 
 doubleTaps.forEach((doubleTap) => {
   doubleTap.addEventListener('dblclick', () => {
@@ -119,8 +120,10 @@ likeComments.forEach((likeComment) => {
     let btnLikeClass = likeComment.children[0].children[0].classList;
     let likeContainer =
       likeComment.parentElement.parentElement.children[0].children[0]
-        .children[1].children[1].children[1];
+        .children[1].children[1].children[1].children[0];
+    console.log(likeContainer);
     let likeCount = parseInt(likeContainer.children[0].dataset.likeCount);
+    console.log(likeCount);
     btnLikeClass.toggle('red-heart');
     if (btnLikeClass.contains('fa-regular')) {
       btnLikeClass.remove('fa-regular');
@@ -150,14 +153,14 @@ likeComments.forEach((likeComment) => {
       .then(function (response) {
         const resText = ejs.render(response.data.text);
         likeComment.children[0].innerHTML = response.data.heart;
-        likeComment.parentElement.parentElement.children[0].children[0].children[1].children[1].children[1].innerHTML =
+        likeComment.parentElement.parentElement.children[0].children[0].children[1].children[1].children[1].children[0].innerHTML =
           resText;
       })
       .catch(function (error) {
         btnLikeClass = likeComment.children[0].children[0].classList;
         likeContainer =
           likeComment.parentElement.parentElement.children[0].children[0]
-            .children[1].children[1].children[1];
+            .children[1].children[1].children[1].children[0];
         likeCount = parseInt(likeContainer.children[0].dataset.likeCount);
         btnLikeClass.toggle('red-heart');
         if (btnLikeClass.contains('fa-regular')) {
@@ -191,6 +194,16 @@ if (followForms) {
   followForms.forEach((followForm) => {
     followForm.addEventListener('submit', (e) => {
       e.preventDefault();
+      if (followForm.children[0].classList.contains('btn-follow')) {
+        followForm.children[0].innerHTML = `<div class="spinner-border spinner-border-sm text-light" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>`;
+      } else {
+        followForm.children[0].innerHTML = `<div class="spinner-border spinner-border-sm text-secondary" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>`;
+      }
+      followForm.parentElement.children[0].disable = true;
       axios.post(`${followForm.action}`, {}).then(function (response) {
         followForm.innerHTML = response.data.button;
         followForm.action = response.data.action;
@@ -221,10 +234,31 @@ function autoGrow(oField) {
   }
 }
 
-window.addEventListener('load', () => {
-  isEllipsisActive(usernameOverflow);
+// Read more functionality
+
+readMores.forEach((readMore) => {
+  readMore.addEventListener('click', () => {
+    readMore.parentElement.querySelector('.more').style.display = 'inline';
+    readMore.parentElement.querySelector('.dots').style.display = 'none';
+    readMore.parentElement.querySelector('.read-more').style.display = 'none';
+  });
 });
 
-function isEllipsisActive(e) {
-  return e.offsetWidth < e.scrollWidth;
+// Show hide password
+const show = document.getElementById('show');
+const hide = document.getElementById('hide');
+const password = document.getElementById('password');
+
+if (show || hide) {
+  show.addEventListener('click', () => {
+    hide.style.display = 'block';
+    show.style.display = 'none';
+    password.type = 'text';
+  });
+
+  hide.addEventListener('click', () => {
+    show.style.display = 'block';
+    hide.style.display = 'none';
+    password.type = 'password';
+  });
 }

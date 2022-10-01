@@ -115,7 +115,7 @@
     </div>
     </a>
     <% if(post.caption){ %>
-    <p class="fs-7 my-1 mb-0">
+      <span class="fs-7 my-1 mb-0">
       <b
         ><a
           href="/<%= post.user.username %>"
@@ -123,13 +123,35 @@
           ><%= post.user.username %></a
         ></b
       >
-      <%=post.caption %>
-    </p>
+      <span class="" style="font-size: 0">
+          <% if ((post.caption.indexOf('\r\n')) < 120 &&
+          post.caption.indexOf('\r\n') !== -1) {%>
+          <span class="less fs-7"
+            ><%= post.caption.slice(0, post.caption.indexOf('\r\n')) %></span
+          >
+          <span class="dots fs-7">...</span>
+          <span class="read-more text-muted fs-7 ms-1"> more</span>
+          <span class="more pre-wrap fs-7" style="display: none"
+            ><%= post.caption.slice(post.caption.indexOf('\r\n')) %></span
+          >
+
+          <%} else if(post.caption.length > 120){ %>
+          <span class="less fs-7"><%= post.caption.slice(0, 120) %></span>
+          <span class="dots fs-7">...</span>
+          <span class="read-more text-muted fs-7 ms-1"> more</span>
+          <span class="more fs-7 pre-wrap" style="display: none"
+            ><%= post.caption.slice(120) %></span
+          >
+          <% } else { %>
+          <span class="pre-wrap fs-7"><%= post.caption %></span>
+          <% } %>
+        </span>
+    </span>
     <% } %>
     <div class="text-muted fs-8 my-1 mb-0">
       <span class="me-1"><%= formatDistanceToNowStrict(post.date)%> ago</span>
       <% if (post.edited){ %>
-      <span class="me-1"> &#183</span>
+      <span class="me-1"> &#183 </span>
       <span>Edited</span>
       <% } %>
     </div>
@@ -200,9 +222,10 @@
                 </div>
               <div class="d-flex align-items-center gap-1">
                 <span class="text-muted fs-8"
-                  ><%= formatDistanceToNowStrict(comment.date)%></span
+                ><%= formatDistanceToNowStrict(comment.date)%></span
                 >
                 <span class="fs-8 ms-2">
+                <a href="/p/<%= post._id %>/c/<%= comment._id %>/liked_by">
                   <% if(comment.likes.length){ %>
                   <span
                     class="text-muted fs-8 fw-5"
@@ -212,10 +235,13 @@
                     %> likes <% } else {%> like <% }%></span
                   >
                   <% } else {%>
-                  <span class="text-muted fs-8 fw-5" data-like-count="0"></span>
-                  <% } %> <% if (currentUser &&
+                    <span class="text-muted fs-8 fw-5" data-like-count="0"></span>
+                    <% } %>
+                    </span>
+                    </a>
+                  <% if (currentUser &&
                   comment.user.equals(currentUser)){ %>
-                </span>
+                
                 <span class="text-muted fs-8 fw-5">
                   <!-- Button trigger modal -->
                   <button

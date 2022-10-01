@@ -124,16 +124,40 @@
       </div>
     </a>
     <% if(post.caption){ %>
-    <p class="fs-7 my-1 mb-0">
-      <b
-        ><a
-          href="/<%= post.user.username %>"
-          class="fs-7 fw-bolder mb-0 text-reset"
-          ><%= post.user.username %></a
-        ></b
-      >
-      <%=post.caption %>
-    </p>
+    <div class="my-1 mb-0">
+      <span class="fs-7">
+        <b
+          ><a
+            href="/<%= post.user.username %>"
+            class="fs-7 fw-bolder mb-0 text-reset"
+            ><%= post.user.username %></a
+          ></b
+        >
+        <span class="" style="font-size: 0">
+          <% if ((post.caption.indexOf('\r\n')) < 120 &&
+          post.caption.indexOf('\r\n') !== -1) {%>
+          <span class="less fs-7"
+            ><%= post.caption.slice(0, post.caption.indexOf('\r\n')) %></span
+          >
+          <span class="dots fs-7">...</span>
+          <span class="read-more text-muted fs-7 ms-1"> more</span>
+          <span class="more pre-wrap fs-7" style="display: none"
+            ><%= post.caption.slice(post.caption.indexOf('\r\n')) %></span
+          >
+
+          <%} else if(post.caption.length > 120){ %>
+          <span class="less fs-7"><%= post.caption.slice(0, 120) %></span>
+          <span class="dots fs-7">...</span>
+          <span class="read-more text-muted fs-7 ms-1"> more</span>
+          <span class="more fs-7 pre-wrap" style="display: none"
+            ><%= post.caption.slice(120) %></span
+          >
+          <% } else { %>
+          <span class="pre-wrap fs-7"><%= post.caption %></span>
+          <% } %>
+        </span>
+      </span>
+    </div>
     <% } %> <% if (post.comments.length){ %>
     <a href="/p/<%= post._id %>#comment" class="text-muted fs-7 my-1"
       >View <%= post.comments.length %> <% if (post.comments.length > 1){ %>

@@ -15,6 +15,7 @@ module.exports.createPost = async (req, res) => {
   if (!req.body.post) throw new ExpressError('Invalid Post Data', 400);
   const user = await User.findById(req.user._id);
   const post = new Post(req.body.post);
+  post.caption = post.caption.replace(/\r\n\r\n/g, '');
   post.image.filename = req.file.filename;
   post.image.url = req.file.path;
   post.user = req.user._id;
@@ -53,6 +54,7 @@ module.exports.renderEditForm = async (req, res, next) => {
 
 module.exports.updatePost = async (req, res) => {
   const { id } = req.params;
+  req.body.post.caption = req.body.post.caption.replace(/\r\n\r\n/g, '');
   const post = await Post.findByIdAndUpdate(id, {
     ...req.body.post,
     edited: true,

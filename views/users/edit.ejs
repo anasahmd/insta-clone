@@ -48,7 +48,6 @@
           required
           value="<%= user.username %>"
         />
-        <div class="valid-feedback">Looks good!</div>
       </div>
       <div class="mb-3">
         <label for="bio" class="form-label fw-5">Bio</label>
@@ -80,10 +79,9 @@
           required
           value="<%= user.email %>"
         />
-        <div class="valid-feedback">Looks good!</div>
       </div>
       <div class="d-flex justify-content-between align-items-center py-1 mb-2">
-        <button class="btn btn-primary btn-sm">Submit</button>
+        <button class="btn btn-primary btn-sm spinner">Submit</button>
         <a class="fs-7 fw-5" href="/accounts/password/change"
           >Change password</a
         >
