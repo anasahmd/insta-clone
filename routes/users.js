@@ -56,6 +56,17 @@ router.put(
   catchAsync(users.changePassword)
 );
 
+router.get('/accounts/password/reset', catchAsync(users.renderForgotForm));
+
+router.post('/forgot', catchAsync(users.forgotPassword));
+
+router.post('/forgot/:token', catchAsync(users.forgotConfirmPassword));
+
+router.get(
+  '/accounts/password/reset/confirm/:token',
+  catchAsync(users.renderForgotConfirmForm)
+);
+
 router.get('/explore', catchAsync(users.renderExplore));
 
 router.get('/explore/search', users.renderSearchForm);

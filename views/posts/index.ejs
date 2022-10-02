@@ -1,172 +1,175 @@
-<% layout('layouts/boilerplate') %> <% for (let post of posts){ %>
-<div class="post-index-card card my-sm-3 mx-width mx-auto">
-  <div class="card-body py-2">
-    <div class="d-flex w-100 gap-2 gap-sm-3">
-      <div class="flex-shrink-0">
-        <a href="/<%= post.user.username %>">
-          <img
-            src="<%= post.user.dp.url ? post.user.dp.url : defaultDp %>"
-            alt=""
-            class="rounded-circle profile-image"
-          />
-        </a>
-      </div>
-      <div
-        class="d-flex flex-column justify-content-center m-0 username-overflow"
-      >
-        <a
-          href="/<%= post.user.username %>"
-          class="fs-7 fw-bolder mb-0 text-reset username-overflow"
-          ><%= post.user.username %></a
+<% layout('layouts/boilerplate') %>
+<div class="mt-2">
+  <% for (let post of posts){ %>
+  <div class="post-index-card card my-sm-3 mx-width mx-auto">
+    <div class="card-body py-2 px-3">
+      <div class="d-flex w-100 gap-2 gap-sm-3 align-items-center">
+        <div class="flex-shrink-0">
+          <a href="/<%= post.user.username %>">
+            <img
+              src="<%= post.user.dp.url ? post.user.dp.url : defaultDp %>"
+              alt=""
+              class="rounded-circle profile-image"
+            />
+          </a>
+        </div>
+        <div
+          class="d-flex flex-column justify-content-center m-0 username-overflow"
         >
-      </div>
-      <!-- Button trigger modal -->
-      <button
-        type="button"
-        class="btn ms-auto btn-custom"
-        data-bs-toggle="modal"
-        data-bs-target="#post<%= post._id %>"
-      >
-        <i class="fa-solid fa-ellipsis-vertical fs-6"></i>
-      </button>
+          <a
+            href="/<%= post.user.username %>"
+            class="fs-7 fw-bolder mb-0 text-reset username-overflow"
+            ><%= post.user.username %></a
+          >
+        </div>
+        <!-- Button trigger modal -->
+        <button
+          type="button"
+          class="btn ms-auto btn-custom"
+          data-bs-toggle="modal"
+          data-bs-target="#post<%= post._id %>"
+        >
+          <i class="fa-solid fa-ellipsis-vertical fs-6"></i>
+        </button>
 
-      <!-- Modal -->
-      <div
-        class="modal fade"
-        id="post<%= post._id %>"
-        tabindex="-1"
-        aria-labelledby="<%= post._id %>Label"
-        aria-hidden="true"
-      >
-        <div class="modal-dialog modal-sm modal-dialog-centered">
-          <div class="modal-content">
-            <% if (currentUser && post.user.equals(currentUser)) { %>
-            <div class="modal-body text-center border-bottom">
-              <form action="/p/<%= post._id %>?_method=DELETE" method="POST">
+        <!-- Modal -->
+        <div
+          class="modal fade"
+          id="post<%= post._id %>"
+          tabindex="-1"
+          aria-labelledby="<%= post._id %>Label"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog modal-sm modal-dialog-centered">
+            <div class="modal-content">
+              <% if (currentUser && post.user.equals(currentUser)) { %>
+              <div class="modal-body text-center border-bottom">
+                <form action="/p/<%= post._id %>?_method=DELETE" method="POST">
+                  <button
+                    class="btn btn-outline-danger btn-delete btn-custom py-0 ms-auto"
+                  >
+                    Delete
+                  </button>
+                </form>
+              </div>
+              <div class="modal-body text-center border-bottom">
+                <a href="/p/<%= post._id %>/edit" class="text-reset">Edit</a>
+              </div>
+              <% } %>
+              <div class="modal-body text-center">
+                <a href="/p/<%= post._id %>" class="text-reset">Go to post</a>
+              </div>
+              <div class="modal-footer text-center">
                 <button
-                  class="btn btn-outline-danger btn-delete btn-custom py-0 ms-auto"
+                  type="button"
+                  class="btn btn-custom py-0 mx-auto"
+                  data-bs-dismiss="modal"
                 >
-                  Delete
+                  Close
                 </button>
-              </form>
-            </div>
-            <div class="modal-body text-center border-bottom">
-              <a href="/p/<%= post._id %>/edit" class="text-reset">Edit</a>
-            </div>
-            <% } %>
-            <div class="modal-body text-center">
-              <a href="/p/<%= post._id %>" class="text-reset">Go to post</a>
-            </div>
-            <div class="modal-footer text-center">
-              <button
-                type="button"
-                class="btn btn-custom py-0 mx-auto"
-                data-bs-dismiss="modal"
-              >
-                Close
-              </button>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-  <div
-    class="double-tap-post position-relative w-100 d-flex justify-content-center align-items-center"
-  >
-    <div class="double-tap-image">
-      <img src="<%= post.image.url %>" alt="" class="img-fluid w-100" />
-    </div>
-    <div class="position-absolute post-heart-center">
-      <i class="fa-solid fa-heart white-heart text-center"></i>
-    </div>
-  </div>
-  <div class="card-body">
-    <div class="d-flex gap-3 my-1">
-      <form
-        action="/like/<%= post._id %> "
-        method="POST"
-        class="m-0 p-0 like-form"
-      >
-        <button class="text-reset p-0 m-0 btn-like">
-          <% if(currentUser && post.likes.includes(currentUser._id)){ %>
-          <i class="fa-solid fa-heart red-heart"></i>
-          <% } else { %>
-          <i class="fa-regular fa-heart"></i>
-          <% } %>
-        </button>
-      </form>
-      <a href="/p/<%= post._id %>#comment" class="text-reset">
-        <i class="fa-regular fa-comment"></i>
-      </a>
-      <span
-        class="post-link text-reset text-reset p-0"
-        style="cursor: pointer"
-        data-url="p/<%= post._id %>"
-      >
-        <i class="fa-solid fa-paper-plane"></i>
-      </span>
-    </div>
-
-    <a href="/p/<%= post._id %>/liked_by" class="text-reset">
-      <div class="like-container">
-        <div class="fs-7 mt-2 mb-1">
-          <% if (post.likes.length){ %>
-          <span class="fw-bolder" data-like-count="<%= post.likes.length %>"
-            ><%= post.likes.length %> <% if(post.likes.length > 1){ %> likes <%
-            }else { %> like <% } %>
-          </span>
-          <% } else { %><span data-like-count="0"
-            >Be the first to <b class="like-this">like this </b></span
-          >
-          <% } %>
-        </div>
+    <div
+      class="double-tap-post position-relative w-100 d-flex justify-content-center align-items-center"
+    >
+      <div class="double-tap-image">
+        <img src="<%= post.image.url %>" alt="" class="img-fluid w-100" />
       </div>
-    </a>
-    <% if(post.caption){ %>
-    <div class="my-1 mb-0">
-      <span class="fs-7">
-        <b
-          ><a
-            href="/<%= post.user.username %>"
-            class="fs-7 fw-bolder mb-0 text-reset"
-            ><%= post.user.username %></a
-          ></b
-        >
-        <span class="" style="font-size: 0">
-          <% if ((post.caption.indexOf('\r\n')) < 120 &&
-          post.caption.indexOf('\r\n') !== -1) {%>
-          <span class="less fs-7"
-            ><%= post.caption.slice(0, post.caption.indexOf('\r\n')) %></span
-          >
-          <span class="dots fs-7">...</span>
-          <span class="read-more text-muted fs-7 ms-1"> more</span>
-          <span class="more pre-wrap fs-7" style="display: none"
-            ><%= post.caption.slice(post.caption.indexOf('\r\n')) %></span
-          >
-
-          <%} else if(post.caption.length > 120){ %>
-          <span class="less fs-7"><%= post.caption.slice(0, 120) %></span>
-          <span class="dots fs-7">...</span>
-          <span class="read-more text-muted fs-7 ms-1"> more</span>
-          <span class="more fs-7 pre-wrap" style="display: none"
-            ><%= post.caption.slice(120) %></span
-          >
-          <% } else { %>
-          <span class="pre-wrap fs-7"><%= post.caption %></span>
-          <% } %>
-        </span>
-      </span>
+      <div class="position-absolute post-heart-center">
+        <i class="fa-solid fa-heart white-heart text-center"></i>
+      </div>
     </div>
-    <% } %> <% if (post.comments.length){ %>
-    <a href="/p/<%= post._id %>#comment" class="text-muted fs-7 my-1"
-      >View <%= post.comments.length %> <% if (post.comments.length > 1){ %>
-      comments <% }else{ %> comment <% } %>
-    </a>
-    <% } %>
-    <div class="text-muted fs-8 my-1 mb-0">
-      <span><%= formatDistanceToNowStrict(post.date)%> ago</span>
+    <div class="card-body">
+      <div class="d-flex gap-3 my-1">
+        <form
+          action="/like/<%= post._id %> "
+          method="POST"
+          class="m-0 p-0 like-form"
+        >
+          <button class="text-reset p-0 m-0 btn-like">
+            <% if(currentUser && post.likes.includes(currentUser._id)){ %>
+            <i class="fa-solid fa-heart red-heart"></i>
+            <% } else { %>
+            <i class="fa-regular fa-heart"></i>
+            <% } %>
+          </button>
+        </form>
+        <a href="/p/<%= post._id %>#comment" class="text-reset">
+          <i class="fa-regular fa-comment"></i>
+        </a>
+        <span
+          class="post-link text-reset text-reset p-0"
+          style="cursor: pointer"
+          data-url="p/<%= post._id %>"
+        >
+          <i class="fa-solid fa-paper-plane"></i>
+        </span>
+      </div>
+
+      <a href="/p/<%= post._id %>/liked_by" class="text-reset">
+        <div class="like-container">
+          <div class="fs-7 mt-2 mb-1">
+            <% if (post.likes.length){ %>
+            <span class="fw-bolder" data-like-count="<%= post.likes.length %>"
+              ><%= post.likes.length %> <% if(post.likes.length > 1){ %> likes
+              <% }else { %> like <% } %>
+            </span>
+            <% } else { %><span data-like-count="0"
+              >Be the first to <b class="like-this">like this </b></span
+            >
+            <% } %>
+          </div>
+        </div>
+      </a>
+      <% if(post.caption){ %>
+      <div class="my-1 mb-0">
+        <span class="fs-7">
+          <b
+            ><a
+              href="/<%= post.user.username %>"
+              class="fs-7 fw-bolder mb-0 text-reset"
+              ><%= post.user.username %></a
+            ></b
+          >
+          <span class="" style="font-size: 0">
+            <% if ((post.caption.indexOf('\r\n')) < 120 &&
+            post.caption.indexOf('\r\n') !== -1) {%>
+            <span class="less fs-7"
+              ><%= post.caption.slice(0, post.caption.indexOf('\r\n')) %></span
+            >
+            <span class="dots fs-7">...</span>
+            <span class="read-more text-muted fs-7 ms-1"> more</span>
+            <span class="more pre-wrap fs-7" style="display: none"
+              ><%= post.caption.slice(post.caption.indexOf('\r\n')) %></span
+            >
+
+            <%} else if(post.caption.length > 120){ %>
+            <span class="less fs-7"><%= post.caption.slice(0, 120) %></span>
+            <span class="dots fs-7">...</span>
+            <span class="read-more text-muted fs-7 ms-1"> more</span>
+            <span class="more fs-7 pre-wrap" style="display: none"
+              ><%= post.caption.slice(120) %></span
+            >
+            <% } else { %>
+            <span class="pre-wrap fs-7"><%= post.caption %></span>
+            <% } %>
+          </span>
+        </span>
+      </div>
+      <% } %> <% if (post.comments.length){ %>
+      <a href="/p/<%= post._id %>#comment" class="text-muted fs-7 my-1"
+        >View <%= post.comments.length %> <% if (post.comments.length > 1){ %>
+        comments <% }else{ %> comment <% } %>
+      </a>
+      <% } %>
+      <div class="text-muted fs-8 my-1 mb-0">
+        <span><%= formatDistanceToNowStrict(post.date)%> ago</span>
+      </div>
     </div>
   </div>
+  <% } %>
 </div>
-<% } %>

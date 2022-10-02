@@ -1,6 +1,6 @@
 <% layout('layouts/boilerplate') %>
 
-<div class="card mx-width mx-auto px-4">
+<div class="card mx-width mx-auto px-4 mt-sm-4">
   <div class="card-body w-90 mx-auto">
     <h1 class="fs-3 my-4 text-center">Dext</h1>
     <form action="/login" method="POST" novalidate class="needs-validation">
@@ -41,6 +41,9 @@
         <button class="btn btn-primary spinner">Log in</button>
       </div>
     </form>
+    <div class="text-center mt-4 fs-7">
+      <a href="/accounts/password/reset">Forgot password?</a>
+    </div>
     <div class="d-flex py-3 flex-row align-items-center">
       <div class="col-5 text-muted">
         <hr />

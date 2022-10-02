@@ -1,0 +1,26 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="card mx-auto px-4 my-sm-5" style="max-width: 400px">
+  <div class="card-body">
+    <div class="d-flex justify-content-center mt-4 mb-3">
+      <i class="fa-solid fa-lock" style="font-size: 3.5rem"></i>
+    </div>
+    <h2 class="fs-5 text-center">Trouble Loggin In?</h2>
+    <p class="text-center fs-7 text-muted">
+      Enter your email or username and we'll send you a link to get back into
+      your account.
+    </p>
+    <form action="/forgot" method="POST" novalidate class="needs-validation">
+      <input
+        type="string"
+        name="email"
+        class="form-control mb-3"
+        placeholder="Email"
+        required
+      />
+      <div class="d-grid mb-3">
+        <button class="btn btn-primary spinner">Change Password</button>
+      </div>
+    </form>
+  </div>
+</div>

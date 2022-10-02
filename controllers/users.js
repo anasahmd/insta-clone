@@ -2,6 +2,8 @@ const User = require('../models/users');
 const { cloudinary } = require('../cloudinary');
 const ExpressError = require('../utils/ExpressError');
 const Post = require('../models/post');
+const nodemailer = require('nodemailer');
+const crypto = require('crypto');
 const prohibitedUsername = [
   'accounts',
   'login',
@@ -142,7 +144,8 @@ module.exports.removeDp = async (req, res) => {
     await cloudinary.uploader.destroy(user.dp.filename);
   }
   user.dp.filename = '';
-  user.dp.url = '';
+  user.dp.url =
+    'https://res.cloudinary.com/dtq8oqzvj/image/upload/v1664629311/Dext%20Profile%20Images/instadefault_lowfpp.jpg';
   await user.save();
   res.redirect(`/${user.username}`);
 };
@@ -179,4 +182,102 @@ module.exports.searchUsers = async (req, res) => {
     });
     res.send({ users });
   }
+};
+
+module.exports.renderForgotForm = async (req, res) => {
+  res.render('users/forgotpwd');
+};
+
+module.exports.forgotPassword = async (req, res) => {
+  let token;
+  crypto.randomBytes(20, (err, buf) => {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    token = buf.toString('hex');
+  });
+  const user = await User.findOne({ email: req.body.email });
+  if (!user) {
+    req.flash('error', 'No users found');
+    return res.redirect('/accounts/password/reset');
+  }
+
+  user.resetPasswordToken = token;
+  user.resetPasswordExpires = Date.now() + 3600000;
+
+  await user.save();
+
+  const transporter = nodemailer.createTransport({
+    service: 'Gmail',
+    auth: {
+      user: 'anasahmad00239@gmail.com',
+      pass: process.env.GMAILAPW,
+    },
+  });
+  const mailOptions = {
+    to: user.email,
+    from: 'Dext',
+    subject: 'Dext Password Reset',
+    text:
+      `Sorry to hear you're having trouble logging into Dext. We got a message that you forgot your password. If this was you, you can reset your password now.\n\n` +
+      `https://${req.headers.host}/accounts/password/reset/confirm/${token} \n\n` +
+      `If you didn’t request a password reset, you can ignore this message \n\n` +
+      `Only people who know your Dext password can log into your account.\n\n`,
+
+    html: `<div style="max-width: 600px;"><p>Sorry to hear you're having trouble logging into Dext. We got a message that you forgot your password. If this was you, you can reset your password now.<p><a href="https://${req.headers.host}/accounts/password/reset/confirm/${token}">Reset your password</a><p>If you didn’t request a password reset, you can ignore this message</p><p>Only people who know your Dext password can log into your account.</p></div>`,
+  };
+  transporter.sendMail(mailOptions, (err) => {
+    req.flash(
+      'success',
+      `We sent an email to ${user.email} with a link to get back into your account.`
+    );
+    res.redirect('/accounts/password/reset');
+  });
+};
+
+module.exports.renderForgotConfirmForm = async (req, res, next) => {
+  const user = await User.findOne({
+    resetPasswordToken: req.params.token,
+    resetPasswordExpires: { $gt: Date.now() },
+  });
+  if (!user) {
+    return next(new ExpressError(`Sorry, this page isn't available`, 400));
+  }
+  res.render('users/forgotconfirm', { token: req.params.token });
+};
+
+module.exports.forgotConfirmPassword = async (req, res, next) => {
+  const user = await User.findOne({
+    resetPasswordToken: req.params.token,
+    resetPasswordExpires: { $gt: Date.now() },
+  });
+  if (!user) {
+    return next(new ExpressError(`Sorry, this page isn't available`, 400));
+  }
+  await user.setPassword(req.body.password);
+  user.resetPasswordToken = undefined;
+  user.resetPasswordExpires = undefined;
+  await user.save();
+  req.login(user, (err) => {
+    if (err) return next(err);
+  });
+  const transporter = nodemailer.createTransport({
+    service: 'Gmail',
+    auth: {
+      user: 'anasahmad00239@gmail.com',
+      pass: process.env.GMAILAPW,
+    },
+  });
+  const mailOptions = {
+    to: user.email,
+    from: 'Dext',
+    subject: 'Your Dext password has been changed',
+    text: `This is a confirmation that the password for your Instagram account ${user.username} has just been changed.`,
+
+    html: `<div style="max-width: 600px;"><p>This is a confirmation that the password for your Dext account ${user.username} has just been changed.</p></div>`,
+  };
+  transporter.sendMail(mailOptions);
+  req.flash('success', `Your password has been changed.`);
+  res.redirect('/');
 };

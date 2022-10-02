@@ -13,6 +13,12 @@ const userSchema = new Schema({
   fullName: {
     type: String,
   },
+  resetPasswordToken: {
+    type: String,
+  },
+  resetPasswordExpires: {
+    type: Date,
+  },
   dp: {
     url: {
       type: String,

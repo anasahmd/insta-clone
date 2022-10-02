@@ -1,0 +1,43 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="card mx-auto w-90 px-4 mt-sm-5" style="max-width: 400px">
+  <div class="card-body mt-5">
+    <h2 class="fs-5 text-center">Create A Strong Password</h2>
+    <p class="text-center fs-7 text-muted mt-3 mb-4">
+      Your password must be at least 6 characters and should include a
+      combination of numbers, letters and special characters (!$@%).
+    </p>
+    <form
+      action="/forgot/<%= token %>"
+      method="POST"
+      novalidate
+      class="needs-validation"
+    >
+      <div class="mb-4">
+        <input
+          type="password"
+          name="password"
+          class="form-control mb-3 fs-7"
+          placeholder="New password"
+          required
+          autocomplete="new-password"
+        />
+      </div>
+      <div class="mb-3">
+        <input
+          type="password"
+          name="repeat_password"
+          class="form-control mb-3 fs-7"
+          placeholder="New password, again"
+          required
+          autocomplete="new-password"
+        />
+      </div>
+      <div>
+        <button class="btn btn-primary btn-sm spinner my-3">
+          Reset Password
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
