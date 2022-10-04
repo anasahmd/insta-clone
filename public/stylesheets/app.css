@@ -14,6 +14,46 @@ main {
   background-color: #fff !important;
 }
 
+.search-item:hover {
+  background-color: #f8f9fa;
+}
+
+.npop-style {
+  background-color: #ff3041;
+}
+
+.npop-style .popover-body {
+  padding: 0.75em;
+}
+
+.npop-style .popover-arrow::after {
+  border-bottom-color: #ff3041 !important;
+}
+
+.nav-pop {
+  width: 175px;
+}
+
+.nav-pop .popover-body {
+  padding: 0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.nav-pop a:hover {
+  background-color: #f8f9fa;
+}
+
+.btn-nav {
+  width: 35px;
+  height: 35px;
+}
+
+.nav-image {
+  width: 24px;
+  height: 24px;
+}
+
 textarea.noscrollbars {
   overflow: hidden;
 }
@@ -34,20 +74,6 @@ textarea.noscrollbars {
 
 .website-link {
   color: #00376b;
-}
-
-.nav-pop {
-  width: 150px;
-}
-
-.btn-nav {
-  width: 35px;
-  height: 35px;
-}
-
-.nav-image {
-  width: 24px;
-  height: 24px;
 }
 
 .profile-image {
@@ -314,10 +340,6 @@ i {
 
 .white-heart {
   color: #fff;
-}
-
-.search-item:hover {
-  background-color: #f8f9fa;
 }
 
 @keyframes like-heart-animation {

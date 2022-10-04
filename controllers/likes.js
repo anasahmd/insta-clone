@@ -1,5 +1,6 @@
 const User = require('../models/users');
 const Post = require('../models/post');
+const Notification = require('../models/notifications');
 const Comment = require('../models/comment');
 
 module.exports.likeComment = async (req, res) => {
@@ -40,9 +41,46 @@ module.exports.likePost = async (req, res) => {
   const { id } = req.params;
   const post = await Post.findById(id);
   if (post.likes.includes(req.user._id)) {
+    //Removing notification
+
+    const notification = await Notification.findOne({
+      refer: post._id,
+      docModel: 'Post',
+    });
+
+    if (notification) {
+      const user = await User.findById(post.user._id);
+      await User.findByIdAndUpdate(user._id, {
+        $pull: { notifications: notification._id },
+      });
+
+      await Notification.findByIdAndDelete(notification._id);
+      await user.save();
+    }
+    //Removed notification
     await Post.findByIdAndUpdate(id, { $pull: { likes: req.user._id } });
   } else {
     post.likes.push(req.user._id);
+
+    // Creating notification
+    const user = await User.findById(post.user);
+
+    if (!req.user._id.equals(user._id)) {
+      const notification = new Notification({
+        sender: req.user._id,
+        receiver: user._id,
+        nType: 'like',
+        refer: post._id,
+        docModel: 'Post',
+      });
+
+      user.notifications.push(notification);
+      await notification.save();
+    }
+
+    //Created notification
+
+    await user.save();
     await post.save();
   }
   const updatedPost = await Post.findById(id);

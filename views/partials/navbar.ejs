@@ -7,22 +7,71 @@
     </div>
     <div class="right d-flex align-items-center">
       <% if(currentUser){ %>
-      <a href="/p/new" class="text-reset me-4 pt-1"
+      <a href="/p/new" class="text-reset me-3 pt-1"
         ><i class="fa-regular fa-square-plus fs-3"></i
       ></a>
-      <a href="/explore" class="text-reset me-3 pt-1"
-        ><i class="fa-solid fa-compass"></i
+      <a href="/explore" class="text-reset me-3"
+        ><svg
+          aria-label="Search &amp; Explore"
+          class="_ab6-"
+          color="#262626"
+          fill="#262626"
+          height="24"
+          role="img"
+          viewBox="0 0 24 24"
+          width="24"
+        >
+          <path
+            d="M19 10.5A8.5 8.5 0 1110.5 2a8.5 8.5 0 018.5 8.5z"
+            fill="none"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+          ></path>
+          <line
+            fill="none"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            x1="16.511"
+            x2="22"
+            y1="16.511"
+            y2="22"
+          ></line></svg
       ></a>
+      <% if(newLikes || newComments || newFollowers){ %>
+      <div class="d-flex flex-column position-relative align-items-center me-3">
+        <a href="/accounts/activity" class="text-reset pt-1"
+          ><i class="fa-regular fa-heart"></i
+        ></a>
+        <i
+          class="fa-solid fa-circle position-absolute"
+          style="font-size: 0.225rem; bottom: -6px; color: #ff3041"
+          id="npop-container"
+          tabindex="0"
+          data-bs-toggle="popover"
+          data-bs-content='<div class="text-white d-flex gap-2 px-1 align-items-start"><% if(newComments){ %> <span class="fs-6"><i class="fa-solid fa-comment fs-6 me-1"></i><%= newComments %></span><% } if(newLikes){ %> <span class="fs-6"><i class="fa-solid fa-heart fs-6 me-1"></i><%= newLikes%></span><% } if(newFollowers){ %> <span class="fs-6"><i class="fa-solid fa-user fs-7 me-1"></i><%= newFollowers %></span><% } %></div>'
+          data-bs-custom-class="npop-style"
+        ></i>
+      </div>
+      <% } else { %>
+      <a href="/accounts/activity" class="text-reset me-3 pt-1"
+        ><i class="fa-regular fa-heart"></i
+      ></a>
+      <% } %>
       <button
         type="button"
-        class="btn rounded-circle btn-nav p-0"
+        class="btn btn-custom rounded-circle btn-nav p-0"
         data-bs-toggle="popover"
-        data-bs-content='<div class="d-flex nav-pop flex-column">
-          <a href="/<%= currentUser.username %>" class="text-reset list-group-item my-2"><i class="fa-solid fs-7 fa-user me-2"></i>Profile</a>
-          <a href="/accounts/edit" class="text-reset my-2"><i class="fa-solid fa-gear fs-7 me-2"></i>Settings</a>
-          <a href="/logout" class="text-reset my-2"><i class="fa-solid fa-right-from-bracket fs-7 me-2"></i>Logout</a>
-        </div>'
-        data-trigger="focus"
+        data-bs-trigger="focus"
+        data-bs-custom-class="nav-pop"
+        data-bs-content='<div class="d-flex flex-column" style="overflow: hidden">
+        <a href="/<%= currentUser.username %>" class="text-reset py-2"><i class="fa-solid fs-7 fa-user me-2 ps-3"></i>Profile</a>
+        <a href="/accounts/edit" class="text-reset py-2"><i class="fa-solid fa-gear fs-7 me-2 ps-3"></i>Settings</a>
+        <a href="/logout" class="text-reset py-2"><i class="fa-solid fa-right-from-bracket fs-7 me-2 ps-3"></i>Logout</a>
+      </div>'
       >
         <img
           src="<%= currentUser.dp.url ? currentUser.dp.url : defaultDp %>"

@@ -43,6 +43,8 @@ router.post(
 
 router.post('/accounts/removedp', isLoggedIn, users.removeDp);
 
+router.get('/accounts/activity', catchAsync(users.renderAccountActivity));
+
 router.get(
   '/accounts/password/change',
   isLoggedIn,

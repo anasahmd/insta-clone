@@ -2,6 +2,7 @@ const User = require('../models/users');
 const { cloudinary } = require('../cloudinary');
 const ExpressError = require('../utils/ExpressError');
 const Post = require('../models/post');
+const Notification = require('../models/notifications');
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 const prohibitedUsername = [
@@ -145,7 +146,7 @@ module.exports.removeDp = async (req, res) => {
   }
   user.dp.filename = '';
   user.dp.url =
-    'https://res.cloudinary.com/dtq8oqzvj/image/upload/v1664629311/Dext%20Profile%20Images/instadefault_lowfpp.jpg';
+    'https://res.cloudinary.com/dtq8oqzvj/image/upload/v1664818880/Don%27t%20Delete/instadefault_h1kqsb.jpg';
   await user.save();
   res.redirect(`/${user.username}`);
 };
@@ -280,4 +281,19 @@ module.exports.forgotConfirmPassword = async (req, res, next) => {
   transporter.sendMail(mailOptions);
   req.flash('success', `Your password has been changed.`);
   res.redirect('/');
+};
+
+module.exports.renderAccountActivity = async (req, res) => {
+  const user = await User.findById(req.user._id).populate({
+    path: 'notifications',
+    populate: [{ path: 'sender', select: 'username dp' }, { path: 'refer' }],
+    options: { sort: { createdAt: -1 } },
+  });
+  await Notification.updateMany(
+    {
+      _id: { $in: user.notifications },
+    },
+    { isRead: true }
+  );
+  res.render('users/activity', { user });
 };

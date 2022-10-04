@@ -64,13 +64,32 @@ passport.use(User.createStrategy());
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-app.use((req, res, next) => {
+app.use(async (req, res, next) => {
   res.locals.success = req.flash('success');
   res.locals.error = req.flash('error');
   res.locals.currentUser = req.user;
   res.locals.defaultDp = `https://res.cloudinary.com/dtq8oqzvj/image/upload/v1664381145/Dext/instadefault_hwqsv3.jpg`;
   res.locals.formatDistanceToNowStrict = formatDistanceToNowStrict;
   res.set('Cache-Control', 'no-store');
+  if (req.user) {
+    const { notifications } = await User.findById(req.user._id).populate({
+      path: 'notifications',
+      populate: [{ path: 'sender', select: 'username dp' }, { path: 'refer' }],
+      options: { sort: { createdAt: -1 } },
+    });
+    const newLikes = notifications.filter((notification) => {
+      return !notification.isRead && notification.nType == 'like';
+    });
+    const newComments = notifications.filter((notification) => {
+      return !notification.isRead && notification.nType == 'comment';
+    });
+    const newFollowers = notifications.filter((notification) => {
+      return !notification.isRead && notification.nType == 'follow';
+    });
+    res.locals.newLikes = newLikes.length;
+    res.locals.newComments = newComments.length;
+    res.locals.newFollowers = newFollowers.length;
+  }
   next();
 });
 

@@ -22,7 +22,7 @@ const userSchema = new Schema({
   dp: {
     url: {
       type: String,
-      default: `https://res.cloudinary.com/dtq8oqzvj/image/upload/v1664629311/Dext%20Profile%20Images/instadefault_lowfpp.jpg`,
+      default: `https://res.cloudinary.com/dtq8oqzvj/image/upload/v1664818880/Don%27t%20Delete/instadefault_h1kqsb.jpg`,
     },
     filename: String,
   },
@@ -51,6 +51,12 @@ const userSchema = new Schema({
     {
       type: Schema.Types.ObjectId,
       ref: 'User',
+    },
+  ],
+  notifications: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Notification',
     },
   ],
 });

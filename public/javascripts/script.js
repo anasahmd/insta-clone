@@ -262,3 +262,28 @@ if (show || hide) {
     password.type = 'password';
   });
 }
+
+const npop = document.getElementById('npop-container');
+
+const options = {
+  html: true,
+  //html element
+  //content: $("#popover-content")
+  trigger: 'manual',
+  placement: 'bottom',
+  offset: [0, 15],
+  //Doing below won't work. Shows title only
+  //content: $("#popover-content").html()
+};
+
+window.addEventListener('load', () => {
+  if (npop) {
+    const popover = new bootstrap.Popover(npop, options);
+    setTimeout(() => {
+      popover.show();
+    }, 500);
+    setTimeout(() => {
+      popover.hide();
+    }, 7000);
+  }
+});

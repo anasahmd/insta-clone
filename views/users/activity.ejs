@@ -1,0 +1,72 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="container mx-width mt-4">
+  <% user.notifications.forEach((notification) => { if(notification.nType ==
+  'like'){ %>
+  <div
+    onclick="window.location='/p/<%= notification.refer._id %>'"
+    style="cursor: pointer"
+    tabindex="1"
+  >
+    <div class="d-flex position-relative align-items-center gap-3 ps-2 mb-3">
+      <a href="/<%= notification.sender.username %>">
+        <img
+          src="<%= notification.sender.dp.url %>"
+          alt=""
+          class="rounded-circle profile-image-list"
+        />
+      </a>
+      <div class="flex-column">
+        <a
+          href="/<%= notification.sender.username %>"
+          class="text-reset fw-semibold fs-6"
+        >
+          <%= notification.sender.username %>
+        </a>
+        liked your post.
+      </div>
+    </div>
+  </div>
+
+  <% } else if (notification.nType == 'comment'){ %>
+  <div
+    onclick="window.location='/p/<%= notification.refer.post %>'"
+    style="cursor: pointer"
+    tabindex="1"
+  >
+    <div class="d-flex position-relative align-items-center gap-3 ps-2 mb-3">
+      <a href="/<%= notification.sender.username %>">
+        <img
+          src="<%= notification.sender.dp.url %>"
+          alt=""
+          class="rounded-circle profile-image-list"
+        />
+      </a>
+      <div class="flex-column">
+        <a
+          href="/<%= notification.sender.username %>"
+          class="text-reset fw-semibold fs-6"
+        >
+          <%= notification.sender.username %>
+        </a>
+        commented: <%= notification.refer.text %>
+      </div>
+    </div>
+  </div>
+  <% } else if (notification.nType == 'follow'){%>
+  <a href="/<%= notification.sender.username %>" class="text-reset">
+    <div class="d-flex position-relative align-items-center gap-3 ps-2 mb-3">
+      <img
+        src="<%= notification.sender.dp.url %>"
+        alt=""
+        class="rounded-circle profile-image-list"
+      />
+
+      <div class="flex-column">
+        <span class="fw-semibold"> <%= notification.sender.username %> </span>
+        started following you.
+      </div>
+    </div>
+  </a>
+  <%} }) %>
+</div>

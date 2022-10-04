@@ -1,4 +1,5 @@
 const User = require('../models/users');
+const Notification = require('../models/notifications');
 const ExpressError = require('../utils/ExpressError');
 
 module.exports.followUser = async (req, res) => {
@@ -14,6 +15,22 @@ module.exports.followUser = async (req, res) => {
   const followUser = await User.findById(followId);
   followUser.followers.push(user._id);
   user.following.push(followUser._id);
+
+  // Creating notification
+
+  const notification = new Notification({
+    sender: user._id,
+    receiver: followUser._id,
+    nType: 'follow',
+    refer: user._id,
+    docModel: 'User',
+  });
+
+  followUser.notifications.push(notification);
+  await notification.save();
+
+  //Created a notification
+
   await followUser.save();
   await user.save();
   updatedFollowUser = await User.findById(followId);
@@ -27,11 +44,22 @@ module.exports.followUser = async (req, res) => {
 module.exports.unfollowUser = async (req, res) => {
   const followId = req.params.id;
   const userId = req.user._id;
-  const followUser = await User.findById(followId);
+  const followUser = await User.findById(followId).populate('notifications');
   const user = await User.findById(userId);
-  await User.findByIdAndUpdate(followUser._id, {
-    $pull: { followers: user._id },
+
+  //Removing notification
+  const notification = await Notification.findOne({
+    refer: user._id,
+    docModel: 'User',
   });
+
+  await User.findByIdAndUpdate(followUser._id, {
+    $pull: { followers: user._id, notifications: notification._id },
+  });
+
+  await Notification.findByIdAndDelete(notification._id);
+  //Removed notification
+
   await User.findByIdAndUpdate(user._id, {
     $pull: { following: followUser._id },
   });
