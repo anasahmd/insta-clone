@@ -32,3 +32,8 @@ module.exports.passwordSchema = Joi.object({
   password: Joi.string().min(6).required(),
   repeat_password: Joi.ref('password'),
 }).required();
+
+module.exports.forgotPasswordSchema = Joi.object({
+  password: Joi.string().min(6).required(),
+  repeat_password: Joi.ref('password'),
+}).required();

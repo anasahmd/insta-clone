@@ -80,13 +80,16 @@ app.use(async (req, res, next) => {
     const newLikes = notifications.filter((notification) => {
       return !notification.isRead && notification.nType == 'like';
     });
+    const newCommentLikes = notifications.filter((notification) => {
+      return !notification.isRead && notification.nType == 'commentLike';
+    });
     const newComments = notifications.filter((notification) => {
       return !notification.isRead && notification.nType == 'comment';
     });
     const newFollowers = notifications.filter((notification) => {
       return !notification.isRead && notification.nType == 'follow';
     });
-    res.locals.newLikes = newLikes.length;
+    res.locals.newLikes = newLikes.length + newCommentLikes.length;
     res.locals.newComments = newComments.length;
     res.locals.newFollowers = newFollowers.length;
   }

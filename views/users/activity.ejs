@@ -1,81 +1,124 @@
 <% layout('layouts/boilerplate') %>
 
-<div class="container mx-width mt-4">
-  <% user.notifications.forEach((notification) => { if(notification.nType ==
-  'like'){ %>
-  <div
-    onclick="window.location='/p/<%= notification.refer._id %>'"
-    style="cursor: pointer"
-    tabindex="1"
-  >
-    <div class="d-flex position-relative align-items-center gap-3 ps-2 mb-3">
-      <a href="/<%= notification.sender.username %>">
+<div class="card mx-width mx-auto mt-sm-4">
+  <div class="card-body my-2">
+    <% if(user.notifications.length){ %>
+    <h2 class="fs-4 mb-4 ms-2">Notifications</h2>
+    <% user.notifications.forEach((notification) => { if(notification.nType ==
+    'like' && notification.refer ){ %>
+    <div
+      onclick="window.location='/p/<%= notification.refer._id %>'"
+      style="cursor: pointer"
+      tabindex="1"
+    >
+      <div class="d-flex position-relative align-items-center gap-3 ps-2 mb-3">
+        <a href="/<%= notification.sender.username %>">
+          <img
+            src="<%= notification.sender.dp.url %>"
+            alt=""
+            class="rounded-circle profile-image-list"
+          />
+        </a>
+        <div class="flex-column">
+          <a
+            href="/<%= notification.sender.username %>"
+            class="text-reset fw-semibold fs-6"
+          >
+            <%= notification.sender.username %>
+          </a>
+          liked your post.
+          <span class="text-muted fs-7 ms-1">
+            <%= formatDistanceToNowStrict(notification.createdAt)%></span
+          >
+        </div>
+      </div>
+    </div>
+
+    <% } else if (notification.nType == 'comment' && notification.refer){ %>
+    <div
+      onclick="window.location='/p/<%= notification.refer.post %>'"
+      style="cursor: pointer"
+      tabindex="1"
+    >
+      <div class="d-flex position-relative align-items-center gap-3 ps-2 mb-3">
+        <a href="/<%= notification.sender.username %>">
+          <img
+            src="<%= notification.sender.dp.url %>"
+            alt=""
+            class="rounded-circle profile-image-list"
+          />
+        </a>
+        <div class="flex-column">
+          <a
+            href="/<%= notification.sender.username %>"
+            class="text-reset fw-semibold fs-6"
+          >
+            <%= notification.sender.username %>
+          </a>
+          commented: <%= notification.refer.text %>
+          <span class="text-muted fs-7 ms-1">
+            <%= formatDistanceToNowStrict(notification.createdAt)%></span
+          >
+        </div>
+      </div>
+    </div>
+    <% } else if (notification.nType == 'follow' && notification.refer){%>
+    <a href="/<%= notification.sender.username %>" class="text-reset">
+      <div class="d-flex position-relative align-items-center gap-3 ps-2 mb-3">
         <img
           src="<%= notification.sender.dp.url %>"
           alt=""
           class="rounded-circle profile-image-list"
         />
-      </a>
-      <div class="flex-column">
-        <a
-          href="/<%= notification.sender.username %>"
-          class="text-reset fw-semibold fs-6"
-        >
-          <%= notification.sender.username %>
-        </a>
-        liked your post.
-        <span class="text-muted fs-7 ms-1">
-          <%= formatDistanceToNowStrict(notification.createdAt)%></span
-        >
-      </div>
-    </div>
-  </div>
 
-  <% } else if (notification.nType == 'comment'){ %>
-  <div
-    onclick="window.location='/p/<%= notification.refer.post %>'"
-    style="cursor: pointer"
-    tabindex="1"
-  >
-    <div class="d-flex position-relative align-items-center gap-3 ps-2 mb-3">
-      <a href="/<%= notification.sender.username %>">
-        <img
-          src="<%= notification.sender.dp.url %>"
-          alt=""
-          class="rounded-circle profile-image-list"
-        />
-      </a>
-      <div class="flex-column">
-        <a
-          href="/<%= notification.sender.username %>"
-          class="text-reset fw-semibold fs-6"
-        >
-          <%= notification.sender.username %>
+        <div class="flex-column">
+          <span class="fw-semibold"> <%= notification.sender.username %> </span>
+          started following you.
+          <span class="text-muted fs-7 ms-1">
+            <%= formatDistanceToNowStrict(notification.createdAt)%></span
+          >
+        </div>
+      </div>
+    </a>
+    <%} else if(notification.nType = 'commentLike' && notification.refer){ %>
+    <div
+      onclick="window.location='/p/<%= notification.refer.post %>'"
+      style="cursor: pointer"
+      tabindex="1"
+    >
+      <div class="d-flex position-relative align-items-center gap-3 ps-2 mb-3">
+        <a href="/<%= notification.sender.username %>">
+          <img
+            src="<%= notification.sender.dp.url %>"
+            alt=""
+            class="rounded-circle profile-image-list"
+          />
         </a>
-        commented: <%= notification.refer.text %>
-        <span class="text-muted fs-7 ms-1">
-          <%= formatDistanceToNowStrict(notification.createdAt)%></span
-        >
+        <div class="flex-column">
+          <a
+            href="/<%= notification.sender.username %>"
+            class="text-reset fw-semibold fs-6"
+          >
+            <%= notification.sender.username %>
+          </a>
+          liked your comment: <%= notification.refer.text %>
+          <span class="text-muted fs-7 ms-1">
+            <%= formatDistanceToNowStrict(notification.createdAt)%></span
+          >
+        </div>
       </div>
     </div>
-  </div>
-  <% } else if (notification.nType == 'follow'){%>
-  <a href="/<%= notification.sender.username %>" class="text-reset">
-    <div class="d-flex position-relative align-items-center gap-3 ps-2 mb-3">
-      <img
-        src="<%= notification.sender.dp.url %>"
-        alt=""
-        class="rounded-circle profile-image-list"
-      />
+    <% } })} else { %>
 
-      <div class="flex-column">
-        <span class="fw-semibold"> <%= notification.sender.username %> </span>
-        started following you.
-        <span class="text-muted fs-7 ms-1">
-          <%= formatDistanceToNowStrict(notification.createdAt)%></span
-        >
-      </div>
+    <div class="d-flex justify-content-center mt-4 mb-3">
+      <i class="fa-regular fa-heart fs-1" style="font-size: 3.5rem"></i>
     </div>
-  </a>
-  <%} }) %>
+    <h2 class="fs-5 text-center">Activity On Your Posts</h2>
+    <p class="text-center fs-7 text-muted">
+      When someone follows you or likes or comments on one of your posts, you'll
+      see it here.
+    </p>
+
+    <% } %>
+  </div>
 </div>

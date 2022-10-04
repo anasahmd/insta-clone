@@ -41,6 +41,8 @@ module.exports.deleteComment = async (req, res) => {
   const notification = await Notification.findOne({
     refer: commentId,
     docModel: 'Comment',
+    nType: 'comment',
+    sender: req.user._id,
   });
 
   if (notification) {

@@ -163,6 +163,22 @@ module.exports.renderPasswordChangeForm = async (req, res) => {
 module.exports.changePassword = async (req, res) => {
   const user = await User.findById(req.user._id);
   await user.changePassword(req.body.oldPassword, req.body.password);
+  const transporter = nodemailer.createTransport({
+    service: 'Gmail',
+    auth: {
+      user: 'anasahmad00239@gmail.com',
+      pass: process.env.GMAILAPW,
+    },
+  });
+  const mailOptions = {
+    to: user.email,
+    from: 'Dext',
+    subject: 'Your Dext password has been changed',
+    text: `This is a confirmation that the password for your Instagram account ${user.username} has just been changed.`,
+
+    html: `<div style="max-width: 600px;"><p>This is a confirmation that the password for your Dext account ${user.username} has just been changed.</p></div>`,
+  };
+  transporter.sendMail(mailOptions);
   req.flash('success', 'Password Changed');
   res.redirect('/accounts/password/change');
 };
@@ -260,9 +276,6 @@ module.exports.forgotConfirmPassword = async (req, res, next) => {
   user.resetPasswordToken = undefined;
   user.resetPasswordExpires = undefined;
   await user.save();
-  req.login(user, (err) => {
-    if (err) return next(err);
-  });
   const transporter = nodemailer.createTransport({
     service: 'Gmail',
     auth: {
@@ -279,8 +292,11 @@ module.exports.forgotConfirmPassword = async (req, res, next) => {
     html: `<div style="max-width: 600px;"><p>This is a confirmation that the password for your Dext account ${user.username} has just been changed.</p></div>`,
   };
   transporter.sendMail(mailOptions);
-  req.flash('success', `Your password has been changed.`);
-  res.redirect('/');
+  req.login(user, (err) => {
+    if (err) return next(err);
+    req.flash('success', 'Password changed successfully');
+    res.redirect('/');
+  });
 };
 
 module.exports.renderAccountActivity = async (req, res) => {

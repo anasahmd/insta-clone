@@ -121,9 +121,7 @@ likeComments.forEach((likeComment) => {
     let likeContainer =
       likeComment.parentElement.parentElement.children[0].children[0]
         .children[1].children[1].children[1].children[0];
-    console.log(likeContainer);
     let likeCount = parseInt(likeContainer.children[0].dataset.likeCount);
-    console.log(likeCount);
     btnLikeClass.toggle('red-heart');
     if (btnLikeClass.contains('fa-regular')) {
       btnLikeClass.remove('fa-regular');
@@ -194,6 +192,7 @@ if (followForms) {
   followForms.forEach((followForm) => {
     followForm.addEventListener('submit', (e) => {
       e.preventDefault();
+      const temp = followForm.children[0].innerHTML;
       if (followForm.children[0].classList.contains('btn-follow')) {
         followForm.children[0].innerHTML = `<div class="spinner-border spinner-border-sm text-light" role="status">
       <span class="sr-only">Loading...</span>
@@ -204,11 +203,17 @@ if (followForms) {
     </div>`;
       }
       followForm.parentElement.children[0].disable = true;
-      axios.post(`${followForm.action}`, {}).then(function (response) {
-        followForm.innerHTML = response.data.button;
-        followForm.action = response.data.action;
-        followersLength.innerHTML = response.data.followers.length;
-      });
+      axios
+        .post(`${followForm.action}`, {})
+        .then(function (response) {
+          followForm.innerHTML = response.data.button;
+          followForm.action = response.data.action;
+          followersLength.innerHTML = response.data.followers.length;
+        })
+        .catch(function (error) {
+          followForm.children[0].innerHTML = temp;
+          console.log(error);
+        });
     });
   });
 }

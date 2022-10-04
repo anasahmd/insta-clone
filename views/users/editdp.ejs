@@ -9,7 +9,7 @@
 <div class="container mx-width">
   <h1 class="fs-3 mb-4" id="change-profile">Change profile photo</h1>
   <form
-    action="/accounts/editdp"
+    action="/accounts/dp?_method=PUT"
     method="POST"
     novalidate
     class="needs-validation"
@@ -40,7 +40,11 @@
       </button>
     </div>
   </form>
-  <form action="/accounts/removedp" method="POST" class="mt-4 needs-validation">
+  <form
+    action="/accounts/dp?_method=DELETE"
+    method="POST"
+    class="mt-4 needs-validation"
+  >
     <div class="d-grid mb-4">
       <button class="btn btn-danger spinner" id="remove-btn">
         Remove Current Photo

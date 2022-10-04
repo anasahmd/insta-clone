@@ -1,7 +1,7 @@
 <% layout('layouts/boilerplate') %>
 
 <div class="container mx-width my-1 mt-4">
-  <% for(let user of listUsers){ %>
+  <% if(listUsers.length) { for(let user of listUsers){ %>
   <div class="d-flex mb-4 align-items-center justify-content-between mx-2">
     <div class="left d-flex gap-2 gap-sm-3 w-65">
       <a href="/<%= user.username %>">
@@ -49,5 +49,7 @@
       <% }%>
     </div>
   </div>
+  <% } } else { %>
+  <div class="text-center mt-5 py-5">No one is here.</div>
   <% } %>
 </div>

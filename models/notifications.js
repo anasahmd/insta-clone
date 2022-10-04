@@ -17,7 +17,7 @@ const notificationSchema = new Schema({
   },
   nType: {
     type: String,
-    enum: ['comment', 'like', 'follow'],
+    enum: ['comment', 'commentLike', 'like', 'follow'],
   },
   refer: {
     type: Schema.Types.ObjectId,

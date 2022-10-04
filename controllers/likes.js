@@ -10,8 +10,44 @@ module.exports.likeComment = async (req, res) => {
     await Comment.findByIdAndUpdate(commentId, {
       $pull: { likes: req.user._id },
     });
+    //Removing notification
+    const notification = await Notification.findOne({
+      refer: commentId,
+      docModel: 'Comment',
+      nType: 'commentLike',
+      sender: req.user._id,
+    });
+
+    if (notification) {
+      const commentUser = await User.findById(comment.user);
+      await User.findByIdAndUpdate(commentUser._id, {
+        $pull: { notifications: notification._id },
+      });
+
+      await Notification.findByIdAndDelete(notification._id);
+      await commentUser.save();
+    }
+    //Removed notification
   } else {
     comment.likes.push(req.user._id);
+    // Creating notification
+    const commentUser = await User.findById(comment.user);
+
+    if (!req.user._id.equals(commentUser._id)) {
+      const notification = new Notification({
+        sender: req.user._id,
+        receiver: commentUser._id,
+        nType: 'commentLike',
+        refer: comment._id,
+        docModel: 'Comment',
+      });
+
+      commentUser.notifications.push(notification);
+      await notification.save();
+      await commentUser.save();
+    }
+    //created notification
+
     await comment.save();
   }
 
@@ -46,6 +82,8 @@ module.exports.likePost = async (req, res) => {
     const notification = await Notification.findOne({
       refer: post._id,
       docModel: 'Post',
+      nType: 'like',
+      sender: req.user._id,
     });
 
     if (notification) {

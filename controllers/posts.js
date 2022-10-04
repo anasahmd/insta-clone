@@ -30,6 +30,7 @@ module.exports.showPost = async (req, res, next) => {
   const post = await Post.findById(req.params.id)
     .populate({
       path: 'comments',
+      options: { sort: { likes: -1, date: -1 } },
       populate: {
         path: 'user',
         select: 'username dp',

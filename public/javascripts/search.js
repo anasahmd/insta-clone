@@ -1,11 +1,17 @@
 let cancelToken;
 document.getElementById('search-user').addEventListener('input', (e) => {
-  const value = document.getElementById('search-user').value;
-  document.getElementById('search-container').innerHTML = '';
+  let value = document.getElementById('search-user').value;
   if (cancelToken) {
     cancelToken.cancel('Operation Cancelled due to new request');
   }
+  if (value.length) {
+    document.getElementById('search-container').innerHTML =
+      '<div class="w-100 text-center mt-3"><div class="spinner-border spinner-border-sm text-secondary" role="status"><span class="sr-only">Loading...</span></div></div>';
+  } else {
+    document.getElementById('search-container').innerHTML = '';
+  }
   cancelToken = axios.CancelToken.source();
+
   axios
     .get('/explore/search/users', {
       cancelToken: cancelToken.token,
@@ -14,6 +20,7 @@ document.getElementById('search-user').addEventListener('input', (e) => {
       },
     })
     .then(function (response) {
+      document.getElementById('search-container').innerHTML = '';
       if (response.data.users) {
         response.data.users.forEach((user) => {
           let div = document.createElement('div');
@@ -26,5 +33,7 @@ document.getElementById('search-user').addEventListener('input', (e) => {
         });
       }
     })
-    .catch(function (error) {});
+    .catch(function (error) {
+      console.log(error);
+    });
 });

@@ -240,7 +240,7 @@
                     </span>
                     </a>
                   <% if (currentUser &&
-                  comment.user.equals(currentUser)){ %>
+                  (comment.user.equals(currentUser) || post.user.equals(currentUser))){ %>
                 
                 <span class="text-muted fs-8 fw-5">
                   <!-- Button trigger modal -->
@@ -275,7 +275,7 @@
         </div>
       </div>
 
-      <% if (currentUser && comment.user.equals(currentUser)){ %>
+      <% if (currentUser && (comment.user.equals(currentUser) || post.user.equals(currentUser))){ %>
       <!-- Modal -->
       <div
         class="modal fade"

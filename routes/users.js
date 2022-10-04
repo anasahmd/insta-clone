@@ -2,7 +2,12 @@ const express = require('express');
 const router = express.Router();
 const catchAsync = require('../utils/catchAsync');
 const passport = require('passport');
-const { isLoggedIn, validateUser, validatePassword } = require('../middleware');
+const {
+  isLoggedIn,
+  validateUser,
+  validatePassword,
+  validateForgotPassword,
+} = require('../middleware');
 const users = require('../controllers/users');
 const multer = require('multer');
 const { storagedp } = require('../cloudinary');
@@ -30,18 +35,14 @@ router.get('/logout', isLoggedIn, users.userLogout);
 router
   .route('/accounts/edit')
   .get(isLoggedIn, catchAsync(users.renderEditForm))
-  .post(isLoggedIn, validateUser, catchAsync(users.accountEdit));
+  .put(isLoggedIn, validateUser, catchAsync(users.accountEdit));
 
 router.get('/accounts/profilepicture', isLoggedIn, users.renderDpForm);
 
-router.post(
-  '/accounts/editdp',
-  isLoggedIn,
-  upload.single('image'),
-  catchAsync(users.editDp)
-);
-
-router.post('/accounts/removedp', isLoggedIn, users.removeDp);
+router
+  .route('/accounts/dp')
+  .put(isLoggedIn, upload.single('image'), catchAsync(users.editDp))
+  .delete(isLoggedIn, users.removeDp);
 
 router.get('/accounts/activity', catchAsync(users.renderAccountActivity));
 
@@ -62,7 +63,11 @@ router.get('/accounts/password/reset', catchAsync(users.renderForgotForm));
 
 router.post('/forgot', catchAsync(users.forgotPassword));
 
-router.post('/forgot/:token', catchAsync(users.forgotConfirmPassword));
+router.post(
+  '/forgot/:token',
+  validateForgotPassword,
+  catchAsync(users.forgotConfirmPassword)
+);
 
 router.get(
   '/accounts/password/reset/confirm/:token',
