@@ -24,6 +24,9 @@
           <%= notification.sender.username %>
         </a>
         liked your post.
+        <span class="text-muted fs-7 ms-1">
+          <%= formatDistanceToNowStrict(notification.createdAt)%></span
+        >
       </div>
     </div>
   </div>
@@ -50,6 +53,9 @@
           <%= notification.sender.username %>
         </a>
         commented: <%= notification.refer.text %>
+        <span class="text-muted fs-7 ms-1">
+          <%= formatDistanceToNowStrict(notification.createdAt)%></span
+        >
       </div>
     </div>
   </div>
@@ -65,6 +71,9 @@
       <div class="flex-column">
         <span class="fw-semibold"> <%= notification.sender.username %> </span>
         started following you.
+        <span class="text-muted fs-7 ms-1">
+          <%= formatDistanceToNowStrict(notification.createdAt)%></span
+        >
       </div>
     </div>
   </a>

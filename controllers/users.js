@@ -295,5 +295,8 @@ module.exports.renderAccountActivity = async (req, res) => {
     },
     { isRead: true }
   );
+  res.locals.newLikes = 0;
+  res.locals.newComments = 0;
+  res.locals.newFollowers = 0;
   res.render('users/activity', { user });
 };

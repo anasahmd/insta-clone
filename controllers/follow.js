@@ -50,6 +50,7 @@ module.exports.unfollowUser = async (req, res) => {
   //Removing notification
   const notification = await Notification.findOne({
     refer: user._id,
+    receiver: followId,
     docModel: 'User',
   });
 
