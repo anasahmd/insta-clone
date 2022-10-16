@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const passportLocalMongoose = require('passport-local-mongoose');
+var uniqueValidator = require('mongoose-unique-validator');
 const { Schema } = mongoose;
 const Post = require('./post');
 const Comment = require('./comment');
@@ -65,5 +66,8 @@ userSchema.plugin(passportLocalMongoose, {
   usernameQueryFields: ['email'],
   usernameLowerCase: true,
 });
+
+uniqueValidator.defaults.message = `Another account is using the same {PATH}`;
+userSchema.plugin(uniqueValidator);
 
 module.exports = mongoose.model('User', userSchema);

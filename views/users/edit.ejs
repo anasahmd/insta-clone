@@ -1,12 +1,14 @@
 <% layout('layouts/boilerplate') %>
 
-<div class="card mx-width mx-auto px-2 w-90 mt-sm-4">
+<div class="card mx-width mx-auto px-2 w-90 mt-sm-4 mb-4">
   <div class="card-body">
     <form
       action="/accounts/edit?_method=PUT"
       method="POST"
       novalidate
       class="needs-validation"
+      id="edit-form"
+      onsubmit="window.location.replace('/accounts/edit')"
     >
       <div class="d-flex gap-3 gap-sm-4 mb-3 align-items-center w-100">
         <img
@@ -51,12 +53,7 @@
       </div>
       <div class="mb-3">
         <label for="bio" class="form-label fw-5">Bio</label>
-        <textarea
-          name="user[bio]"
-          id="userbio"
-          class="form-control noscrollbars"
-          onkeyup="autoGrow(this);"
-        >
+        <textarea name="user[bio]" id="userbio" class="form-control">
 <%= user.bio %></textarea
         >
         <div class="fs-8 text-muted mt-2 ms-1">
@@ -89,3 +86,10 @@
     </form>
   </div>
 </div>
+
+<script>
+  const editForm = document.getElementById('edit-form');
+  editForm.addEventListener('submit', () => {
+    window.history.replaceState({}, 'foo', '/<%= currentUser.username %>');
+  });
+</script>

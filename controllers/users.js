@@ -33,19 +33,55 @@ const prohibitedUsername = [
   'admin',
 ];
 
+module.exports.renderIndex = async (req, res) => {
+  if (req.user) {
+    const posts = await Post.find({
+      user: {
+        $in: [...req.user.following, req.user._id],
+      },
+    })
+      .populate('user')
+      .sort({ date: -1 });
+    if (posts.length) {
+      res.render('posts/index', { posts });
+    } else {
+      const listUsers = await User.find({
+        _id: {
+          $nin: [...req.user.following, req.user._id],
+        },
+      }).sort({ followers: -1 });
+      res.render('users/suggestuser', { listUsers });
+    }
+  } else {
+    res.redirect('/login');
+  }
+};
+
 module.exports.renderLogin = (req, res) => {
-  res.render('users/login');
+  if (!req.user) {
+    if (req.query.returnTo) {
+      req.session.returnTo = req.query.returnTo;
+    }
+    res.render('users/login');
+  } else {
+    res.redirect('/');
+  }
 };
 
 module.exports.renderSignup = (req, res) => {
-  res.render('users/signup');
+  if (!req.user) {
+    res.render('users/signup');
+  } else {
+    res.redirect('/');
+  }
 };
 
 module.exports.userSignup = async (req, res, next) => {
   try {
     const { username, email, password, fullName } = req.body.user;
     if (prohibitedUsername.indexOf(username) !== -1) {
-      return next(new ExpressError(`Username not available`, 400));
+      req.flash('error', 'Username not available');
+      return res.redirect('/accounts/edit');
     }
     const newUser = new User({
       username,
@@ -66,7 +102,8 @@ module.exports.userSignup = async (req, res, next) => {
 
 module.exports.userLogin = (req, res) => {
   req.flash('success', 'Welcome Back');
-  res.redirect('/');
+  const redirectUrl = res.locals.returnTo || '/';
+  res.redirect(redirectUrl);
 };
 
 module.exports.userLogout = (req, res) => {
@@ -85,25 +122,40 @@ module.exports.renderEditForm = async (req, res) => {
 
 module.exports.accountEdit = async (req, res, next) => {
   const user = req.user;
-  req.body.user.username = req.body.user.username.toLowerCase();
-  if (prohibitedUsername.indexOf(req.body.user.username) !== -1) {
-    return next(new ExpressError(`Username not available`, 400));
+  try {
+    req.body.user.username = req.body.user.username.toLowerCase();
+    if (prohibitedUsername.indexOf(req.body.user.username) !== -1) {
+      req.flash('error', 'Username not available');
+      return res.redirect('/accounts/edit');
+    }
+
+    req.body.user.bio = req.body.user.bio.replace(/\r\n\r\n/g, '');
+    await User.findOneAndUpdate(
+      { _id: user._id },
+      {
+        ...req.body.user,
+      },
+      { runValidators: true, context: 'query' }
+    );
+    req.session.passport.user = req.body.user.username;
+  } catch (e) {
+    req.flash('error', e.message);
+    return res.redirect('/accounts/edit');
   }
-  req.body.user.bio = req.body.user.bio.replace(/\r\n\r\n/g, '');
-  await User.findByIdAndUpdate(user._id, {
-    ...req.body.user,
-  });
-  req.session.passport.user = req.body.user.username;
-  res.redirect(`/${req.body.user.username}`);
+  res.redirect(`/accounts/edit`);
 };
 
-module.exports.renderUserIndex = async (req, res) => {
+module.exports.renderUserIndex = async (req, res, next) => {
   const { username } = req.params;
   const user = await User.findByUsername(username).populate({
     path: 'posts',
     options: { sort: { date: -1 } },
   });
-  res.render('users/index', { user });
+  if (user) {
+    res.render('users/index', { user });
+  } else {
+    next();
+  }
 };
 
 module.exports.renderFollowers = async (req, res) => {
@@ -162,7 +214,16 @@ module.exports.renderPasswordChangeForm = async (req, res) => {
 
 module.exports.changePassword = async (req, res) => {
   const user = await User.findById(req.user._id);
-  await user.changePassword(req.body.oldPassword, req.body.password);
+  try {
+    await user.changePassword(req.body.oldPassword, req.body.password);
+  } catch (e) {
+    req.flash(
+      'error',
+      'Your old password was entered incorrectly. Please enter it again.'
+    );
+    return res.redirect('/accounts/password/change');
+  }
+
   const transporter = nodemailer.createTransport({
     service: 'Gmail',
     auth: {
@@ -172,11 +233,11 @@ module.exports.changePassword = async (req, res) => {
   });
   const mailOptions = {
     to: user.email,
-    from: 'Dext',
-    subject: 'Your Dext password has been changed',
+    from: 'InstaClone',
+    subject: 'Your InstaClone password has been changed',
     text: `This is a confirmation that the password for your Instagram account ${user.username} has just been changed.`,
 
-    html: `<div style="max-width: 600px;"><p>This is a confirmation that the password for your Dext account ${user.username} has just been changed.</p></div>`,
+    html: `<div style="max-width: 600px;"><p>This is a confirmation that the password for your InstaClone account ${user.username} has just been changed.</p></div>`,
   };
   transporter.sendMail(mailOptions);
   req.flash('success', 'Password Changed');
@@ -234,15 +295,15 @@ module.exports.forgotPassword = async (req, res) => {
   });
   const mailOptions = {
     to: user.email,
-    from: 'Dext',
-    subject: 'Dext Password Reset',
+    from: 'InstaClone',
+    subject: 'InstaClone Password Reset',
     text:
-      `Sorry to hear you're having trouble logging into Dext. We got a message that you forgot your password. If this was you, you can reset your password now.\n\n` +
+      `Sorry to hear you're having trouble logging into InstaClone. We got a message that you forgot your password. If this was you, you can reset your password now.\n\n` +
       `https://${req.headers.host}/accounts/password/reset/confirm/${token} \n\n` +
       `If you didn’t request a password reset, you can ignore this message \n\n` +
-      `Only people who know your Dext password can log into your account.\n\n`,
+      `Only people who know your InstaClone password can log into your account.\n\n`,
 
-    html: `<div style="max-width: 600px;"><p>Sorry to hear you're having trouble logging into Dext. We got a message that you forgot your password. If this was you, you can reset your password now.<p><a href="https://${req.headers.host}/accounts/password/reset/confirm/${token}">Reset your password</a><p>If you didn’t request a password reset, you can ignore this message</p><p>Only people who know your Dext password can log into your account.</p></div>`,
+    html: `<div style="max-width: 600px;"><p>Sorry to hear you're having trouble logging into InstaClone. We got a message that you forgot your password. If this was you, you can reset your password now.<p><a href="https://${req.headers.host}/accounts/password/reset/confirm/${token}">Reset your password</a><p>If you didn’t request a password reset, you can ignore this message</p><p>Only people who know your InstaClone password can log into your account.</p></div>`,
   };
   transporter.sendMail(mailOptions, (err) => {
     req.flash(
@@ -285,11 +346,11 @@ module.exports.forgotConfirmPassword = async (req, res, next) => {
   });
   const mailOptions = {
     to: user.email,
-    from: 'Dext',
-    subject: 'Your Dext password has been changed',
+    from: 'InstaClone',
+    subject: 'Your InstaClone password has been changed',
     text: `This is a confirmation that the password for your Instagram account ${user.username} has just been changed.`,
 
-    html: `<div style="max-width: 600px;"><p>This is a confirmation that the password for your Dext account ${user.username} has just been changed.</p></div>`,
+    html: `<div style="max-width: 600px;"><p>This is a confirmation that the password for your InstaClone account ${user.username} has just been changed.</p></div>`,
   };
   transporter.sendMail(mailOptions);
   req.login(user, (err) => {

@@ -1,9 +1,20 @@
 <% layout('layouts/boilerplate')%>
-<div class="row mt-3">
-  <div class="col-6 offset-3">
+
+<div class="card mx-width mx-auto mt-4 mt-sm-5">
+  <div class="card-body my-4">
+    <% if(!process.env.NODE_ENV === 'production'){ %>
     <div class="alert alert-danger" role="alert">
       <h4 class="alert-heading"><%=err.message%></h4>
       <p><%= err.stack %></p>
     </div>
+    <% } else { %>
+    <div class="text-center">
+      <h1 class="fs-4 mb-4">Sorry, this page isn't available.</h1>
+      <span
+        >The link you followed may be broken, or the page may have been removed.
+        <a href="/">Go back to InstaClone.</a>
+      </span>
+    </div>
+    <% } %>
   </div>
 </div>

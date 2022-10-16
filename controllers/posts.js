@@ -1,11 +1,7 @@
 const { cloudinary } = require('../cloudinary');
 const Post = require('../models/post');
 const User = require('../models/users');
-
-module.exports.index = async (req, res) => {
-  const posts = await Post.find().populate('user').sort({ date: -1 });
-  res.render('posts/index', { posts });
-};
+const ExpressError = require('../utils/ExpressError');
 
 module.exports.renderNewForm = (req, res) => {
   res.render('posts/new');
@@ -23,26 +19,25 @@ module.exports.createPost = async (req, res) => {
   await post.save();
   await user.save();
   req.flash('success', 'Your post has been shared');
-  res.redirect('/p');
+  res.redirect('/');
 };
 
 module.exports.showPost = async (req, res, next) => {
-  const post = await Post.findById(req.params.id)
-    .populate({
-      path: 'comments',
-      options: { sort: { likes: -1, date: -1 } },
-      populate: {
-        path: 'user',
-        select: 'username dp',
-      },
-    })
-    .populate('user');
-  if (!post) {
-    req.flash('error', 'Post Not Found');
-    return res.redirect('/p');
-    // return next(new ExpressError('Post Not Found', 404));
+  try {
+    const post = await Post.findById(req.params.id)
+      .populate({
+        path: 'comments',
+        options: { sort: { likes: -1, date: -1 } },
+        populate: {
+          path: 'user',
+          select: 'username dp',
+        },
+      })
+      .populate('user');
+    res.render('posts/show', { post });
+  } catch (e) {
+    return next(new ExpressError('Post not found', 404));
   }
-  res.render('posts/show', { post });
 };
 
 module.exports.renderEditForm = async (req, res, next) => {
@@ -69,7 +64,7 @@ module.exports.deletePost = async (req, res) => {
   const post = await Post.findById(id);
   await cloudinary.uploader.destroy(post.image.filename);
   await Post.findByIdAndDelete(id);
-  res.redirect('/p');
+  res.redirect('/');
 };
 
 module.exports.likedBy = async (req, res) => {

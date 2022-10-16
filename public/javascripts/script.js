@@ -3,7 +3,6 @@ const likeComments = document.querySelectorAll('.like-form-comment');
 const followForms = document.querySelectorAll('.follow-form');
 const followersLength = document.querySelector('#followers-length');
 const links = document.querySelectorAll('a');
-const postLinks = document.querySelectorAll('.post-link');
 let doubleTaps = document.querySelectorAll('.double-tap-post');
 const usernameOverflow = document.querySelector('.username-overflow');
 const readMores = document.querySelectorAll('.read-more');
@@ -208,7 +207,9 @@ if (followForms) {
         .then(function (response) {
           followForm.innerHTML = response.data.button;
           followForm.action = response.data.action;
-          followersLength.innerHTML = response.data.followers.length;
+          if (followersLength) {
+            followersLength.innerHTML = response.data.followers.length;
+          }
         })
         .catch(function (error) {
           followForm.children[0].innerHTML = temp;
@@ -216,27 +217,6 @@ if (followForms) {
         });
     });
   });
-}
-
-//For sharing post
-postLinks.forEach((post) => {
-  post.addEventListener('click', () => {
-    if (navigator.share) {
-      navigator.share({
-        url: post.dataset.url,
-      });
-    } else {
-      console.log('hello');
-    }
-  });
-});
-
-//Auto grow textarea
-
-function autoGrow(oField) {
-  if (oField.scrollHeight > oField.clientHeight) {
-    oField.style.height = `${oField.scrollHeight}px`;
-  }
 }
 
 // Read more functionality
@@ -292,3 +272,12 @@ window.addEventListener('load', () => {
     }, 7000);
   }
 });
+
+const btnNav = document.querySelector('.btn-nav');
+if (btnNav) {
+  btnNav.addEventListener('click', () => {
+    document.querySelector('.nav-pop').addEventListener('mousedown', (e) => {
+      e.preventDefault();
+    });
+  });
+}

@@ -5,8 +5,8 @@ const likes = require('../controllers/likes');
 
 const { isLoggedIn } = require('../middleware');
 
-router.post('/comment/:commentId', catchAsync(likes.likeComment));
+router.post('/comment/:commentId', isLoggedIn, catchAsync(likes.likeComment));
 
-router.post('/:id', catchAsync(likes.likePost));
+router.post('/:id', isLoggedIn, catchAsync(likes.likePost));
 
 module.exports = router;

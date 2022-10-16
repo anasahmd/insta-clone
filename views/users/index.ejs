@@ -28,7 +28,7 @@
         <% } %>
       </form>
       <% } else if (!currentUser){%>
-      <a href="/login">
+      <a href="/login?returnTo=/<%= user.username %>">
         <button class="btn btn-primary btn-sm px-3 btn-follow">Follow</button>
       </a>
       <% }else {%>
@@ -80,8 +80,9 @@
   <span class="text-muted fs-7 fw-bold">POSTS</span>
 </div>
 
+<% if(user.posts.length){ %>
 <section class="post-list">
-  <% for (let post of user.posts){ %>
+  <% if(user.posts.length){ %> <% for (let post of user.posts){ %>
   <a href="/p/<%= post._id %> " class="post">
     <figure class="post-image profile-post-img">
       <img class="img img-fluid" src="<%= post.image.url %>" alt="" />
@@ -98,5 +99,13 @@
       </p>
     </span>
   </a>
-  <% } %>
+  <% } } %>
 </section>
+<% }else { %>
+
+<div class="text-center w-100 mt-5 mb-4">
+  <div><i class="fa-solid fa-camera fs-3"></i></div>
+  <div class="fw-2 fs-3 mt-3">No Posts Yet</div>
+</div>
+
+<% } %>

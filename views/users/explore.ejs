@@ -1,6 +1,8 @@
 <% layout('layouts/boilerplate') %>
 <a href="/explore/search">
-  <div class="d-flex bg-light py-2 px-3 px-lg-0 mx-width-profile mx-auto">
+  <div
+    class="d-flex bg-light py-2 px-3 px-lg-0 mx-width-profile mx-auto position-sticky"
+  >
     <div class="w-100 position-relative">
       <i
         class="fa-solid fa-magnifying-glass position-absolute text-muted fs-8"
@@ -11,8 +13,9 @@
         name="comment[text]"
         class="form-control fs-7 px-4"
         placeholder="Search"
-        disabled
+        onclick='window.location="/explore/search"'
         style="cursor: pointer"
+        tabindex="1"
       />
     </div>
   </div>

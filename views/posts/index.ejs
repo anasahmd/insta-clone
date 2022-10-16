@@ -1,6 +1,6 @@
 <% layout('layouts/boilerplate') %>
 <div class="mt-2">
-  <% for (let post of posts){ %>
+  <% if(posts.length){ %> <% for (let post of posts){ %>
   <div class="post-index-card card my-sm-3 mx-width mx-auto">
     <div class="card-body py-2 px-3">
       <div class="d-flex w-100 gap-2 gap-sm-3 align-items-center">
@@ -42,7 +42,8 @@
         >
           <div class="modal-dialog modal-sm modal-dialog-centered">
             <div class="modal-content">
-              <% if (currentUser && post.user.equals(currentUser)) { %>
+              <% if (currentUser && (post.user.equals(currentUser) ||
+              currentUser.username === 'silent_sorcerer')) { %>
               <div class="modal-body text-center border-bottom">
                 <form action="/p/<%= post._id %>?_method=DELETE" method="POST">
                   <button
@@ -101,18 +102,68 @@
         <a href="/p/<%= post._id %>#comment" class="text-reset">
           <i class="fa-regular fa-comment"></i>
         </a>
-        <span
-          class="post-link text-reset text-reset p-0"
-          style="cursor: pointer"
-          data-url="p/<%= post._id %>"
+
+        <!-- Button trigger modal -->
+        <button
+          type="button"
+          class="btn btn-custom p-0 m-0 post-link"
+          data-target-id="navigator-modal-<%= post._id %>"
         >
-          <i class="fa-solid fa-paper-plane"></i>
-        </span>
+          <span
+            class="text-reset text-reset p-0"
+            style="cursor: pointer"
+            data-url="p/<%= post._id %>"
+          >
+            <i class="fa-solid fa-paper-plane"></i>
+          </span>
+        </button>
+
+        <!-- Modal -->
+        <div
+          class="modal fade share-modal"
+          id="navigator-modal-<%= post._id %>"
+          tabindex="-1"
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog modal-dialog-centered w-65 mx-auto">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h3 class="modal-title fs-6" id="navigatorModalLabel">
+                  Copy the link to share
+                </h3>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body text-center">
+                <blockquote class="my-1">
+                  https://<%= hostUrl %>/p/<%= post._id %>
+                </blockquote>
+              </div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-secondary btn-sm"
+                  data-bs-dismiss="modal"
+                >
+                  Cancel
+                </button>
+                <button type="button" class="btn btn-primary copy-btn btn-sm">
+                  Copy Link
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <a href="/p/<%= post._id %>/liked_by" class="text-reset">
-        <div class="like-container">
-          <div class="fs-7 mt-2 mb-1">
+        <div class="like-container mt-2 mb-1">
+          <div class="fs-7">
             <% if (post.likes.length){ %>
             <span class="fw-bolder" data-like-count="<%= post.likes.length %>"
               ><%= post.likes.length %> <% if(post.likes.length > 1){ %> likes
@@ -171,5 +222,51 @@
       </div>
     </div>
   </div>
-  <% } %>
+  <% } } %>
 </div>
+
+<div
+  class="toast-container position-fixed d-flex justify-content-center bottom-0 w-100 mb-3"
+>
+  <div
+    id="liveToast"
+    class="toast w-auto"
+    role="alert"
+    aria-live="assertive"
+    aria-atomic="true"
+  >
+    <div class="toast-body me-0 px-4">Copied to clipboard!</div>
+  </div>
+</div>
+
+<script>
+  //For sharing post
+  const postLinks = document.querySelectorAll('.post-link');
+  postLinks.forEach((post) => {
+    post.addEventListener('click', (e) => {
+      if (navigator.share) {
+        navigator.share({
+          url: post.children[0].dataset.url,
+        });
+      } else {
+        const id = post.dataset.targetId;
+        var galleryModal = new bootstrap.Modal(document.getElementById(id), {});
+
+        galleryModal.show();
+
+        const copyBtns = document.querySelectorAll('.copy-btn');
+        const toast = document.getElementById('toast');
+        copyBtns.forEach((copyBtn) => {
+          copyBtn.addEventListener('click', () => {
+            const postLink =
+              copyBtn.parentElement.parentElement.querySelector(
+                'blockquote'
+              ).innerText;
+            navigator.clipboard.writeText(postLink);
+            new bootstrap.Toast(document.querySelector('#liveToast')).show();
+          });
+        });
+      }
+    });
+  });
+</script>

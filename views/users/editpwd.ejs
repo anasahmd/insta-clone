@@ -1,12 +1,13 @@
 <% layout('layouts/boilerplate') %>
 
-<div class="card mx-width mx-auto px-2 w-90 mt-sm-4">
+<div class="card mx-width mx-auto px-2 w-90 mt-sm-4 mb-4">
   <div class="card-body">
     <form
       action="/accounts/password?_method=PUT"
       method="POST"
       novalidate
       class="needs-validation"
+      id="change-pw-form"
     >
       <div class="d-flex gap-3 gap-sm-3 mb-4 mt-2 align-items-center w-100">
         <img
@@ -53,3 +54,10 @@
     </form>
   </div>
 </div>
+
+<script>
+  const changeForm = document.getElementById('change-pw-form');
+  changeForm.addEventListener('submit', () => {
+    window.history.replaceState({}, 'foo', '/accounts/edit');
+  });
+</script>

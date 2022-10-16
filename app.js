@@ -16,6 +16,8 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const User = require('./models/users');
 const formatDistanceToNowStrict = require('date-fns/formatDistanceToNowStrict');
+const mongoSanitize = require('express-mongo-sanitize');
+const helmet = require('helmet');
 
 const posts = require('./routes/posts');
 const comments = require('./routes/comments');
@@ -31,6 +33,52 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(mongoSanitize());
+
+const scriptSrcUrls = [
+  'https://stackpath.bootstrapcdn.com',
+  'https://kit.fontawesome.com',
+  'https://cdnjs.cloudflare.com',
+  'https://cdn.jsdelivr.net',
+];
+const styleSrcUrls = [
+  'https://cdn.jsdelivr.net',
+  'https://cdnjs.cloudflare.com',
+  'https://fonts.googleapis.com',
+  'https://use.fontawesome.com',
+  'https://kit.fontawesome.com',
+];
+const fontSrcUrls = [
+  'https://use.fontawesome.com',
+  'https://cdn.jsdelivr.net',
+  'https://cdnjs.cloudflare.com',
+  'https://fonts.gstatic.com',
+];
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: [],
+      connectSrc: ["'self'", 'blob:'],
+      scriptSrc: [
+        "'unsafe-inline'",
+        "'unsafe-eval'",
+        "'self'",
+        ...scriptSrcUrls,
+      ],
+      styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
+      workerSrc: ["'self'", 'blob:'],
+      childSrc: ['blob:'],
+      objectSrc: [],
+      imgSrc: [
+        "'self'",
+        'blob:',
+        'data:',
+        'https://res.cloudinary.com/dtq8oqzvj/',
+      ],
+      fontSrc: ["'self'", ...fontSrcUrls],
+    },
+  })
+);
 
 const mongoose = require('mongoose');
 mongoose
@@ -44,6 +92,7 @@ mongoose
   });
 
 const sessionConfig = {
+  name: 'cloneSession',
   secret: 'thisisnotagoodsecret',
   resave: false,
   saveUninitialized: false,
@@ -68,8 +117,9 @@ app.use(async (req, res, next) => {
   res.locals.success = req.flash('success');
   res.locals.error = req.flash('error');
   res.locals.currentUser = req.user;
-  res.locals.defaultDp = `https://res.cloudinary.com/dtq8oqzvj/image/upload/v1664381145/Dext/instadefault_hwqsv3.jpg`;
+  res.locals.defaultDp = `https://res.cloudinary.com/dtq8oqzvj/image/upload/v1664818880/Don%27t%20Delete/instadefault_h1kqsb.jpg`;
   res.locals.formatDistanceToNowStrict = formatDistanceToNowStrict;
+  res.locals.hostUrl = req.headers.host;
   res.set('Cache-Control', 'no-store');
   if (req.user) {
     const { notifications } = await User.findById(req.user._id).populate({
@@ -96,15 +146,15 @@ app.use(async (req, res, next) => {
   next();
 });
 
+app.get('/about', (req, res) => {
+  res.render('about');
+});
+
 app.use('/p', posts);
 app.use('/p/:id/comments', comments);
-app.use('/', users);
 app.use('/like', likes);
 app.use('/follow', follow);
-
-app.get('/', (req, res) => {
-  res.redirect('/p');
-});
+app.use('/', users);
 
 app.all('*', (req, res, next) => {
   next(new ExpressError('Page not found', 404));

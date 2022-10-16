@@ -7,6 +7,8 @@ const {
   validateUser,
   validatePassword,
   validateForgotPassword,
+  checkReturnTo,
+  validateSignupUser,
 } = require('../middleware');
 const users = require('../controllers/users');
 const multer = require('multer');
@@ -14,10 +16,13 @@ const { storagedp } = require('../cloudinary');
 const upload = multer({ storage: storagedp });
 const User = require('../models/users');
 
+router.get('/', isLoggedIn, catchAsync(users.renderIndex));
+
 router
   .route('/login')
   .get(users.renderLogin)
   .post(
+    checkReturnTo,
     passport.authenticate('local', {
       failureFlash: true,
       failureRedirect: '/login',
@@ -28,7 +33,7 @@ router
 router
   .route('/accounts/signup')
   .get(users.renderSignup)
-  .post(validateUser, catchAsync(users.userSignup));
+  .post(validateSignupUser, catchAsync(users.userSignup));
 
 router.get('/logout', isLoggedIn, users.userLogout);
 
@@ -44,7 +49,11 @@ router
   .put(isLoggedIn, upload.single('image'), catchAsync(users.editDp))
   .delete(isLoggedIn, users.removeDp);
 
-router.get('/accounts/activity', catchAsync(users.renderAccountActivity));
+router.get(
+  '/accounts/activity',
+  isLoggedIn,
+  catchAsync(users.renderAccountActivity)
+);
 
 router.get(
   '/accounts/password/change',
@@ -74,16 +83,24 @@ router.get(
   catchAsync(users.renderForgotConfirmForm)
 );
 
-router.get('/explore', catchAsync(users.renderExplore));
+router.get('/explore', isLoggedIn, catchAsync(users.renderExplore));
 
-router.get('/explore/search', users.renderSearchForm);
+router.get('/explore/search', isLoggedIn, users.renderSearchForm);
 
-router.get('/explore/search/users', catchAsync(users.searchUsers));
+router.get('/explore/search/users', isLoggedIn, catchAsync(users.searchUsers));
 
 router.get('/:username', catchAsync(users.renderUserIndex));
 
-router.get('/:username/followers', catchAsync(users.renderFollowers));
+router.get(
+  '/:username/followers',
+  isLoggedIn,
+  catchAsync(users.renderFollowers)
+);
 
-router.get('/:username/following', catchAsync(users.renderFollowing));
+router.get(
+  '/:username/following',
+  isLoggedIn,
+  catchAsync(users.renderFollowing)
+);
 
 module.exports = router;

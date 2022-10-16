@@ -10,7 +10,7 @@ cloudinary.config({
 const storage = new CloudinaryStorage({
   cloudinary,
   params: {
-    folder: 'Dext Images',
+    folder: 'InstaClone Images',
     allowedFormats: ['jpeg', 'png', 'jpg'],
     width: 600,
     height: 600,
@@ -21,7 +21,7 @@ const storage = new CloudinaryStorage({
 const storagedp = new CloudinaryStorage({
   cloudinary,
   params: {
-    folder: 'Dext Profile Images',
+    folder: 'InstaClone Profile Images',
     allowedFormats: ['jpeg', 'png', 'jpg'],
     width: 150,
     height: 150,

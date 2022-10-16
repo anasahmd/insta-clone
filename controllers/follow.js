@@ -47,11 +47,13 @@ module.exports.unfollowUser = async (req, res) => {
   const followUser = await User.findById(followId).populate('notifications');
   const user = await User.findById(userId);
 
-  //Removing notification
+  // Removing notification
+
   const notification = await Notification.findOne({
-    refer: user._id,
+    refer: userId,
     receiver: followId,
     docModel: 'User',
+    nType: 'follow',
   });
 
   await User.findByIdAndUpdate(followUser._id, {
@@ -59,7 +61,8 @@ module.exports.unfollowUser = async (req, res) => {
   });
 
   await Notification.findByIdAndDelete(notification._id);
-  //Removed notification
+
+  // Removed notification
 
   await User.findByIdAndUpdate(user._id, {
     $pull: { following: followUser._id },
