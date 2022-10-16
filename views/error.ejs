@@ -2,7 +2,7 @@
 
 <div class="card mx-width mx-auto mt-4 mt-sm-5">
   <div class="card-body my-4">
-    <% if(!process.env.NODE_ENV === 'production'){ %>
+    <% if(process.env.NODE_ENV !== 'production'){ %>
     <div class="alert alert-danger" role="alert">
       <h4 class="alert-heading"><%=err.message%></h4>
       <p><%= err.stack %></p>

@@ -43,7 +43,7 @@
           <div class="modal-dialog modal-sm modal-dialog-centered">
             <div class="modal-content">
               <% if (currentUser && (post.user.equals(currentUser) ||
-              currentUser.username === 'silent_sorcerer')) { %>
+              currentUser.username === process.env.ADMIN)) { %>
               <div class="modal-body text-center border-bottom">
                 <form action="/p/<%= post._id %>?_method=DELETE" method="POST">
                   <button

@@ -39,7 +39,7 @@
         <div class="modal-dialog modal-sm modal-dialog-centered">
           <div class="modal-content">
             <% if (currentUser && (post.user.equals(currentUser) ||
-            currentUser.username === 'silent_sorcerer')) { %>
+            currentUser.username === process.env.ADMIN)) { %>
             <div class="modal-body text-center border-bottom">
               <form action="/p/<%= post._id %>?_method=DELETE" method="POST">
                 <button
@@ -217,7 +217,7 @@
     <div class="text-muted fs-8 my-1 mb-0">
       <span class="me-1"><%= formatDistanceToNowStrict(post.date)%> ago</span>
       <% if (post.edited){ %>
-      <span class="me-1"> </span>
+      <span class="me-1">&#183</span>
       <span>Edited</span>
       <% } %>
     </div>
@@ -310,7 +310,7 @@
                   </a>
                 </span>
                 <% if (currentUser && (post.user.equals(currentUser) ||
-                currentUser.username === 'silent_sorcerer')) { %>
+                currentUser.username === process.env.ADMIN)) { %>
 
                 <span class="text-muted fs-8 fw-5">
                   <!-- Button trigger modal -->
@@ -353,7 +353,7 @@
 
       <% if (currentUser && (comment.user.equals(currentUser) ||
       post.user.equals(currentUser) || currentUser.username ===
-      'silent_sorcerer')){ %>
+      process.env.ADMIN)){ %>
       <!-- Modal -->
       <div
         class="modal fade"

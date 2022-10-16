@@ -99,7 +99,7 @@ module.exports.isAuthor = async (req, res, next) => {
   const { id } = req.params;
   const post = await Post.findById(id);
   if (
-    !(post.user.equals(req.user._id) || req.user.username === 'silent_sorcerer')
+    !(post.user.equals(req.user._id) || req.user.username === process.env.ADMIN)
   ) {
     req.flash('error', 'You do not have permission to do that!');
     return res.redirect(`/p/${id}`);
@@ -115,7 +115,7 @@ module.exports.isCommentAuthor = async (req, res, next) => {
     !(
       comment.user.equals(req.user._id) ||
       post.user.equals(req.user._id) ||
-      req.user.username === 'silent_sorcerer'
+      req.user.username === process.env.ADMIN
     )
   ) {
     req.flash('error', 'You do not have permission to do that!');

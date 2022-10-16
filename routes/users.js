@@ -14,7 +14,6 @@ const users = require('../controllers/users');
 const multer = require('multer');
 const { storagedp } = require('../cloudinary');
 const upload = multer({ storage: storagedp });
-const User = require('../models/users');
 
 router.get('/', isLoggedIn, catchAsync(users.renderIndex));
 

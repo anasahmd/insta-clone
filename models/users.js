@@ -65,6 +65,9 @@ const userSchema = new Schema({
 userSchema.plugin(passportLocalMongoose, {
   usernameQueryFields: ['email'],
   usernameLowerCase: true,
+  limitAttempts: true,
+  maxAttempts: 10,
+  unlockInterval: 7200000,
 });
 
 uniqueValidator.defaults.message = `Another account is using the same {PATH}`;

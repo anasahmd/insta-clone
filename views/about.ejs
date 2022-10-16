@@ -1,27 +1,49 @@
 <% layout('layouts/boilerplate')%>
 
-<h1 class="mx-width mx-auto ps-sm-0 ps-3 mt-4">About the InstaClone</h1>
-<div class="card mx-width mx-auto mt-sm-5">
-  <div class="card-body">
+<div class="mx-width mx-auto mt-5 w-90">
+  <h1 class="insta-clone mb-4 fs-1">About the InstaClone</h1>
+  <div class="mb-5">
     <p>
-      Hey there, This is my first ever full stack project that I did by myself
-      after taking the course from colt Steele. Although I wanted to learn react
-      after that course to complete my full stack development quest. But, I
-      thought why not make a full stack project to solidify my understanding.
-      And after a lot of thought, I decided to make an insta clone. It was going
-      to be a bare minimum replica of Instagram, It started out well and I would
-      have finished it in about half a month, but alas my perfectionist woke up
-      and I couldn't resist the temptations to add more features as I got on
-      with this project which I didn't initially planned of, like notification,
-      explore, search, forgot password, photo cropping (I had to do some
-      workaround for it), filter would have been too much for me now, I am good
-      with cropping feature for now. And there was more I wanted to add, and the
-      list would have been never ending. It was becoming tedious and since this
-      website is of no real use, and I already spent 2 months on it. I had to
-      stop somewhere. However, I would like to add chat functionality in future,
-      if I feel like it. And I will my repo public, once It's been tested enough
-      and I have confidence in this website. And since it is of no use other
-      than representation of my skills, I guess it is enough for it.
+      This is my first full stack project that I built from scratch and it took
+      about 2 months to complete. It turned out better than I expected. Feel
+      free to test it. Please report any bugs that you may encounter.
     </p>
+    <a href="https://www.udemy.com/course/the-web-developer-bootcamp/"
+      >Course I took</a
+    >
   </div>
+  <h2 class="insta-clone mb-4 fs-1" id="termsandconditions">
+    Terms and Conditions
+  </h2>
+  <p class="mb-5">
+    Although it is a bit obvious, I still want to emphasize that this website is
+    not meant for real use. This is my personal project and I won't be
+    responsible for your data loss.
+  </p>
+  <h2 class="insta-clone mb-4 fs-1">Techonologies Used</h2>
+  <p class="mb-5">MongoDB, Express, Node.js, Bootstrap</p>
+  <h2 class="insta-clone mb-4 fs-1">Some Features</h2>
+  <p class="mb-5">
+    User Authentication, Search User, Explore, Notifications, Forgot Password
+  </p>
+
+  <h2 class="insta-clone mb-4 fs-1">About Me</h2>
+  <div class="mb-5">
+    <p>I'm a self taught web developer and computer science student.</p>
+    <a href="https://anasahmad.dev/"
+      >Check out my website to learn more about me</a
+    >
+  </div>
+  <h2 class="insta-clone mb-4 fs-1">Support</h2>
+  <p class="mb-4">Got a suggestion or a bug to report?</p>
+  <button class="btn btn-outline-primary btn-sm mb-5" id="email-btn">
+    <a href="" class="text-reset" id="email-link">Contact me </a>
+  </button>
 </div>
+
+<script>
+  const me = 'anasahmad0239';
+  const place = 'gmail.com';
+  const eLink = document.getElementById('email-link');
+  eLink.href = `mailto:${me}@${place}`;
+</script>

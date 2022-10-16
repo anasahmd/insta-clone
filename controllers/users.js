@@ -227,7 +227,7 @@ module.exports.changePassword = async (req, res) => {
   const transporter = nodemailer.createTransport({
     service: 'Gmail',
     auth: {
-      user: 'anasahmad00239@gmail.com',
+      user: process.env.GMAIL,
       pass: process.env.GMAILAPW,
     },
   });
@@ -289,7 +289,7 @@ module.exports.forgotPassword = async (req, res) => {
   const transporter = nodemailer.createTransport({
     service: 'Gmail',
     auth: {
-      user: 'anasahmad00239@gmail.com',
+      user: process.env.GMAIL,
       pass: process.env.GMAILAPW,
     },
   });
@@ -340,7 +340,7 @@ module.exports.forgotConfirmPassword = async (req, res, next) => {
   const transporter = nodemailer.createTransport({
     service: 'Gmail',
     auth: {
-      user: 'anasahmad00239@gmail.com',
+      user: process.env.GMAIL,
       pass: process.env.GMAILAPW,
     },
   });

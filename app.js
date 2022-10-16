@@ -7,17 +7,16 @@ const app = express();
 const path = require('path');
 const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
-const catchAsync = require('./utils/catchAsync');
+const mongoose = require('mongoose');
 const ExpressError = require('./utils/ExpressError');
-const like = require('./utils/like');
 const session = require('express-session');
 const flash = require('connect-flash');
 const passport = require('passport');
-const LocalStrategy = require('passport-local');
 const User = require('./models/users');
 const formatDistanceToNowStrict = require('date-fns/formatDistanceToNowStrict');
 const mongoSanitize = require('express-mongo-sanitize');
 const helmet = require('helmet');
+const MongoStore = require('connect-mongo');
 
 const posts = require('./routes/posts');
 const comments = require('./routes/comments');
@@ -53,6 +52,7 @@ const fontSrcUrls = [
   'https://cdn.jsdelivr.net',
   'https://cdnjs.cloudflare.com',
   'https://fonts.gstatic.com',
+  'https://fonts.googleapis.com',
 ];
 app.use(
   helmet.contentSecurityPolicy({
@@ -80,9 +80,10 @@ app.use(
   })
 );
 
-const mongoose = require('mongoose');
+const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/social-media';
+
 mongoose
-  .connect('mongodb://localhost:27017/social-media')
+  .connect(dbUrl)
   .then(() => {
     console.log('CONNECTION OPEN!!!');
   })
@@ -91,9 +92,22 @@ mongoose
     console.log(err);
   });
 
+const secret = process.env.SECRET || 'thisshouldbeabettersecret!';
+
+const store = new MongoStore({
+  mongoUrl: dbUrl,
+  secret,
+  touchAfter: 24 * 60 * 60,
+});
+
+store.on('error', function (e) {
+  console.log('SESSION STORE ERROR', e);
+});
+
 const sessionConfig = {
-  name: 'cloneSession',
-  secret: 'thisisnotagoodsecret',
+  name: 'instaCloneSession',
+  secret,
+  store,
   resave: false,
   saveUninitialized: false,
   cookie: {
