@@ -5,8 +5,8 @@ if (process.env.NODE_ENV !== 'production') {
 const express = require('express');
 const app = express();
 const path = require('path');
-const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
+const methodOverride = require('method-override');
 const mongoose = require('mongoose');
 const ExpressError = require('./utils/ExpressError');
 const session = require('express-session');
@@ -113,10 +113,10 @@ const sessionConfig = {
   resave: false,
   saveUninitialized: false,
   mongoUrl: dbUrl,
-  proxy: true,
+  // proxy: true,
   cookie: {
     httpOnly: true,
-    secure: true,
+    // secure: true,
     expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
     maxAge: 1000 * 60 * 60 * 24 * 7,
   },
