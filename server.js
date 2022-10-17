@@ -89,15 +89,17 @@ mongoose
   })
   .catch((err) => {
     console.log('OH NO ERROR!!!!');
-    return console.log(err);
+    console.log(err);
   });
 
 const secret = process.env.SECRET || 'thisshouldbeabettersecret!';
 
-const store = new MongoStore({
+const store = MongoStore.create({
   mongoUrl: dbUrl,
-  secret,
   touchAfter: 24 * 60 * 60,
+  crypto: {
+    secret,
+  },
 });
 
 store.on('error', function (e) {
