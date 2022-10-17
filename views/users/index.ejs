@@ -43,7 +43,7 @@
     </div>
   </div>
   <div class="mt-sm-3 mt-2 d-flex flex-column">
-    <span class="fs-7 fw-5 m-0"><%= user.fullName %> </span>
+    <span class="fs-7 fw-6 m-0"><%= user.fullName %> </span>
     <span class="pre-wrap fs-7 m-0"><%= user.bio %></span>
   </div>
 </div>
@@ -53,12 +53,12 @@
 >
   <div class="d-flex justify-content-around my-0 text-center fs-7">
     <div>
-      <div class="fw-bold"><%= user.posts.length %></div>
+      <div class="fw-6"><%= user.posts.length %></div>
       <div class="text-muted">posts</div>
     </div>
     <div>
       <a href="<%= user.username %>/followers" class="text-reset">
-        <div class="fw-bold" id="followers-length">
+        <div class="fw-6" id="followers-length">
           <%= user.followers.length %>
         </div>
         <div class="text-muted">followers</div>
@@ -66,7 +66,7 @@
     </div>
     <div>
       <a href="<%= user.username %>/following" class="text-reset">
-        <div class="fw-bold"><%= user.following.length %></div>
+        <div class="fw-6"><%= user.following.length %></div>
         <div class="text-muted">following</div>
       </a>
     </div>
@@ -77,7 +77,7 @@
   class="text-center py-3 gap-2 d-flex justify-content-center align-items-center"
 >
   <i class="fa-solid fa-table-cells-large fs-7 text-muted"></i>
-  <span class="text-muted fs-7 fw-bold">POSTS</span>
+  <span class="text-muted fs-8 fw-7">POSTS</span>
 </div>
 
 <% if(user.posts.length){ %>
@@ -104,8 +104,8 @@
 <% }else { %>
 
 <div class="text-center w-100 mt-5 mb-4">
-  <div><i class="fa-solid fa-camera fs-3"></i></div>
-  <div class="fw-2 fs-3 mt-3">No Posts Yet</div>
+  <div><i class="fa-solid fa-camera fs-3 text-muted mt-3"></i></div>
+  <div class="fs-5 fw-6 mt-3 text-muted">No Posts Yet</div>
 </div>
 
 <% } %>

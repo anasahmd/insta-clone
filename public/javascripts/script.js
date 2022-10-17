@@ -46,9 +46,9 @@ likeForms.forEach((likeForm) => {
       btnLikeClass.remove('fa-regular');
       btnLikeClass.add('fa-solid');
       if (likeCount == 0) {
-        likeContainerDiv.innerHTML = `<span class="fw-bolder" data-like-count="1">1 like</span>`;
+        likeContainerDiv.innerHTML = `<span class="fw-6" data-like-count="1">1 like</span>`;
       } else {
-        likeContainerDiv.innerHTML = `<span class="fw-bolder" data-like-count="${
+        likeContainerDiv.innerHTML = `<span class="fw-6" data-like-count="${
           likeCount + 1
         }">${likeCount + 1} likes</span>`;
       }
@@ -58,9 +58,9 @@ likeForms.forEach((likeForm) => {
       if (likeCount == 1) {
         likeContainerDiv.innerHTML = `<span data-like-count="0">Be the first to <b class="like-this">like this </b><span>`;
       } else if (likeCount == 2) {
-        likeContainerDiv.innerHTML = `<span class="fw-bolder" data-like-count="1">1 like</span>`;
+        likeContainerDiv.innerHTML = `<span class="fw-6" data-like-count="1">1 like</span>`;
       } else {
-        likeContainerDiv.innerHTML = `<span class="fw-bolder" data-like-count="${
+        likeContainerDiv.innerHTML = `<span class="fw-6" data-like-count="${
           likeCount - 1
         }">${likeCount - 1} likes</span>`;
       }
@@ -90,9 +90,9 @@ likeForms.forEach((likeForm) => {
           btnLikeClass.remove('fa-regular');
           btnLikeClass.add('fa-solid');
           if (likeCount == 0) {
-            likeContainerDiv.innerHTML = `<span class="fw-bolder" data-like-count="1">1 like</span>`;
+            likeContainerDiv.innerHTML = `<span class="fw-6" data-like-count="1">1 like</span>`;
           } else {
-            likeContainerDiv.innerHTML = `<span class="fw-bolder" data-like-count="${
+            likeContainerDiv.innerHTML = `<span class="fw-6" data-like-count="${
               likeCount + 1
             }">${likeCount + 1} likes</span>`;
           }
@@ -102,9 +102,9 @@ likeForms.forEach((likeForm) => {
           if (likeCount == 1) {
             likeContainerDiv.innerHTML = `<span data-like-count="0">Be the first to <b class="like-this">like this </b><span>`;
           } else if (likeCount == 2) {
-            likeContainerDiv.innerHTML = `<span class="fw-bolder" data-like-count="1">1 like</span>`;
+            likeContainerDiv.innerHTML = `<span class="fw-6" data-like-count="1">1 like</span>`;
           } else {
-            likeContainerDiv.innerHTML = `<span class="fw-bolder" data-like-count="${
+            likeContainerDiv.innerHTML = `<span class="fw-6" data-like-count="${
               likeCount - 1
             }">${likeCount - 1} likes</span>`;
           }

@@ -131,7 +131,7 @@ module.exports.likePost = async (req, res) => {
   res.send({
     text: `<div class="fs-7 mt-2">
       <% if (${updatedPost.likes.length}){ %>
-      <span class="fw-bolder" data-like-count="${updatedPost.likes.length}"
+      <span class="fw-6" data-like-count="${updatedPost.likes.length}"
         ><%= ${updatedPost.likes.length} %> <% if(${updatedPost.likes.length} > 1){ %> likes <%
         }else { %> like <% } %>
       </span>

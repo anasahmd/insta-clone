@@ -14,7 +14,7 @@
       >
         <a
           href="/<%= post.user.username %>"
-          class="fs-7 fw-bolder mb-0 text-reset username-overflow"
+          class="fs-7 fw-6 mb-0 text-reset username-overflow"
           ><%= post.user.username %></a
         >
       </div>
@@ -169,7 +169,7 @@
       <div class="like-container mt-2 mb-1">
         <div class="fs-7">
           <% if (post.likes.length){ %>
-          <span class="fw-bolder" data-like-count="<%= post.likes.length %>"
+          <span class="fw-6" data-like-count="<%= post.likes.length %>"
             ><%= post.likes.length %> <% if(post.likes.length > 1){ %> likes <%
             }else { %> like <% } %>
           </span>
@@ -185,7 +185,7 @@
       <b
         ><a
           href="/<%= post.user.username %>"
-          class="fs-7 fw-bolder mb-0 text-reset"
+          class="fs-7 fw-6 mb-0 text-reset"
           ><%= post.user.username %></a
         ></b
       >
@@ -391,8 +391,8 @@
       <% } %> <% } %>
     </div>
     <% }else { %>
-    <div class="container d-flex align-items-center flex-column my-4">
-      <div class="fs-4 mb-2">No comments Yet.</div>
+    <div class="container d-flex align-items-center flex-column my-5">
+      <div class="fs-5 mb-2 fw-5">No comments Yet</div>
       <div class="fs-7 mb-2">Start the conversation</div>
     </div>
     <% } %>
