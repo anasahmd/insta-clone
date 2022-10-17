@@ -13,9 +13,10 @@
         name="comment[text]"
         class="form-control fs-7 px-4"
         placeholder="Search"
-        onclick='window.location="/explore/search"'
+        data-target-url="/explore/search"
         style="cursor: pointer"
         tabindex="1"
+        id="search-bar"
       />
     </div>
   </div>
@@ -41,3 +42,9 @@
   </a>
   <% } %>
 </section>
+
+<script>
+  document.getElementById('search-bar').addEventListener('click', () => {
+    window.location = document.getElementById('search-bar').dataset.targetUrl;
+  });
+</script>

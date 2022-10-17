@@ -7,9 +7,10 @@
     <% user.notifications.forEach((notification) => { if(notification.nType ==
     'like' && notification.refer ){ %>
     <div
-      onclick="window.location='/p/<%= notification.refer._id %>'"
+      data-target-url="/p/<%= notification.refer._id %>"
       style="cursor: pointer"
       tabindex="1"
+      class="on-click"
     >
       <div class="d-flex position-relative align-items-center gap-3 ps-2 mb-3">
         <a href="/<%= notification.sender.username %>">
@@ -36,7 +37,8 @@
 
     <% } else if (notification.nType == 'comment' && notification.refer){ %>
     <div
-      onclick="window.location='/p/<%= notification.refer.post %>'"
+      data-target-url="/p/<%= notification.refer.post %>"
+      class="on-click"
       style="cursor: pointer"
       tabindex="1"
     >
@@ -82,7 +84,8 @@
     </a>
     <%} else if(notification.nType = 'commentLike' && notification.refer){ %>
     <div
-      onclick="window.location='/p/<%= notification.refer.post %>'"
+      data-target-url="/p/<%= notification.refer._id %>"
+      class="on-click"
       style="cursor: pointer"
       tabindex="1"
     >
@@ -122,3 +125,12 @@
     <% } %>
   </div>
 </div>
+
+<script>
+  const onClicks = document.querySelectorAll('.on-click');
+  onClicks.forEach((onClick) => {
+    onClick.addEventListener('click', () => {
+      window.location = onClick.dataset.targetUrl;
+    });
+  });
+</script>
