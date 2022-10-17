@@ -90,6 +90,7 @@ mongoose
   .catch((err) => {
     console.log('OH NO ERROR!!!!');
     console.log(err);
+    throw new ExpressError('Page not found', 404);
   });
 
 const secret = process.env.SECRET || 'thisshouldbeabettersecret!';
