@@ -15,7 +15,17 @@ const multer = require('multer');
 const { storagedp } = require('../cloudinary');
 const upload = multer({ storage: storagedp });
 
-router.get('/', isLoggedIn, catchAsync(users.renderIndex));
+router.get(
+  '/',
+  (req, res, next) => {
+    if (!req.isAuthenticated()) {
+      req.session.returnTo = req.originalUrl;
+      return res.redirect('/login');
+    }
+    next();
+  },
+  catchAsync(users.renderIndex)
+);
 
 router
   .route('/login')
