@@ -6,7 +6,7 @@
   referrerpolicy="no-referrer"
 ></script>
 
-<div class="container mx-width">
+<div class="container mx-width mt-4 mt-sm-5 w-90">
   <h1 class="fs-3 mb-4" id="change-profile">Change profile photo</h1>
   <form
     action="/accounts/dp?_method=PUT"
@@ -43,10 +43,10 @@
   <form
     action="/accounts/dp?_method=DELETE"
     method="POST"
-    class="mt-4 needs-validation"
+    class="mt-4 delete-form"
   >
     <div class="d-grid mb-4">
-      <button class="btn btn-danger spinner" id="remove-btn">
+      <button class="btn btn-outline-danger spinner" id="remove-btn">
         Remove Current Photo
       </button>
     </div>
@@ -54,6 +54,18 @@
 </div>
 
 <script>
+  // For spinner
+  const deleteForm = document.querySelector('.delete-form');
+  if (deleteForm) {
+    const spinner = deleteForm.querySelector('.spinner');
+    deleteForm.addEventListener('submit', () => {
+      spinner.disabled = true;
+      spinner.innerHTML = `<div class="spinner-border spinner-border-sm text-danger" role="status">
+                <span class="sr-only">Loading...</span>
+                </div>`;
+    });
+  }
+
   // image-box is the id of the div element that will store our cropping image preview
   const imagebox = document.getElementById('image-box');
   // crop-btn is the id of button that will trigger the event of change original file with cropped file.

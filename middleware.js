@@ -99,6 +99,7 @@ module.exports.isAuthor = async (req, res, next) => {
   const { id } = req.params;
   const post = await Post.findById(id);
   if (
+    post &&
     !(post.user.equals(req.user._id) || req.user.username === process.env.ADMIN)
   ) {
     req.flash('error', 'You do not have permission to do that!');
@@ -112,6 +113,8 @@ module.exports.isCommentAuthor = async (req, res, next) => {
   const post = await Post.findById(id);
   const comment = await Comment.findById(commentId);
   if (
+    post &&
+    comment &&
     !(
       comment.user.equals(req.user._id) ||
       post.user.equals(req.user._id) ||

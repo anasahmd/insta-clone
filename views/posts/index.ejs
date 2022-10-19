@@ -40,14 +40,18 @@
           aria-labelledby="<%= post._id %>Label"
           aria-hidden="true"
         >
-          <div class="modal-dialog modal-sm modal-dialog-centered">
+          <div class="modal-dialog modal-sm modal-dialog-centered w-70 mx-auto">
             <div class="modal-content">
               <% if (currentUser && (post.user.equals(currentUser) ||
               currentUser.username === process.env.ADMIN)) { %>
               <div class="modal-body text-center border-bottom">
-                <form action="/p/<%= post._id %>?_method=DELETE" method="POST">
+                <form
+                  action="/p/<%= post._id %>?_method=DELETE"
+                  class="delete-form"
+                  method="POST"
+                >
                   <button
-                    class="btn btn-outline-danger btn-delete btn-custom py-0 ms-auto"
+                    class="btn btn-outline-danger btn-delete btn-custom py-0 ms-auto spinner"
                   >
                     Delete
                   </button>
@@ -126,7 +130,9 @@
           aria-labelledby="exampleModalLabel"
           aria-hidden="true"
         >
-          <div class="modal-dialog modal-dialog-centered w-65 mx-auto">
+          <div
+            class="modal-dialog modal-md modal-dialog-centered mx-width-sm w-85 mx-auto"
+          >
             <div class="modal-content">
               <div class="modal-header">
                 <h3 class="modal-title fs-6" id="navigatorModalLabel">
@@ -269,4 +275,18 @@
       }
     });
   });
+
+  // For spinner
+  const deleteForms = document.querySelectorAll('.delete-form');
+  if (deleteForms) {
+    deleteForms.forEach((deleteForm) => {
+      const spinner = deleteForm.querySelector('.spinner');
+      deleteForm.addEventListener('submit', () => {
+        spinner.disabled = true;
+        spinner.innerHTML = `<div class="spinner-border spinner-border-sm text-danger" role="status">
+                <span class="sr-only">Loading...</span>
+                </div>`;
+      });
+    });
+  }
 </script>

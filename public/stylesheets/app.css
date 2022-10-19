@@ -123,6 +123,10 @@ a {
   text-decoration: none;
 }
 
+.mx-width-sm {
+  max-width: 400px;
+}
+
 .mx-width {
   max-width: 500px;
 }
@@ -184,6 +188,11 @@ i {
 }
 
 .btn-custom {
+  background-color: white;
+  border-color: white;
+}
+
+.btn-custom:disabled {
   background-color: white;
   border-color: white;
 }

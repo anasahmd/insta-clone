@@ -8,7 +8,9 @@ module.exports.renderNewForm = (req, res) => {
 };
 
 module.exports.createPost = async (req, res) => {
-  if (!req.body.post) throw new ExpressError('Invalid Post Data', 400);
+  if (!req.body.post) {
+    return next(new ExpressError('Invalid Post Data', 400));
+  }
   const user = await User.findById(req.user._id);
   const post = new Post(req.body.post);
   post.caption = post.caption.replace(/\r\n\r\n/g, '');
@@ -23,21 +25,20 @@ module.exports.createPost = async (req, res) => {
 };
 
 module.exports.showPost = async (req, res, next) => {
-  try {
-    const post = await Post.findById(req.params.id)
-      .populate({
-        path: 'comments',
-        options: { sort: { likes: -1, date: -1 } },
-        populate: {
-          path: 'user',
-          select: 'username dp',
-        },
-      })
-      .populate('user');
-    res.render('posts/show', { post });
-  } catch (e) {
+  const post = await Post.findById(req.params.id)
+    .populate({
+      path: 'comments',
+      options: { sort: { likes: -1, date: -1 } },
+      populate: {
+        path: 'user',
+        select: 'username dp',
+      },
+    })
+    .populate('user');
+  if (!post) {
     return next(new ExpressError('Post not found', 404));
   }
+  res.render('posts/show', { post });
 };
 
 module.exports.renderEditForm = async (req, res, next) => {
